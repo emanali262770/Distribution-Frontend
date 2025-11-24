@@ -44,9 +44,8 @@ const ItemWisePurchase = () => {
       setLoading(true);
 
       // ✅ Build query dynamically before calling API
-      let query = `${
-        import.meta.env.VITE_API_BASE_URL
-      }/reports/itemwise?itemName=${encodeURIComponent(selectedItem)}`;
+      let query = `${import.meta.env.VITE_API_BASE_URL
+        }/reports/itemwise?itemName=${encodeURIComponent(selectedItem)}`;
 
       if (dateFrom && dateTo) {
         query += `&from=${dateFrom}&to=${dateTo}`;
@@ -101,6 +100,11 @@ const ItemWisePurchase = () => {
       setShowItemError(true);
     }
   }, []);
+
+  const totalNetAmount = ledgerEntries.reduce(
+    (sum, entry) => sum + Number(entry.Amount || 0),
+    0
+  );
 
   return (
     <div className="p-4 bg-gray-50 min-h-screen">
@@ -260,6 +264,29 @@ const ItemWisePurchase = () => {
               </>
             )}
 
+            {/* TOTAL NET AMOUNT ROW */}
+            {ledgerEntries.length > 0 && (
+              <div className="grid grid-cols-[0.5fr_0.5fr_0.5fr_1.5fr_1fr_1fr_1fr_1fr_1fr] gap-4 bg-gray-100 py-3 px-6 text-sm font-semibold text-gray-700 border-t">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div className="text-right">Total Amount:</div>
+
+                {/* Total Amount Column */}
+                <div className="text-blue-600">
+                  {totalNetAmount.toLocaleString("en-PK", {
+                    style: "currency",
+                    currency: "PKR",
+                    minimumFractionDigits: 0,
+                  })}
+                </div>
+              </div>
+            )}
+
             {/* Pagination */}
             {totalPages > 1 && (
               <div className="flex justify-between items-center py-4 px-6 border-t bg-gray-50">
@@ -272,11 +299,10 @@ const ItemWisePurchase = () => {
                   <button
                     onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
                     disabled={currentPage === 1}
-                    className={`px-3 py-1 rounded-md ${
-                      currentPage === 1
-                        ? "bg-gray-300 cursor-not-allowed"
-                        : "bg-newPrimary text-white"
-                    }`}
+                    className={`px-3 py-1 rounded-md ${currentPage === 1
+                      ? "bg-gray-300 cursor-not-allowed"
+                      : "bg-newPrimary text-white"
+                      }`}
                   >
                     Previous
                   </button>
@@ -285,11 +311,10 @@ const ItemWisePurchase = () => {
                       setCurrentPage((p) => Math.min(p + 1, totalPages))
                     }
                     disabled={currentPage === totalPages}
-                    className={`px-3 py-1 rounded-md ${
-                      currentPage === totalPages
-                        ? "bg-gray-300 cursor-not-allowed"
-                        : "bg-newPrimary text-white"
-                    }`}
+                    className={`px-3 py-1 rounded-md ${currentPage === totalPages
+                      ? "bg-gray-300 cursor-not-allowed"
+                      : "bg-newPrimary text-white"
+                      }`}
                   >
                     Next
                   </button>

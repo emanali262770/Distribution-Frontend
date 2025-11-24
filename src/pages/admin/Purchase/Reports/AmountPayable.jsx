@@ -44,6 +44,11 @@ const AmountPayable = () => {
       s.Balance?.toString().includes(searchTerm)
   );
 
+  const totalBalanceSum = searchedSuppliers.reduce(
+    (sum, s) => sum + parseFloat(s.Balance || 0),
+    0
+  );
+
   // 🔹 Pagination
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
@@ -146,6 +151,21 @@ const AmountPayable = () => {
                 )}
               </div>
 
+              {/* Total Balance Row */}
+              {!loading && currentRecords.length > 0 && (
+                <div className="grid grid-cols-1 lg:grid-cols-3 items-center gap-4 bg-gray-100 py-3 px-6 text-sm font-semibold text-gray-700 border-t">
+                  <div></div>
+                  <div className="text-right">Total Balance:</div>
+                  <div className="text-blue-600">
+                    {totalBalanceSum.toLocaleString("en-PK", {
+                      style: "currency",
+                      currency: "PKR",
+                      minimumFractionDigits: 2,
+                    })}
+                  </div>
+                </div>
+              )}
+              
               {/* Pagination */}
               {totalPages > 1 && (
                 <div className="flex justify-between items-center py-4 px-6 bg-white border-t mt-2 rounded-b-xl">

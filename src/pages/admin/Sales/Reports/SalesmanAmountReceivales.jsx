@@ -114,7 +114,8 @@ const SalesmanAmountReceivables = () => {
                           {
                             style: "currency",
                             currency: "PKR",
-                            minimumFractionDigits: 2,
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0,
                           }
                         )}
                       </div>
@@ -127,7 +128,7 @@ const SalesmanAmountReceivables = () => {
                 )}
               </div>
               {/* ✅ TOTAL RECOVERY BALANCE ROW */}
-           
+
               {!loading && searchedCustomers.length > 0 && (
                 <div className="grid grid-cols-[0.2fr_0.5fr_1fr] gap-4 bg-gray-100 py-3 px-6 text-sm font-semibold text-gray-700 border-t">
                   <div></div>
@@ -157,11 +158,10 @@ const SalesmanAmountReceivables = () => {
                         setCurrentPage((prev) => Math.max(prev - 1, 1))
                       }
                       disabled={currentPage === 1}
-                      className={`px-3 py-1 rounded-md ${
-                        currentPage === 1
+                      className={`px-3 py-1 rounded-md ${currentPage === 1
                           ? "bg-gray-300 cursor-not-allowed"
                           : "bg-newPrimary text-white hover:bg-newPrimary/80"
-                      }`}
+                        }`}
                     >
                       Previous
                     </button>
@@ -171,11 +171,10 @@ const SalesmanAmountReceivables = () => {
                         setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                       }
                       disabled={currentPage === totalPages}
-                      className={`px-3 py-1 rounded-md ${
-                        currentPage === totalPages
+                      className={`px-3 py-1 rounded-md ${currentPage === totalPages
                           ? "bg-gray-300 cursor-not-allowed"
                           : "bg-newPrimary text-white hover:bg-newPrimary/80"
-                      }`}
+                        }`}
                     >
                       Next
                     </button>
