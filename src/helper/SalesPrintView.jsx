@@ -452,7 +452,7 @@ export const handleSupplierLedgerPrint = (ledgerEntries = []) => {
               <td colspan="4" style="text-align:right;">Totals:</td>
               <td>${totalDebit.toLocaleString()}</td>
               <td>${totalCredit.toLocaleString()}</td>
-              <td>${totalBalance.toLocaleString()}</td>
+              <td></td>
             </tr>
           </tfoot>
         </table>

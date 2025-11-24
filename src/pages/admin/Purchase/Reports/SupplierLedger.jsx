@@ -240,7 +240,7 @@ const SupplierLedger = () => {
                   <div>SR</div>
                   <div>Date</div>
                   <div>ID</div>
-                  <div>Description</div>
+                  <div>Narration</div>
                   <div>Debit</div>
                   <div>Credit</div>
                   <div>Balance</div>
@@ -275,9 +275,9 @@ const SupplierLedger = () => {
                     Total Credit: {totalDebit.toLocaleString()}
                   </div>
 
-                  <div className="text-blue-600">
+                  {/* <div className="text-blue-600">
                     Total Balance: {totalBalance.toLocaleString()}
-                  </div>
+                  </div> */}
 
                  
                 </div>

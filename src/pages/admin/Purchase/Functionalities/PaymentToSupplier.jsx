@@ -503,7 +503,7 @@ const PaymentToSupplier = () => {
                 <div>Receipt ID</div>
                 <div>Date</div>
                 <div>Supplier</div>
-                <div>Amount Received</div>
+                <div>Amount Paid</div>
                 <div>New Balance</div>
                 <div>Remarks</div>
                 <div>Action</div>
