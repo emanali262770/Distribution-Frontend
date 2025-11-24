@@ -139,7 +139,8 @@ const AmountPayable = () => {
                         {parseFloat(supp.Balance).toLocaleString("en-PK", {
                           style: "currency",
                           currency: "PKR",
-                          minimumFractionDigits: 2,
+                          minimumFractionDigits: 0,
+                          maximumFractionDigits: 0,
                         })}
                       </div>
                     </div>
@@ -160,7 +161,8 @@ const AmountPayable = () => {
                     {totalBalanceSum.toLocaleString("en-PK", {
                       style: "currency",
                       currency: "PKR",
-                      minimumFractionDigits: 2,
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 0,
                     })}
                   </div>
                 </div>

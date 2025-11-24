@@ -118,7 +118,8 @@ const AmountReceivables = () => {
                         {parseFloat(cust.Balance).toLocaleString("en-PK", {
                           style: "currency",
                           currency: "PKR",
-                          minimumFractionDigits: 2,
+                          minimumFractionDigits: 0,
+                          maximumFractionDigits: 0,
                         })}
                       </div>
                     </div>
