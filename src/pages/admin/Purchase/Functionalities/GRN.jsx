@@ -13,6 +13,8 @@ const GRN = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 10;
+  const [supplierError, setSupplierError] = useState("");
+  const [itemError, setItemError] = useState("");
 
   const [records, setRecords] = useState([]);
   const [salesmanList, setSalesmanList] = useState([]);
@@ -65,7 +67,6 @@ const GRN = () => {
     }
   }, []);
   // console.log({salesmanList});
-  
 
   // 🔹 Fetch Item Options
   const fetchItems = useCallback(async () => {
@@ -91,18 +92,35 @@ const GRN = () => {
     fetchSalesmen();
     fetchItems();
   }, [fetchSalesmen, fetchItems]);
- console.log(itemOptions);
- 
-  
+  console.log(itemOptions);
 
   // 🔹 Handle Salesman Select
   const handleSalesmanChange = (e) => {
     const salesmanId = e.target.value;
     setSelectedSalesman(salesmanId);
+
     const selected = salesmanList.find((s) => s._id === salesmanId);
-    // console.log({ selected });
 
     if (selected) {
+      // 🔥 Check limit & show inline error
+      if (selected.payableBalance >= 5000000) {
+        setSupplierError(
+          "Supplier credit/cash limit exceeded (50 lakh). Please change supplier."
+        );
+
+        // Reset data if needed
+        setSelectedSalesman("");
+        setBalance("");
+        setPhone("");
+        setAddress("");
+
+        return;
+      }
+
+      // If OK → clear error
+      setSupplierError("");
+
+      // existing code
       setBalance(selected.payableBalance || 0);
       setPhone(selected.contactNumber || "-");
       setAddress(selected.address || "-");
@@ -195,6 +213,8 @@ const GRN = () => {
     setItem("");
     setQty("");
     setRate("");
+    setItemError("")
+    setSupplierError("")
     setDescription("");
     setDiscount(0);
     setIsEnable(true);
@@ -486,26 +506,27 @@ const GRN = () => {
                             {grn.totalAmount || "-"}
                           </div>
                           <div className="flex justify-end gap-3">
-                            {/* <button
+                            <button
                             onClick={() => handleEditClick(grn)}
                             className="py-1 text-sm rounded text-blue-600"
                             title="Edit"
                           >
                             <SquarePen size={18} />
-                          </button> */}
-                            <button
-                              onClick={() => handleView(grn)}
-                              className="text-amber-600 hover:bg-amber-50 rounded"
-                              title="View GRN"
-                            >
-                              <Eye size={18} />
-                            </button>
+                          </button>
+                           
                             <button
                               onClick={() => handleDelete(grn._id)}
                               className="py-1 text-sm text-red-600"
                               title="Delete"
                             >
                               <Trash2 size={18} />
+                            </button>
+                             <button
+                              onClick={() => handleView(grn)}
+                              className="text-amber-600 hover:bg-amber-50 rounded"
+                              title="View GRN"
+                            >
+                              <Eye size={18} />
                             </button>
                             {/* <button
                             onClick={() => handleView(grn)}
@@ -648,6 +669,11 @@ const GRN = () => {
                           </option>
                         ))}
                       </select>
+                      {supplierError && (
+                        <p className="text-red-500 whitespace-nowrap text-sm mt-1">
+                          {supplierError}
+                        </p>
+                      )}
                     </div>
                     <div className="flex-1 min-w-0">
                       <label className="block text-gray-700 font-medium mb-2">
@@ -659,7 +685,6 @@ const GRN = () => {
                         readOnly
                         disabled
                         className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-newPrimary bg-gray-100"
-                        placeholder="Enter phone number"
                       />
                     </div>
                     <div className="flex-1 min-w-0">
@@ -672,7 +697,6 @@ const GRN = () => {
                         readOnly
                         disabled
                         className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-newPrimary bg-gray-100"
-                        placeholder="Enter phone number"
                       />
                     </div>
                   </div>
@@ -687,7 +711,6 @@ const GRN = () => {
                         readOnly
                         disabled
                         className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-newPrimary bg-gray-100"
-                        placeholder="Enter address"
                       />
                     </div>
                   </div>
@@ -708,10 +731,15 @@ const GRN = () => {
                           <option value="">Select Item</option>
                           {itemOptions.map((opt) => (
                             <option key={opt._id} value={opt._id}>
-                              {opt.itemName} 
+                              {opt.itemName}
                             </option>
                           ))}
                         </select>
+                        {itemError && (
+                          <p className="text-red-500 whitespace-nowrap text-sm mt-1">
+                            {itemError}
+                          </p>
+                        )}
                       </div>
 
                       {/* Rate */}
@@ -762,7 +790,7 @@ const GRN = () => {
                       </div>
 
                       {/* Add Button */}
-                      <div className="flex items-end">
+                      <div className={`${itemError?"items-center":"items-end"} flex `}>
                         <button
                           type="button"
                           onClick={() => {
@@ -775,6 +803,23 @@ const GRN = () => {
                               (opt) => opt._id === item
                             );
                             const total = qty * rate;
+                            // 🔥 CALCULATE CURRENT + NEW TOTAL
+                            const currentTotal = itemsList.reduce(
+                              (sum, i) => sum + i.total,
+                              0
+                            );
+                            const newPayable = currentTotal + total;
+
+                            // 🔥 Check supplier limit (50 lakh)
+                            if (balance + newPayable >= 5000000) {
+                              setItemError(
+                                "Supplier limit exceeded It must be less than 50 lakh. Reduce rate or quantity."
+                              );
+                              return; // ❌ STOP adding item
+                            }
+
+                            // Clear error if OK
+                            setItemError("");
 
                             const newItem = {
                               item: selectedItem?.itemName || "Unknown",
