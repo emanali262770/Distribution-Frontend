@@ -277,7 +277,7 @@ const ExpensePage = () => {
               {/* Header */}
               <div
                 className="hidden lg:grid 
-        grid-cols-[80px_150px_150px_1fr_150px_150px] 
+        grid-cols-[80px_180px_150px_1fr_150px_150px] 
         gap-6 bg-gray-100 py-3 px-6 text-xs font-semibold 
         text-gray-600 uppercase border-b "
               >
@@ -294,7 +294,7 @@ const ExpensePage = () => {
                   <TableSkeleton
                     rows={5}
                     cols={6}
-                    className="lg:grid-cols-[80px_150px_150px_1fr_150px_150px]"
+                    className="lg:grid-cols-[80px_180px_150px_1fr_150px_150px]"
                   />
                 ) : currentRecords.length === 0 ? (
                   <div className="text-center py-4 text-gray-500 bg-white">
@@ -305,8 +305,8 @@ const ExpensePage = () => {
                     <div
                       key={exp.id}
                       className="grid grid-cols-1 
-              lg:grid-cols-[80px_150px_150px_1fr_150px_150px]
-              gap-4 items-center px-6 py-4 text-sm bg-white 
+              lg:grid-cols-[80px_180px_150px_1fr_150px_150px]
+              gap-4 items-center px-6  text-sm bg-white 
               hover:bg-gray-50 transition"
                     >
                       <div className="">{indexOfFirstRecord + index + 1}</div>
@@ -522,9 +522,7 @@ const ExpensePage = () => {
                 </ul>
               </div>
 
-              <p className="mt-4 font-semibold text-blue-600">
-                Total Amount: {viewExpense.amount}
-              </p>
+              
 
               <button
                 onClick={() => setViewExpense(null)}

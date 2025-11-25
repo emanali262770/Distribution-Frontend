@@ -265,11 +265,11 @@ const ListOfItems = () => {
     setManufacture("");
     setSupplier("");
     setItemUnit("");
-    setPerUnit("");
+    // setPerUnit("");
     setPrice("");
     setReorder("");
     setEnabled(true);
-    setImage(null);
+    // setImage(null);
     setImagePreview(null);
     setExpiryOption("NoExpiry");
     setExpiryDay("");
@@ -283,9 +283,9 @@ const ListOfItems = () => {
     if (!itemName) errors.push("Item Name is required");
 
     // expiry ke liye special case
-    if (expiryOption === "HasExpiry" && !expiryDay) {
-      errors.push("Expiry day is required when Has Expiry is selected");
-    }
+    // if (expiryOption === "HasExpiry" && !expiryDay) {
+    //   errors.push("Expiry day is required when Has Expiry is selected");
+    // }
 
     return errors;
   };
@@ -308,14 +308,14 @@ const ListOfItems = () => {
       itemName,
       itemCategory: itemCategory.id,
       supplier,
-      shelveLocation,
-      itemUnit,
-      isEnable: enabled,
-      primaryBarcode,
-      secondaryBarcode: barcode,
-      itemKind,
-      hasExpiry: expiryOption === "HasExpiry" ? parseInt(expiryDay) || 0 : 0,
-      noHasExpiray: expiryOption === "NoExpiry"
+      // shelveLocation,
+      // itemUnit,
+      // isEnable: enabled,
+      // primaryBarcode,
+      // secondaryBarcode: barcode,
+      // itemKind,
+      // hasExpiry: expiryOption === "HasExpiry" ? parseInt(expiryDay) || 0 : 0,
+      // noHasExpiray: expiryOption === "NoExpiry"
     };
 
     try {
@@ -333,13 +333,17 @@ const ListOfItems = () => {
       }
 
       // Refresh table
-      fetchData(); // ✅ Add this line
+     
 
       // Close slider
       reState();
+       fetchData(); // ✅ Add this line
     } catch (error) {
-      console.error(error);
-      toast.error(error.response?.data?.message || "An error occurred");
+      console.error({error}, "Error saving item");
+      setTimeout(() => {
+        toast.error(error.response?.data?.message || "Something went wrong");
+      }, 4000);
+      
     } finally {
       setIsSaving(false);
     }
@@ -358,16 +362,16 @@ const ListOfItems = () => {
     setSupplier("");
     setShelveLocation("");
     setItemUnit("");
-    setPerUnit("");
+    // setPerUnit("");
     // setPurchase("");
     // setSales("");
     // setStock("");
     setPrice("");
     setBarcode("");
-    setReorder("");
+    // setReorder("");
     setEnabled(false);
-    setImagePreview("");
-    setImage(null);
+    // setImagePreview("");
+    // setImage(null);
     setExpiryOption("NoExpiry");
     setExpiryDay("");
   };
@@ -478,24 +482,24 @@ const ListOfItems = () => {
       });
   };
 
-  // Image Upload
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImage(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  // // Image Upload
+  // const handleImageUpload = (e) => {
+  //   const file = e.target.files[0];
+  //   if (file) {
+  //     setImage(file);
+  //     const reader = new FileReader();
+  //     reader.onloadend = () => {
+  //       setImagePreview(reader.result);
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
 
-  // Remove Image
-  const removeImage = () => {
-    setImage(null);
-    setImagePreview("");
-  };
+  // // Remove Image
+  // const removeImage = () => {
+  //   setImage(null);
+  //   setImagePreview("");
+  // };
   const handleCategoryChange = (e) => {
     const selectedId = e.target.value;
     const categoryObj = categoryList.find((c) => c._id === selectedId);
@@ -523,10 +527,11 @@ const ListOfItems = () => {
   const currentRecords = filteredItems.slice(indexOfFirstRecord, indexOfLastRecord);
   const totalPages = Math.ceil(filteredItems.length / recordsPerPage);
 
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
 
+
+useEffect(() => {
+ setCurrentPage(1)
+}, [searchTerm])
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
@@ -697,13 +702,13 @@ const ListOfItems = () => {
                   setSupplier("");
                   setShelveLocation("");
                   setItemUnit("");
-                  setPerUnit("");
+                  // setPerUnit("");
                   setPrice("");
                   setBarcode("");
-                  setReorder("");
+                  // setReorder("");
                   setEnabled(true);
-                  setImage(null);
-                  setImagePreview(null);
+                  // setImage(null);
+                  // setImagePreview(null);
                 }}
               >
                 ×

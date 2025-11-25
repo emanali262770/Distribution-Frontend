@@ -7,6 +7,9 @@ import CommanHeader from "../../Components/CommanHeader";
 import TableSkeleton from "../../Components/Skeleton";
 
 const ReceiptVoucher = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const recordsPerPage = 10; // you can change to 8 or 15
+
   const [vouchers, setVouchers] = useState([]);
   const [banks, setBanks] = useState([]);
   const [salesmen, setSalesmen] = useState([]);
@@ -100,7 +103,9 @@ const ReceiptVoucher = () => {
 
   const fetchSalesmen = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/employees`);
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_BASE_URL}/employees`
+      );
       setSalesmen(res.data || []);
     } catch {
       setSalesmen([]);
@@ -196,6 +201,18 @@ const ReceiptVoucher = () => {
   };
 
   /** ================== UI ================== **/
+
+  // 🔹 Pagination Logic
+  const indexOfLastRecord = currentPage * recordsPerPage;
+  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+  const currentRecords = vouchers.slice(indexOfFirstRecord, indexOfLastRecord);
+  const totalPages = Math.ceil(vouchers.length / recordsPerPage);
+
+  // Reset to first page when vouchers change (after add/edit/delete)
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [vouchers]);
+
   return (
     <div className="p-4 bg-gray-50 min-h-screen">
       <CommanHeader />
@@ -214,7 +231,9 @@ const ReceiptVoucher = () => {
         {loading ? (
           <TableSkeleton rows={6} cols={7} />
         ) : vouchers.length === 0 ? (
-          <div className="text-center py-6 text-gray-500">No vouchers found</div>
+          <div className="text-center py-6 text-gray-500">
+            No vouchers found
+          </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="min-w-full text-sm">
@@ -230,21 +249,29 @@ const ReceiptVoucher = () => {
                 </tr>
               </thead>
               <tbody>
-                {vouchers.map((v, i) => (
+                {currentRecords.map((v, i) => (
                   <tr key={v._id} className="border-b hover:bg-gray-50">
-                    <td className="px-4 py-3">{i + 1}</td>
+                    <td className="px-4 py-3">{indexOfFirstRecord + i + 1}</td>
                     <td className="px-4 py-3">{v.receiptId}</td>
-                    <td className="px-4 py-3">{v.salesman?.employeeName || "-"}</td>
+                    <td className="px-4 py-3">
+                      {v.salesman?.employeeName || "-"}
+                    </td>
                     <td className="px-4 py-3">{v.bank?.bankName || "-"}</td>
                     <td className="px-4 py-3">Rs. {v.amountReceived}</td>
                     <td className="px-4 py-3">
                       {new Date(v.date).toLocaleDateString()}
                     </td>
                     <td className="px-4 py-3 flex gap-2">
-                      <button onClick={() => handleEdit(v)} className="text-blue-600">
+                      <button
+                        onClick={() => handleEdit(v)}
+                        className="text-blue-600"
+                      >
                         <SquarePen size={18} />
                       </button>
-                      <button onClick={() => handleDelete(v._id)} className="text-red-600">
+                      <button
+                        onClick={() => handleDelete(v._id)}
+                        className="text-red-600"
+                      >
                         <Trash2 size={18} />
                       </button>
                     </td>
@@ -255,6 +282,43 @@ const ReceiptVoucher = () => {
           </div>
         )}
       </div>
+      {totalPages > 1 && (
+        <div className="flex justify-between items-center py-4 px-6 bg-white border-t mt-2 rounded-b-xl">
+          <p className="text-sm text-gray-600">
+            Showing {indexOfFirstRecord + 1} to{" "}
+            {Math.min(indexOfLastRecord, vouchers.length)} of {vouchers.length}{" "}
+            records
+          </p>
+
+          <div className="flex gap-2">
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className={`px-3 py-1 rounded-md ${
+                currentPage === 1
+                  ? "bg-gray-300 cursor-not-allowed"
+                  : "bg-newPrimary text-white hover:bg-newPrimary/80"
+              }`}
+            >
+              Previous
+            </button>
+
+            <button
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
+              disabled={currentPage === totalPages}
+              className={`px-3 py-1 rounded-md ${
+                currentPage === totalPages
+                  ? "bg-gray-300 cursor-not-allowed"
+                  : "bg-newPrimary text-white hover:bg-newPrimary/80"
+              }`}
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Form Modal */}
       {isFormOpen && (
@@ -305,7 +369,9 @@ const ReceiptVoucher = () => {
                   <select
                     value={formData.bank}
                     onChange={(e) => {
-                      const selected = banks.find((b) => b._id === e.target.value);
+                      const selected = banks.find(
+                        (b) => b._id === e.target.value
+                      );
                       setFormData({
                         ...formData,
                         bank: selected?._id,
@@ -340,7 +406,9 @@ const ReceiptVoucher = () => {
                   <select
                     value={formData.salesman}
                     onChange={(e) => {
-                      const selected = salesmen.find((s) => s._id === e.target.value);
+                      const selected = salesmen.find(
+                        (s) => s._id === e.target.value
+                      );
                       setFormData({
                         ...formData,
                         salesman: selected?._id,
@@ -361,10 +429,11 @@ const ReceiptVoucher = () => {
                         </option>
                       ))}
                   </select>
-
                 </div>
                 <div>
-                  <label className="block mb-1 font-medium">Receivable Balance</label>
+                  <label className="block mb-1 font-medium">
+                    Receivable Balance
+                  </label>
                   <input
                     type="text"
                     value={formData.salesmanBalance}
@@ -397,7 +466,6 @@ const ReceiptVoucher = () => {
                 {amountError && (
                   <p className="text-red-500 text-sm mt-1">{amountError}</p>
                 )}
-
               </div>
 
               <div>
@@ -420,8 +488,10 @@ const ReceiptVoucher = () => {
               >
                 {submitting ? (
                   <div className="w-5 h-5 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+                ) : isEditing ? (
+                  "Update Voucher"
                 ) : (
-                isEditing ? "Update Voucher" :  "Save Voucher"
+                  "Save Voucher"
                 )}
               </button>
             </form>

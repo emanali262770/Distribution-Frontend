@@ -188,7 +188,7 @@ const CreditAgingReport = () => {
               <div className="max-h-screen overflow-y-auto custom-scrollbar">
                 <div className="inline-block min-w-[1500px] w-full align-middle">
                   {/* Table Header */}
-                  <div className="hidden lg:grid grid-cols-12 gap-4 bg-gray-100 py-3 px-6 text-xs font-semibold text-gray-600 uppercase sticky top-0 z-10 border-b border-gray-200">
+                  <div className="hidden lg:grid grid-cols-[0.2fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr] gap-4 bg-gray-100 py-3 px-6 text-xs font-semibold text-gray-600 uppercase sticky top-0 z-10 border-b border-gray-200">
                     <div>SR</div>
                     <div>Customer</div>
                     <div>Salesman</div>
@@ -201,6 +201,7 @@ const CreditAgingReport = () => {
                     <div>Credit</div>
                     <div>Under Credit</div>
                     <div>Due</div>
+                    <div>OutStanding</div>
                   </div>
 
                   {/* Table Body */}
@@ -208,7 +209,7 @@ const CreditAgingReport = () => {
                     {loading ? (
                       <TableSkeleton
                         rows={currentRecords.length || 5}
-                        cols={12}
+                        cols={13}
                       />
                     ) : apiData.length > 0 ? (
                       currentRecords.map((customer, cIdx) => (
@@ -232,7 +233,7 @@ const CreditAgingReport = () => {
                           {customer.invoices.map((inv, iIdx) => (
                             <div
                               key={iIdx}
-                              className="grid grid-cols-12 items-center gap-6 px-6 py-3 text-sm hover:bg-gray-50 transition"
+                              className="grid grid-cols-[0.2fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr] items-center gap-6 px-6 py-3 text-sm hover:bg-gray-50 transition"
                             >
                               <div>{iIdx + 1}</div>
                               <div>{inv.customerName || "-"}</div>
@@ -253,6 +254,7 @@ const CreditAgingReport = () => {
                               >
                                 {inv.due.toLocaleString() ?? "-"}
                               </div>
+                               <div>{inv.credit.toLocaleString() || "-"}</div>
                             </div>
                           ))}
                         </div>
@@ -266,7 +268,15 @@ const CreditAgingReport = () => {
 
                   {/* Totals Footer */}
                   {apiData.length > 0 && (
-                    <div className="grid grid-cols-12 gap-4 bg-gray-100 py-3 px-6 text-xs font-semibold text-gray-700 whitespace-nowrap">
+                    <div className="grid grid-cols-[0.2fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr] gap-4 bg-gray-100 py-3 px-6 text-xs font-semibold text-gray-700 whitespace-nowrap">
+                      <div className=""></div>
+                      <div className=""></div>
+                      <div className=""></div>
+                      <div className=""></div>
+                      <div className=""></div>
+                      <div className=""></div>
+                      <div className=""></div>
+                      <div className=""></div>
                       <div className="col-span-8 text-right">Totals:</div>
                       <div className="text-blue-600">
                         Debit: {totals.totalDebit.toLocaleString()}

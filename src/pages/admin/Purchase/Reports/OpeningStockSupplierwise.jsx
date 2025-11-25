@@ -201,7 +201,7 @@ const OpeningStock = () => {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [itemCategory]);
+  }, [itemCategory,searchQuery]);
 
   useEffect(() => {
     if (!itemCategory) {

@@ -22,6 +22,7 @@ const PaymentVoucher = () => {
   const userInfo = JSON.parse(localStorage.getItem("userInfo")) || {};
   const sliderRef = useRef(null);
   const [amountError, setAmountError] = useState(""); // new
+
   const [submitting, setSubmitting] = useState(false);
   const API_URL = `${import.meta.env.VITE_API_BASE_URL}/payment-vouchers`;
 
@@ -162,38 +163,37 @@ const PaymentVoucher = () => {
 
   /** ================== SUBMIT ================== **/
   const handleSubmit = async (e) => {
-      e.preventDefault();
-   if (!formData.bank) {
-  toast.error("Please select a bank");
-  return;
-}
+    e.preventDefault();
+    if (!formData.bank) {
+      toast.error("Please select a bank");
+      return;
+    }
 
-if (!formData.supplier) {
-  toast.error("Please select a supplier");
-  return;
-}
+    if (!formData.supplier) {
+      toast.error("Please select a supplier");
+      return;
+    }
 
-if (formData.supplierPayable === 0) {
-  toast.error("Selected supplier has 0 payable balance");
-  return;
-}
+    if (formData.supplierPayable === 0) {
+      toast.error("Selected supplier has 0 payable balance");
+      return;
+    }
 
-if (Number(formData.amountPaid) <= 0) {
-  toast.error("Amount must be greater than 0");
-  return;
-}
+    if (Number(formData.amountPaid) <= 0) {
+      toast.error("Amount must be greater than 0");
+      return;
+    }
 
-if (Number(formData.amountPaid) > formData.supplierPayable) {
-  setAmountError("Amount cannot exceed payable balance");
-  return;
-}
+    if (Number(formData.amountPaid) > formData.supplierPayable) {
+      setAmountError("Amount cannot exceed payable balance");
+      return;
+    }
 
-if (Number(formData.amountPaid) > formData.bankBalance) {
-  toast.error("Amount cannot exceed bank balance");
-  return;
-}
+    if (Number(formData.amountPaid) > formData.bankBalance) {
+      toast.error("Amount cannot exceed bank balance");
+      return;
+    }
 
-  
     setSubmitting(true); // start spinner
     const payload = {
       date: formData.date,
@@ -234,7 +234,16 @@ if (Number(formData.amountPaid) > formData.bankBalance) {
   const indexOfLast = currentPage * recordsPerPage;
   const indexOfFirst = indexOfLast - recordsPerPage;
   const currentRecords = filteredData.slice(indexOfFirst, indexOfLast);
-// console.log({banks});
+
+  const totalPages = Math.ceil(filteredData.length / recordsPerPage);
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [vouchers]);
+
+  // console.log({banks});
 
   /** ================== UI ================== **/
   return (
@@ -319,6 +328,44 @@ if (Number(formData.amountPaid) > formData.bankBalance) {
                 ))}
               </tbody>
             </table>
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="flex justify-between items-center py-2 px-6 bg-white  mt-2 rounded-b-xl">
+                <p className="text-sm text-gray-600">
+                  Showing {indexOfFirst + 1} to{" "}
+                  {Math.min(indexOfLast, filteredData.length)} of{" "}
+                  {filteredData.length} records
+                </p>
+
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                    disabled={currentPage === 1}
+                    className={`px-3 py-1 rounded-md ${
+                      currentPage === 1
+                        ? "bg-gray-300 cursor-not-allowed"
+                        : "bg-newPrimary text-white hover:bg-newPrimary/80"
+                    }`}
+                  >
+                    Previous
+                  </button>
+
+                  <button
+                    onClick={() =>
+                      setCurrentPage((p) => Math.min(p + 1, totalPages))
+                    }
+                    disabled={currentPage === totalPages}
+                    className={`px-3 py-1 rounded-md ${
+                      currentPage === totalPages
+                        ? "bg-gray-300 cursor-not-allowed"
+                        : "bg-newPrimary text-white hover:bg-newPrimary/80"
+                    }`}
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -497,8 +544,10 @@ if (Number(formData.amountPaid) > formData.bankBalance) {
               >
                 {submitting ? (
                   <div className="w-5 h-5 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+                ) : isEditing ? (
+                  "Update Payment Voucher"
                 ) : (
-                 isEditing ? "Update Payment Voucher" : "Save Payment Voucher"
+                  "Save Payment Voucher"
                 )}
               </button>
             </form>

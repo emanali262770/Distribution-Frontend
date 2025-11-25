@@ -35,11 +35,14 @@ const SalesManInformation = () => {
   const recordsPerPage = 10;
 
   // Filtered employees based on search term
-  const filteredEmployees = employeeList?.filter((emp) =>
-    emp.employeeName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (emp.departmentName && emp.departmentName.toLowerCase().includes(searchTerm.toLowerCase())) ||
-    (emp.address && emp.address?.toLowerCase().includes(searchTerm.toLowerCase())) ||
-    (emp.city && emp.city.toLowerCase().includes(searchTerm.toLowerCase()))
+  const filteredEmployees = employeeList?.filter(
+    (emp) =>
+      emp.employeeName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (emp.departmentName &&
+        emp.departmentName.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (emp.address &&
+        emp.address?.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (emp.city && emp.city.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   useEffect(() => {
@@ -49,7 +52,10 @@ const SalesManInformation = () => {
   // Pagination logic applied on filtered employees
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-  const currentRecords = filteredEmployees.slice(indexOfFirstRecord, indexOfLastRecord);
+  const currentRecords = filteredEmployees.slice(
+    indexOfFirstRecord,
+    indexOfLastRecord
+  );
   const totalPages = Math.ceil(filteredEmployees.length / recordsPerPage);
 
   const handlePageChange = (pageNumber) => {
@@ -133,7 +139,6 @@ const SalesManInformation = () => {
     return errors;
   };
 
-
   const handleSave = async () => {
     const errors = validateSalesmanForm();
     if (errors.length > 0) {
@@ -185,7 +190,6 @@ const SalesManInformation = () => {
       setIsSaving(false);
     }
   };
-
 
   const handleEdit = (emp) => {
     setIsEdit(true);
@@ -276,7 +280,6 @@ const SalesManInformation = () => {
     setCurrentPage(1);
   }, [employeeList]);
 
-
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       {/* Common header */}
@@ -289,7 +292,9 @@ const SalesManInformation = () => {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
         {/* Title Section */}
         <div>
-          <h1 className="text-2xl font-bold text-newPrimary">Salesman Information</h1>
+          <h1 className="text-2xl font-bold text-newPrimary">
+            Salesman Information
+          </h1>
           <p className="text-gray-500 text-sm">Manage your salesman details</p>
         </div>
 
@@ -310,7 +315,6 @@ const SalesManInformation = () => {
           </button>
         </div>
       </div>
-
 
       {/* Employee Table */}
       <div className="rounded-xl border border-gray-200 overflow-hidden">
@@ -351,14 +355,20 @@ const SalesManInformation = () => {
                       {indexOfFirstRecord + index + 1}
                     </div>
 
-                    <div className="text-gray-700">{emp?.employeeName || "-"}</div>
+                    <div className="text-gray-700">
+                      {emp?.employeeName || "-"}
+                    </div>
                     <div className="text-gray-600">
                       {emp?.departmentName || "-"}
                     </div>
                     <div className="text-gray-600">{emp?.mobile || "-"}</div>
                     <div className="text-gray-600">{emp?.nicNo || "-"}</div>
-                    <div className="text-gray-600">{formatDate(emp.dob) || "-"}</div>
-                    <div className="text-gray-600">{emp?.qualification || "-"}</div>
+                    <div className="text-gray-600">
+                      {formatDate(emp.dob) || "-"}
+                    </div>
+                    <div className="text-gray-600">
+                      {emp?.qualification || "-"}
+                    </div>
                     <div className="font-semibold">
                       {emp?.isEnable ? (
                         <span className="text-green-600 bg-green-50 px-3 py-1 rounded-[5px]">
@@ -402,10 +412,11 @@ const SalesManInformation = () => {
                       setCurrentPage((prev) => Math.max(prev - 1, 1))
                     }
                     disabled={currentPage === 1}
-                    className={`px-3 py-1 rounded-md ${currentPage === 1
-                      ? "bg-gray-300 cursor-not-allowed"
-                      : "bg-newPrimary text-white hover:bg-newPrimary/80"
-                      }`}
+                    className={`px-3 py-1 rounded-md ${
+                      currentPage === 1
+                        ? "bg-gray-300 cursor-not-allowed"
+                        : "bg-newPrimary text-white hover:bg-newPrimary/80"
+                    }`}
                   >
                     Previous
                   </button>
@@ -414,10 +425,11 @@ const SalesManInformation = () => {
                       setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                     }
                     disabled={currentPage === totalPages}
-                    className={`px-3 py-1 rounded-md ${currentPage === totalPages
-                      ? "bg-gray-300 cursor-not-allowed"
-                      : "bg-newPrimary text-white hover:bg-newPrimary/80"
-                      }`}
+                    className={`px-3 py-1 rounded-md ${
+                      currentPage === totalPages
+                        ? "bg-gray-300 cursor-not-allowed"
+                        : "bg-newPrimary text-white hover:bg-newPrimary/80"
+                    }`}
                   >
                     Next
                   </button>
@@ -435,7 +447,6 @@ const SalesManInformation = () => {
             ref={sliderRef}
             className="relative w-full md:w-[800px] bg-white rounded-2xl shadow-2xl overflow-y-auto max-h-[90vh]"
           >
-
             <div className="flex justify-between items-center p-4 border-b sticky top-0 bg-white rounded-t-2xl">
               <h2 className="text-xl font-bold text-newPrimary">
                 {isEdit ? "Update Salesman" : "Add a New Salesman"}
@@ -535,16 +546,21 @@ const SalesManInformation = () => {
                   <input
                     type="text"
                     value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (/^\d*$/.test(value)) {
+                        // allows only digits
+                        setPhoneNumber(value);
+                      }
+                    }}
                     className="w-full p-2 border rounded"
+                    placeholder="Enter phone number"
                   />
                 </div>
               </div>
               <div className="flex gap-4">
                 <div className="flex-1 min-w-0">
-                  <label className="block text-gray-700 font-medium">
-                    NIC
-                  </label>
+                  <label className="block text-gray-700 font-medium">NIC</label>
                   <input
                     type="text"
                     value={nic}
@@ -603,12 +619,14 @@ const SalesManInformation = () => {
                 <button
                   type="button"
                   onClick={() => setEnable(!enable)}
-                  className={`w-14 h-7 flex items-center rounded-full p-1 transition-colors duration-300 ${enable ? "bg-green-500" : "bg-gray-300"
-                    }`}
+                  className={`w-14 h-7 flex items-center rounded-full p-1 transition-colors duration-300 ${
+                    enable ? "bg-green-500" : "bg-gray-300"
+                  }`}
                 >
                   <div
-                    className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-300 ${enable ? "translate-x-7" : "translate-x-0"
-                      }`}
+                    className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-300 ${
+                      enable ? "translate-x-7" : "translate-x-0"
+                    }`}
                   />
                 </button>
                 <span>{enable ? "Enabled" : "Disabled"}</span>
@@ -618,7 +636,7 @@ const SalesManInformation = () => {
                 className="bg-newPrimary text-white px-4 py-2 rounded-lg hover:bg-newPrimary/80 w-full"
                 onClick={handleSave}
               >
-       {isEdit ? "Update Salesman" : "Save Salesman"} 
+                {isEdit ? "Update Salesman" : "Save Salesman"}
               </button>
             </div>
           </div>

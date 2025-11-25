@@ -40,6 +40,9 @@ const Bank = () => {
   const [accountNo, setAccountNo] = useState("");
   const [balance, setBalance] = useState("");
   const [isEdit, setIsEdit] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const recordsPerPage = 10; // you can change to 10/15
+
   const [editId, setEditId] = useState(null);
   const [loading, setLoading] = useState(true);
   const sliderRef = useRef(null);
@@ -89,7 +92,8 @@ const Bank = () => {
     if (!bankName) return toast.error("Please select a bank name");
     if (!accountName.trim()) return toast.error("Please enter an account name");
     if (!accountNo.trim()) return toast.error("Please enter an account number");
-    if (!balance || isNaN(balance)) return toast.error("Please enter a valid balance");
+    if (!balance || isNaN(balance))
+      return toast.error("Please enter a valid balance");
     return true;
   };
 
@@ -177,10 +181,19 @@ const Bank = () => {
     setBalance("");
   };
 
+  // 🔹 Pagination calculation
+  const indexOfLastRecord = currentPage * recordsPerPage;
+  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+  const currentRecords = bankList.slice(indexOfFirstRecord, indexOfLastRecord);
+  const totalPages = Math.ceil(bankList.length / recordsPerPage);
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [bankList]);
+
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       {/* Header */}
-      <CommanHeader/>
+      <CommanHeader />
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-2xl font-bold text-newPrimary">Bank List</h1>
@@ -207,28 +220,36 @@ const Bank = () => {
               {userInfo?.isAdmin && <div className="text-right">Actions</div>}
             </div>
 
-            <div className="flex flex-col divide-y divide-gray-100 max-h-[400px] overflow-y-auto">
+            <div className="flex flex-col divide-y divide-gray-100 max-h-screen overflow-y-auto">
               {loading ? (
                 <TableSkeleton rows={5} cols={6} />
               ) : bankList.length === 0 ? (
-                <div className="text-center py-4 text-gray-500 bg-white">No banks found.</div>
+                <div className="text-center py-4 text-gray-500 bg-white">
+                  No banks found.
+                </div>
               ) : (
-                bankList.map((b, index) => (
+                currentRecords.map((b, index) => (
                   <div
                     key={b._id}
                     className="hidden lg:grid grid-cols-[80px_1.5fr_1.5fr_1.5fr_1fr_1fr] items-center gap-6 px-6 py-4 text-sm bg-white hover:bg-gray-50 transition"
                   >
-                    <div>{index + 1}</div>
+                    <div>{indexOfFirstRecord + index + 1}</div>
                     <div>{b.bankName}</div>
                     <div>{b.accountHolderName || b.accountName}</div>
                     <div>{b.accountNumber}</div>
                     <div>{b.balance?.toLocaleString()}</div>
                     {userInfo?.isAdmin && (
                       <div className="flex justify-end gap-3">
-                        <button onClick={() => handleEdit(b)} className="text-blue-600">
+                        <button
+                          onClick={() => handleEdit(b)}
+                          className="text-blue-600"
+                        >
                           <SquarePen size={18} />
                         </button>
-                        <button onClick={() => handleDelete(b._id)} className="text-red-600">
+                        <button
+                          onClick={() => handleDelete(b._id)}
+                          className="text-red-600"
+                        >
                           <Trash2 size={18} />
                         </button>
                       </div>
@@ -237,6 +258,46 @@ const Bank = () => {
                 ))
               )}
             </div>
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="flex justify-between items-center py-4 px-6 bg-white border-t mt-2 rounded-b-xl">
+                <p className="text-sm text-gray-600">
+                  Showing {indexOfFirstRecord + 1} to{" "}
+                  {Math.min(indexOfLastRecord, bankList.length)} of{" "}
+                  {bankList.length} records
+                </p>
+
+                <div className="flex gap-2">
+                  <button
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.max(prev - 1, 1))
+                    }
+                    disabled={currentPage === 1}
+                    className={`px-3 py-1 rounded-md ${
+                      currentPage === 1
+                        ? "bg-gray-300 cursor-not-allowed"
+                        : "bg-newPrimary text-white hover:bg-newPrimary/80"
+                    }`}
+                  >
+                    Previous
+                  </button>
+
+                  <button
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                    }
+                    disabled={currentPage === totalPages}
+                    className={`px-3 py-1 rounded-md ${
+                      currentPage === totalPages
+                        ? "bg-gray-300 cursor-not-allowed"
+                        : "bg-newPrimary text-white hover:bg-newPrimary/80"
+                    }`}
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -326,7 +387,7 @@ const Bank = () => {
                 className="bg-newPrimary text-white px-4 py-2 rounded-lg hover:bg-newPrimary/80 w-full"
                 onClick={handleSave}
               >
-              {isEdit ? "Update" : "Save Bank"}  
+                {isEdit ? "Update" : "Save Bank"}
               </button>
             </div>
           </div>

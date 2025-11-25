@@ -44,8 +44,9 @@ const ItemWisePurchase = () => {
       setLoading(true);
 
       // ✅ Build query dynamically before calling API
-      let query = `${import.meta.env.VITE_API_BASE_URL
-        }/reports/itemwise?itemName=${encodeURIComponent(selectedItem)}`;
+      let query = `${
+        import.meta.env.VITE_API_BASE_URL
+      }/reports/itemwise?itemName=${encodeURIComponent(selectedItem)}`;
 
       if (dateFrom && dateTo) {
         query += `&from=${dateFrom}&to=${dateTo}`;
@@ -87,13 +88,29 @@ const ItemWisePurchase = () => {
   }, [fetchItemwiseReport]);
 
   // ================= 3️⃣ PAGINATION =================
+  // 🔍 SEARCH FILTER
+  const filteredEntries = ledgerEntries.filter((entry) => {
+    const q = searchQuery.toLowerCase();
+
+    return (
+      entry.ID?.toString().toLowerCase().includes(q) ||
+      entry.SupplierName?.toLowerCase().includes(q) ||
+      entry.Item?.toLowerCase().includes(q)
+    );
+  });
+
+  // 🔢 PAGINATION (USE FILTERED DATA)
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-  const currentRecords = ledgerEntries.slice(
+  const currentRecords = filteredEntries.slice(
     indexOfFirstRecord,
     indexOfLastRecord
   );
-  const totalPages = Math.ceil(ledgerEntries.length / recordsPerPage);
+  const totalPages = Math.ceil(filteredEntries.length / recordsPerPage);
+useEffect(() => {
+  setCurrentPage(1);
+}, [searchQuery]);
+
   // console.log({ ledgerEntries });
   useEffect(() => {
     if (!selectedItem) {
@@ -198,7 +215,11 @@ const ItemWisePurchase = () => {
                 </div>
 
                 {/* Filter Button */}
-                <div className="flex items-end">
+                <div
+                  className={`${
+                    showItemError ? "items-center" : "items-end"
+                  } flex `}
+                >
                   <button
                     onClick={fetchItemwiseReport}
                     disabled={!selectedItem}
@@ -240,7 +261,7 @@ const ItemWisePurchase = () => {
             ) : (
               <>
                 {/* Header */}
-                <div className="hidden lg:grid grid-cols-[0.3fr_1fr_1fr_1.5fr_1fr_1fr_1fr_1fr_1fr] bg-gray-100 py-3 px-6 text-xs font-semibold text-gray-600 uppercase">
+                <div className="hidden lg:grid grid-cols-[0.3fr_1fr_1fr_1.5fr_1.5fr_1fr_1fr_1fr_1fr] bg-gray-100 py-3 px-6 text-xs font-semibold text-gray-600 uppercase">
                   <div>SR</div>
                   <div>Date</div>
                   <div>ID</div>
@@ -257,7 +278,7 @@ const ItemWisePurchase = () => {
                   {currentRecords.map((entry, i) => (
                     <div
                       key={i}
-                      className="grid grid-cols-[0.3fr_1fr_1fr_1.5fr_1fr_1fr_1fr_1fr_1fr] items-center px-6 py-3 hover:bg-gray-50 text-sm"
+                      className="grid grid-cols-[0.3fr_1fr_1fr_1.5fr_1.5fr_1fr_1fr_1fr_1fr] items-center px-6 py-3 hover:bg-gray-50 text-sm"
                     >
                       <div>{i + 1 + indexOfFirstRecord}</div>
                       <div>{entry.Date || "-"}</div>
@@ -276,7 +297,7 @@ const ItemWisePurchase = () => {
 
             {/* TOTAL NET AMOUNT ROW */}
             {ledgerEntries.length > 0 && (
-              <div className="grid grid-cols-[0.5fr_0.5fr_0.5fr_1.5fr_1fr_1fr_1fr_1fr_1fr] gap-4 bg-gray-100 py-3 px-6 text-sm font-semibold text-gray-700 border-t">
+              <div className="grid grid-cols-[0.3fr_1fr_1fr_1.5fr_1.5fr_1fr_1fr_1fr_1fr] gap-4 bg-gray-100 py-3 px-6 text-sm font-semibold text-gray-700 border-t">
                 <div></div>
                 <div></div>
                 <div></div>
@@ -309,10 +330,11 @@ const ItemWisePurchase = () => {
                   <button
                     onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
                     disabled={currentPage === 1}
-                    className={`px-3 py-1 rounded-md ${currentPage === 1
-                      ? "bg-gray-300 cursor-not-allowed"
-                      : "bg-newPrimary text-white"
-                      }`}
+                    className={`px-3 py-1 rounded-md ${
+                      currentPage === 1
+                        ? "bg-gray-300 cursor-not-allowed"
+                        : "bg-newPrimary text-white"
+                    }`}
                   >
                     Previous
                   </button>
@@ -321,10 +343,11 @@ const ItemWisePurchase = () => {
                       setCurrentPage((p) => Math.min(p + 1, totalPages))
                     }
                     disabled={currentPage === totalPages}
-                    className={`px-3 py-1 rounded-md ${currentPage === totalPages
-                      ? "bg-gray-300 cursor-not-allowed"
-                      : "bg-newPrimary text-white"
-                      }`}
+                    className={`px-3 py-1 rounded-md ${
+                      currentPage === totalPages
+                        ? "bg-gray-300 cursor-not-allowed"
+                        : "bg-newPrimary text-white"
+                    }`}
                   >
                     Next
                   </button>

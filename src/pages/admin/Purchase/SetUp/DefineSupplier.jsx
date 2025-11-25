@@ -275,6 +275,9 @@ const DefineSupplier = () => {
     indexOfLastRecord
   );
   const totalPages = Math.ceil(filteredSuppliers.length / recordsPerPage);
+useEffect(() => {
+  setCurrentPage(1)
+}, [searchQuery])
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">

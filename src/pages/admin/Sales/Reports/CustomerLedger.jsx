@@ -322,9 +322,7 @@ const totalCredit = ledgerEntries.reduce(
                     <div className="text-green-600">
                       Total Debit: {totalDebit.toLocaleString()}
                     </div>
-                    <div className="text-green-600">
-                      Total Balance: {totalBalance.toLocaleString()}
-                    </div>
+                   
                   </div>
                 </>
               )}

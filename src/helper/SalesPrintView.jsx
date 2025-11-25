@@ -216,7 +216,7 @@ export const handleLedgerPrint = (ledgerEntries = []) => {
               <th>Rate</th>
               <th>Qty</th>
               <th>Amount</th>
-              <th>Payable Discount</th>
+              <th>Net Amount</th>
             </tr>
           </thead>
           <tbody>
@@ -320,7 +320,8 @@ export const handleItemWisePrint = (ledgerEntries = []) => {
               <th>Rate</th>
               <th>Qty</th>
               <th>Total Amount</th>
-              <th>Payable Discount</th>
+              <th>
+Net Amount</th>
             </tr>
           </thead>
           <tbody>
@@ -373,10 +374,7 @@ export const handleSupplierLedgerPrint = (ledgerEntries = []) => {
   const toNum = (v) => parseFloat(String(v || "0").replace(/,/g, ""));
 
   // Totals
-  const totalDebit = ledgerEntries.reduce(
-    (sum, e) => sum + toNum(e.Debit),
-    0
-  );
+  const totalDebit = ledgerEntries.reduce((sum, e) => sum + toNum(e.Debit), 0);
 
   const totalCredit = ledgerEntries.reduce(
     (sum, e) => sum + toNum(e.Credit),
@@ -466,7 +464,6 @@ export const handleSupplierLedgerPrint = (ledgerEntries = []) => {
   win.document.close();
   win.print();
 };
-
 
 export const handleDateWisePrint = (ledgerEntries = []) => {
   if (!ledgerEntries.length) return;
@@ -649,7 +646,7 @@ export const handleCreditAgingPrint = (apiData = [], totals = {}) => {
               <td>${(totals.totalCredit || 0).toLocaleString()}</td>
               <td>${(totals.totalUnderCredit || 0).toLocaleString()}</td>
               <td>${(totals.totalDue || 0).toLocaleString()}</td>
-              <td>${(totals.totalOutstanding || 0).toLocaleString()}</td>
+              <td></td>
             </tr>
           </tfoot>
         </table>
@@ -1134,24 +1131,29 @@ function numberToWords(num) {
 }
 
 export const handleCustomerLedgerPrint = (ledgerEntries = []) => {
+
   if (!ledgerEntries.length) return;
 
   const firstEntry = ledgerEntries[0];
 
-  const totalPaid = ledgerEntries.reduce(
-    (sum, e) => sum + (parseFloat(e.Paid) || 0),
+  // Convert comma numbers safely
+  const toNumber = (value) => {
+    if (!value) return 0;
+    return parseFloat(value.toString().replace(/,/g, ""));
+  };
+
+  const totalDebit = ledgerEntries.reduce(
+    (sum, e) => sum + toNumber(e.Debit),
     0
   );
-  const totalReceived = ledgerEntries.reduce(
-    (sum, e) => sum + (parseFloat(e.Received) || 0),
-    0
-  );
-  const totalBalance = ledgerEntries.reduce(
-    (sum, e) => sum + (parseFloat(e.Balance) || 0),
+
+  const totalCredit = ledgerEntries.reduce(
+    (sum, e) => sum + toNumber(e.Credit),
     0
   );
 
   const win = window.open("", "", "width=900,height=700");
+
   win.document.write(`
     <html>
       <head>
@@ -1162,7 +1164,7 @@ export const handleCustomerLedgerPrint = (ledgerEntries = []) => {
           h1 { font-size: 22px; font-weight: bold; }
           h2 { margin-top: 8px; text-decoration: underline; }
           p { font-size: 14px; color: #555; }
-          hr { border: none; border-top: 1px solid #aaa; margin: 10px 0 20px; }
+          hr { border-top: 1px solid #aaa; margin: 10px 0 20px; }
           table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; }
           th, td { border: 1px solid #999; padding: 6px; text-align: center; }
           th { background: #f2f2f2; }
@@ -1170,11 +1172,13 @@ export const handleCustomerLedgerPrint = (ledgerEntries = []) => {
           .note { font-size: 11px; color: #777; margin-top: 20px; text-align: center; }
         </style>
       </head>
+
       <body>
         <h1>Distribution System Pvt. Ltd.</h1>
         <p>Mall of Lahore, Cantt</p>
         <p>Phone: 0318-4486979</p>
         <hr />
+
         <h2>Customer Ledger Report</h2>
 
         <div style="margin-bottom:10px; font-size:13px;">
@@ -1190,13 +1194,12 @@ export const handleCustomerLedgerPrint = (ledgerEntries = []) => {
               <th>ID</th>
               <th>Customer Name</th>
               <th>Description</th>
-              <th>Paid</th>
-              <th>Received</th>
-              <th>Balance</th>
               <th>Debit</th>
               <th>Credit</th>
+              <th>Balance</th>
             </tr>
           </thead>
+
           <tbody>
             ${ledgerEntries
               .map(
@@ -1207,22 +1210,19 @@ export const handleCustomerLedgerPrint = (ledgerEntries = []) => {
                     <td>${entry.ID || "-"}</td>
                     <td>${entry.CustomerName || "-"}</td>
                     <td>${entry.Description || "-"}</td>
-                    <td>${parseFloat(entry.Paid || 0).toLocaleString()}</td>
-                    <td>${parseFloat(entry.Received || 0).toLocaleString()}</td>
-                    <td>${parseFloat(entry.Balance || 0).toLocaleString()}</td>
-                    <td>${parseFloat(entry.Debit || 0).toLocaleString()}</td>
-                    <td>${parseFloat(entry.Credit || 0).toLocaleString()}</td>
+                    <td>${toNumber(entry.Debit).toLocaleString()}</td>
+                    <td>${toNumber(entry.Credit).toLocaleString()}</td>
+                    <td>${toNumber(entry.Balance).toLocaleString()}</td>
                   </tr>`
               )
               .join("")}
           </tbody>
+
           <tfoot>
             <tr>
               <td colspan="5" style="text-align:right;">Totals:</td>
-              <td>${totalPaid.toLocaleString()}</td>
-              <td>${totalReceived.toLocaleString()}</td>
-              <td>${totalBalance.toLocaleString()}</td>
-              <td>-</td>
+              <td>${totalDebit.toLocaleString()}</td>
+              <td>${totalCredit.toLocaleString()}</td>
               <td>-</td>
             </tr>
           </tfoot>
@@ -1231,9 +1231,12 @@ export const handleCustomerLedgerPrint = (ledgerEntries = []) => {
         <p class="note">
           This is a system-generated customer ledger report and does not require a signature.
         </p>
+
       </body>
     </html>
   `);
+
   win.document.close();
   win.print();
 };
+

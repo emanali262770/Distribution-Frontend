@@ -55,10 +55,11 @@ const AmountReceivables = () => {
     setCurrentPage(1);
   }, [searchTerm]);
   // 🔹 Total Balance Calculation
-  const totalBalance = filteredCustomers.reduce(
-    (sum, r) => sum + (parseFloat(r.Balance) || 0),
-    0
-  );
+ const totalBalance = searchedCustomers.reduce(
+  (sum, r) => sum + (parseFloat(r.Balance) || 0),
+  0
+);
+
 
   console.log({ currentRecords });
 

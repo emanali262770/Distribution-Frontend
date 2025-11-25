@@ -283,7 +283,7 @@ const SupplierWisePurchase = () => {
                     Total Amount: {totalDebit.toLocaleString()}
                   </div>
                   <div className="text-green-600">
-                    Total Payable: {totalCredit.toLocaleString()}
+                    Total Net Amoun: {totalCredit.toLocaleString()}
                   </div>
                 </div>
               </>

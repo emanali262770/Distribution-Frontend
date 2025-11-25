@@ -92,7 +92,7 @@ const GRN = () => {
     fetchSalesmen();
     fetchItems();
   }, [fetchSalesmen, fetchItems]);
-  console.log(itemOptions);
+  // console.log(itemOptions);
 
   // 🔹 Handle Salesman Select
   const handleSalesmanChange = (e) => {
@@ -149,6 +149,8 @@ const GRN = () => {
       const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/grn`, {
         headers,
       });
+      console.log(res.data.data);
+      
       // console.log("GRN API Response:", res.data); // Debug API response
       const transformedGrns = res.data.data.map((grn) => ({
         _id: grn._id,
@@ -156,6 +158,9 @@ const GRN = () => {
         grnDate: formatDate(grn.grnDate) || "-",
         supplier: {
           supplierName: grn.Supplier?.supplierName || "-",
+          address: grn.Supplier?.address || "-",
+          contactNumber: grn.Supplier?.contactNumber || "-",
+          payableBalance: grn.Supplier?.payableBalance || "-",
         },
         items:
           grn.products?.map((p) => ({
@@ -247,7 +252,7 @@ const GRN = () => {
     setSelectedSalesman(selectedSupplier?._id || "");
     setSupplier(grn.supplier?.supplierName || "");
     setAddress(selectedSupplier?.address || "-");
-    setPhone(selectedSupplier?.phoneNumber || "-");
+    setPhone(selectedSupplier?.contactNumber || "-");
     setBalance(selectedSupplier?.payableBalance || 0);
 
     // ✅ Items section (unchanged)
@@ -424,6 +429,12 @@ const GRN = () => {
 
   // Update total pages based on filtered results
   const totalPages = Math.ceil(filteredGrns.length / recordsPerPage);
+useEffect(() => {
+ setCurrentPage(1)
+}, [searchTerm])
+
+console.log({grns});
+
 
   return (
     <div className="p-4 bg-gray-50 min-h-screen">

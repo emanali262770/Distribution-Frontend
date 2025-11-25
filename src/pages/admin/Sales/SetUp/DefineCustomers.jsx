@@ -343,7 +343,7 @@ const DefineCustomers = () => {
   };
   useEffect(() => {
     setCurrentPage(1);
-  }, [customerList]);
+  }, [searchTerm]);
 
 
   return (
