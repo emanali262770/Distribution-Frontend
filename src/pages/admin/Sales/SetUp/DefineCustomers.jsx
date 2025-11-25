@@ -43,9 +43,10 @@ const DefineCustomers = () => {
   const recordsPerPage = 10;
 
   // Filtered customers based on search term
-  const filteredCustomers = customerList.filter((c) =>
-    c.customerName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (c.address && c.address.toLowerCase().includes(searchTerm.toLowerCase()))
+  const filteredCustomers = customerList.filter(
+    (c) =>
+      c.customerName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (c.address && c.address.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   // Pagination logic on filtered customers
@@ -58,7 +59,6 @@ const DefineCustomers = () => {
 
   // Total pages based on filtered customers
   const totalPages = Math.ceil(filteredCustomers.length / recordsPerPage);
-
 
   const handlePageChange = (pageNumber) => {
     setLoading(true);
@@ -133,7 +133,7 @@ const DefineCustomers = () => {
   const handleAddCustomer = () => {
     setIsSliderOpen(true);
     setIsEdit(false);
-    setSelectedSalesman("")
+    setSelectedSalesman("");
     setEditId(null);
     setCustomerName("");
     setContactPerson("");
@@ -208,8 +208,6 @@ const DefineCustomers = () => {
       openingBalanceDate,
       salesBalance: Number(balanceReceived) || 0,
     };
-
-
 
     try {
       const { token } = userInfo || {};
@@ -345,7 +343,6 @@ const DefineCustomers = () => {
     setCurrentPage(1);
   }, [searchTerm]);
 
-
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <CommanHeader />
@@ -377,7 +374,6 @@ const DefineCustomers = () => {
         </div>
       </div>
 
-
       <div className="rounded-xl border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
           <div className="min-w-[1100px]">
@@ -399,6 +395,10 @@ const DefineCustomers = () => {
                   className="lg:grid-cols-[20px_1fr_1fr_1fr_1fr_1.5fr_auto]"
                 />
               ) : customerList.length === 0 ? (
+                <div className="text-center py-4 text-gray-500 bg-white">
+                  No customers found.
+                </div>
+              ) : filteredCustomers.length === 0 ? (
                 <div className="text-center py-4 text-gray-500 bg-white">
                   No customers found.
                 </div>
@@ -483,8 +483,9 @@ const DefineCustomers = () => {
                         Balance: {c.balanceReceived || "0"}
                       </p>
                       <p
-                        className={`text-sm font-semibold ${c.status ? "text-green-600" : "text-red-600"
-                          }`}
+                        className={`text-sm font-semibold ${
+                          c.status ? "text-green-600" : "text-red-600"
+                        }`}
                       >
                         {c.status ? "Active" : "Inactive"}
                       </p>
@@ -523,10 +524,11 @@ const DefineCustomers = () => {
                       setCurrentPage((prev) => Math.max(prev - 1, 1))
                     }
                     disabled={currentPage === 1}
-                    className={`px-3 py-1 rounded-md ${currentPage === 1
-                      ? "bg-gray-300 cursor-not-allowed"
-                      : "bg-newPrimary text-white hover:bg-newPrimary/80"
-                      }`}
+                    className={`px-3 py-1 rounded-md ${
+                      currentPage === 1
+                        ? "bg-gray-300 cursor-not-allowed"
+                        : "bg-newPrimary text-white hover:bg-newPrimary/80"
+                    }`}
                   >
                     Previous
                   </button>
@@ -535,10 +537,11 @@ const DefineCustomers = () => {
                       setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                     }
                     disabled={currentPage === totalPages}
-                    className={`px-3 py-1 rounded-md ${currentPage === totalPages
-                      ? "bg-gray-300 cursor-not-allowed"
-                      : "bg-newPrimary text-white hover:bg-newPrimary/80"
-                      }`}
+                    className={`px-3 py-1 rounded-md ${
+                      currentPage === totalPages
+                        ? "bg-gray-300 cursor-not-allowed"
+                        : "bg-newPrimary text-white hover:bg-newPrimary/80"
+                    }`}
                   >
                     Next
                   </button>
@@ -843,7 +846,7 @@ const DefineCustomers = () => {
                 className="bg-newPrimary text-white px-4 py-2 rounded-lg hover:bg-newPrimary/80 w-full"
                 onClick={handleSave}
               >
-              {isEdit?"Update Customer":"Save Customer"}  
+                {isEdit ? "Update Customer" : "Save Customer"}
               </button>
             </div>
           </div>

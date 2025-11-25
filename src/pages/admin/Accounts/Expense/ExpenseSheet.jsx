@@ -45,7 +45,6 @@ const ExpensePage = () => {
       if (dateFrom && dateTo) {
         url = `${API_BASE}/salesman-expense/by-date?from=${dateFrom}&to=${dateTo}`;
       }
-      
 
       const { data } = await axios.get(url);
 
@@ -220,6 +219,10 @@ const ExpensePage = () => {
                       className="lg:grid-cols-[80px_150px_1fr_150px_150px]"
                     />
                   ) : expenses.length === 0 ? (
+                    <div className="text-center py-4 text-gray-500 bg-white">
+                      No expenses found.
+                    </div>
+                  ) : filteredExpenses.length === 0 ? (
                     <div className="text-center py-4 text-gray-500 bg-white">
                       No expenses found.
                     </div>

@@ -117,14 +117,14 @@ const setupChildren = [
   //   icon: <FaMapMarkerAlt />,
   // },
   {
-    to: "/admin/define-customers",
-    label: "Define Customers",
-    icon: <FaUsers />,
-  },
-  {
     to: "/admin/salesman-information",
     label: "Salesman Information",
     icon: <FaUser />,
+  },
+  {
+    to: "/admin/define-customers",
+    label: "Define Customers",
+    icon: <FaUsers />,
   },
   // {
   //   to: "/admin/vehicle-information",
@@ -180,7 +180,7 @@ const reportsChildren = [
     label: "Daily Sales Report",
     icon: <FaCalendarAlt />,
   },
- 
+
   // {
   //   to: "/admin/report/opening-stock",
   //   label: "Opening Stock",

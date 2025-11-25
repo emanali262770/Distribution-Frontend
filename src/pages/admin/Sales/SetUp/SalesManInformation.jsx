@@ -345,6 +345,10 @@ const SalesManInformation = () => {
                 <div className="text-center py-4 text-gray-500 bg-white">
                   No employee found.
                 </div>
+              ) : filteredEmployees.length === 0 ? (
+                <div className="text-center py-4 text-gray-500 bg-white">
+                  No employee found.
+                </div>
               ) : (
                 currentRecords.map((emp, index) => (
                   <div

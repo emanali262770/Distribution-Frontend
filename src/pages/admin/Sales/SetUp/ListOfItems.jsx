@@ -52,7 +52,6 @@ const ListOfItems = () => {
   // const [imagePreview, setImagePreview] = useState(null);
   const [itemTypeList, setItemTypeList] = useState([]);
 
-
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const generateDummyBarcode = () => {
     return Math.floor(100000000000 + Math.random() * 900000000000).toString();
@@ -167,7 +166,8 @@ const ListOfItems = () => {
     const fetchItemTypes = async () => {
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL}/item-details/category/${itemCategory.name
+          `${import.meta.env.VITE_API_BASE_URL}/item-details/category/${
+            itemCategory.name
           }`
         );
         setItemTypeList(res.data);
@@ -325,25 +325,31 @@ const ListOfItems = () => {
       };
 
       if (isEdit && editId) {
-        await axios.put(`${import.meta.env.VITE_API_BASE_URL}/item-details/${editId}`, payload, { headers });
+        await axios.put(
+          `${import.meta.env.VITE_API_BASE_URL}/item-details/${editId}`,
+          payload,
+          { headers }
+        );
         toast.success("Item List updated successfully");
       } else {
-        await axios.post(`${import.meta.env.VITE_API_BASE_URL}/item-details`, payload, { headers });
+        await axios.post(
+          `${import.meta.env.VITE_API_BASE_URL}/item-details`,
+          payload,
+          { headers }
+        );
         toast.success("Item List added successfully");
       }
 
       // Refresh table
-     
 
       // Close slider
       reState();
-       fetchData(); // ✅ Add this line
+      fetchData(); // ✅ Add this line
     } catch (error) {
-      console.error({error}, "Error saving item");
+      console.error({ error }, "Error saving item");
       setTimeout(() => {
         toast.error(error.response?.data?.message || "Something went wrong");
       }, 4000);
-      
     } finally {
       setIsSaving(false);
     }
@@ -509,7 +515,6 @@ const ListOfItems = () => {
     });
   };
 
-
   const filteredItems = itemList.filter((item) => {
     const term = searchTerm.toLowerCase();
     return (
@@ -524,14 +529,15 @@ const ListOfItems = () => {
 
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-  const currentRecords = filteredItems.slice(indexOfFirstRecord, indexOfLastRecord);
+  const currentRecords = filteredItems.slice(
+    indexOfFirstRecord,
+    indexOfLastRecord
+  );
   const totalPages = Math.ceil(filteredItems.length / recordsPerPage);
 
-
-
-useEffect(() => {
- setCurrentPage(1)
-}, [searchTerm])
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
@@ -571,7 +577,6 @@ useEffect(() => {
         </div>
       </div>
 
-
       {/* Item Table */}
       <div className="rounded-xl shadow border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
@@ -594,6 +599,10 @@ useEffect(() => {
                     className="lg:grid-cols-[0.2fr_1fr_1fr_0.5fr]"
                   />
                 ) : itemList.length === 0 ? (
+                  <div className="text-center py-4 text-gray-500 bg-white">
+                    No Items found.
+                  </div>
+                ) : filteredItems.length === 0 ? (
                   <div className="text-center py-4 text-gray-500 bg-white">
                     No Items found.
                   </div>
@@ -651,10 +660,11 @@ useEffect(() => {
                         setCurrentPage((prev) => Math.max(prev - 1, 1))
                       }
                       disabled={currentPage === 1}
-                      className={`px-3 py-1 rounded-md ${currentPage === 1
-                        ? "bg-gray-300 cursor-not-allowed"
-                        : "bg-newPrimary text-white hover:bg-newPrimary/80"
-                        }`}
+                      className={`px-3 py-1 rounded-md ${
+                        currentPage === 1
+                          ? "bg-gray-300 cursor-not-allowed"
+                          : "bg-newPrimary text-white hover:bg-newPrimary/80"
+                      }`}
                     >
                       Previous
                     </button>
@@ -663,10 +673,11 @@ useEffect(() => {
                         setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                       }
                       disabled={currentPage === totalPages}
-                      className={`px-3 py-1 rounded-md ${currentPage === totalPages
-                        ? "bg-gray-300 cursor-not-allowed"
-                        : "bg-newPrimary text-white hover:bg-newPrimary/80"
-                        }`}
+                      className={`px-3 py-1 rounded-md ${
+                        currentPage === totalPages
+                          ? "bg-gray-300 cursor-not-allowed"
+                          : "bg-newPrimary text-white hover:bg-newPrimary/80"
+                      }`}
                     >
                       Next
                     </button>
@@ -747,10 +758,11 @@ useEffect(() => {
                           <Barcode value={primaryBarcode} height={30} />
                         </div>
                       ) : (
-                        <p className="text-gray-500 text-sm mt-2">No barcode generated</p>
+                        <p className="text-gray-500 text-sm mt-2">
+                          No barcode generated
+                        </p>
                       )}
                     </div>
-
                   </div>
                 </div>
                 {/* Section 2 */}
@@ -812,7 +824,6 @@ useEffect(() => {
                     </div>
                   </div>
                 </div>
-
               </div>
               {/* <div className="flex gap-20">
                 <div>
@@ -865,7 +876,6 @@ useEffect(() => {
                   </div>
                 </div>
               </div> */}
-
 
               {/* Save Button */}
               <button

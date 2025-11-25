@@ -100,23 +100,23 @@ const CustomerLedger = () => {
   }, [fetchCustomerLedger]);
 
   const toNumber = (value) => {
-  if (!value) return 0;
-  return parseFloat(value.toString().replace(/,/g, ""));
-};
+    if (!value) return 0;
+    return parseFloat(value.toString().replace(/,/g, ""));
+  };
 
   // Calculate totals
-const totalCredit = ledgerEntries.reduce(
-  (sum, entry) => sum + toNumber(entry.Credit),
-  0
-);
+  const totalCredit = ledgerEntries.reduce(
+    (sum, entry) => sum + toNumber(entry.Credit),
+    0
+  );
   const totalDebit = ledgerEntries.reduce(
-  (sum, entry) => sum + toNumber(entry.Debit),
-  0
-);
+    (sum, entry) => sum + toNumber(entry.Debit),
+    0
+  );
   const totalBalance = ledgerEntries.reduce(
-  (sum, entry) => sum + toNumber(entry.Balance),
-  0
-);
+    (sum, entry) => sum + toNumber(entry.Balance),
+    0
+  );
 
   // Pagination
   const indexOfLastRecord = currentPage * recordsPerPage;
@@ -281,6 +281,10 @@ const totalCredit = ledgerEntries.reduce(
                 <div className="text-center py-6 text-gray-500">
                   No ledger entries found.
                 </div>
+              ) : searchedEntries.length === 0 ? (
+                <div className="text-center py-4 text-gray-500 bg-white">
+                  No customer ledger records found.
+                </div>
               ) : (
                 <>
                   <div className="hidden lg:grid grid-cols-[0.3fr_1fr_1.5fr_2.5fr_1fr_1fr_1fr] gap-4 bg-gray-100 py-3 px-6 text-xs font-semibold text-gray-600 uppercase">
@@ -322,7 +326,6 @@ const totalCredit = ledgerEntries.reduce(
                     <div className="text-green-600">
                       Total Debit: {totalDebit.toLocaleString()}
                     </div>
-                   
                   </div>
                 </>
               )}

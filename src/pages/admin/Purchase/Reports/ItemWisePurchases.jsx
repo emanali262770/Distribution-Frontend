@@ -123,15 +123,6 @@ useEffect(() => {
     0
   );
 
-  const filteredEntries = ledgerEntries.filter((entry) => {
-  const term = searchQuery.toLowerCase();
-
-  return (
-    entry.ID?.toLowerCase().includes(term) ||
-    entry.SupplierName?.toLowerCase().includes(term) ||
-    entry.Item?.toLowerCase().includes(term)
-  );
-});
 
   return (
     <div className="p-4 bg-gray-50 min-h-screen">
@@ -254,7 +245,7 @@ useEffect(() => {
               <div className="text-center py-6 text-gray-500">
                 Please select an item to view purchase details.
               </div>
-            ) : ledgerEntries.length === 0 ? (
+            ) : filteredEntries.length === 0 ? (
               <div className="text-center py-6 text-gray-500">
                 No purchase records found for this item.
               </div>

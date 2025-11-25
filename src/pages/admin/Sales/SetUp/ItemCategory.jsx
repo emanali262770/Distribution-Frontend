@@ -155,12 +155,14 @@ const ItemCategory = () => {
     swalWithTailwindButtons
       .fire({
         title: "Are you sure?",
-        text: `Do you want to ${category.isEnable ? "disable" : "enable"
-          } this category?`,
+        text: `Do you want to ${
+          category.isEnable ? "disable" : "enable"
+        } this category?`,
         icon: "warning",
         showCancelButton: true,
-        confirmButtonText: `Yes, ${category.isEnable ? "disable" : "enable"
-          } it!`,
+        confirmButtonText: `Yes, ${
+          category.isEnable ? "disable" : "enable"
+        } it!`,
         cancelButtonText: "No, cancel!",
         reverseButtons: true,
       })
@@ -279,7 +281,6 @@ const ItemCategory = () => {
     setCurrentPage(1);
   }, [searchTerm]);
 
-
   useEffect(() => {
     setCurrentPage(1);
   }, [categories]);
@@ -350,6 +351,10 @@ const ItemCategory = () => {
                   <div className="text-center py-4 text-gray-500 bg-white">
                     No categories found.
                   </div>
+                ) : filteredCategories.length === 0 ? (
+                  <div className="text-center py-4 text-gray-500 bg-white">
+                    No categories found.
+                  </div>
                 ) : (
                   currentRecords.map((category, index) => (
                     <div
@@ -390,10 +395,11 @@ const ItemCategory = () => {
                         </button>
                         <button
                           onClick={() => handleToggleEnable(category)}
-                          className={`px-3 py-1 text-sm rounded ${category.isEnable
-                            ? "bg-yellow-100 text-yellow-600 hover:bg-yellow-200"
-                            : "bg-green-100 text-green-600 hover:bg-green-200"
-                            }`}
+                          className={`px-3 py-1 text-sm rounded ${
+                            category.isEnable
+                              ? "bg-yellow-100 text-yellow-600 hover:bg-yellow-200"
+                              : "bg-green-100 text-green-600 hover:bg-green-200"
+                          }`}
                         >
                           {category.isEnable ? "Disable" : "Enable"}
                         </button>
@@ -422,10 +428,11 @@ const ItemCategory = () => {
                         setCurrentPage((prev) => Math.max(prev - 1, 1))
                       }
                       disabled={currentPage === 1}
-                      className={`px-3 py-1 rounded-md ${currentPage === 1
-                        ? "bg-gray-300 cursor-not-allowed"
-                        : "bg-newPrimary text-white hover:bg-newPrimary/80"
-                        }`}
+                      className={`px-3 py-1 rounded-md ${
+                        currentPage === 1
+                          ? "bg-gray-300 cursor-not-allowed"
+                          : "bg-newPrimary text-white hover:bg-newPrimary/80"
+                      }`}
                     >
                       Previous
                     </button>
@@ -434,10 +441,11 @@ const ItemCategory = () => {
                         setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                       }
                       disabled={currentPage === totalPages}
-                      className={`px-3 py-1 rounded-md ${currentPage === totalPages
-                        ? "bg-gray-300 cursor-not-allowed"
-                        : "bg-newPrimary text-white hover:bg-newPrimary/80"
-                        }`}
+                      className={`px-3 py-1 rounded-md ${
+                        currentPage === totalPages
+                          ? "bg-gray-300 cursor-not-allowed"
+                          : "bg-newPrimary text-white hover:bg-newPrimary/80"
+                      }`}
                     >
                       Next
                     </button>
@@ -454,7 +462,6 @@ const ItemCategory = () => {
               ref={sliderRef}
               className="relative w-full md:w-[500px] bg-white rounded-2xl shadow-2xl overflow-y-auto max-h-[90vh]"
             >
-
               <div className="flex justify-between items-center p-4 border-b sticky top-0 bg-white rounded-t-2xl">
                 <h2 className="text-xl font-bold text-newPrimary">
                   {editingCategory ? "Update Category" : "Add a New Category"}
@@ -493,17 +500,20 @@ const ItemCategory = () => {
                     <button
                       type="button"
                       onClick={() => setIsEnable(!isEnable)}
-                      className={`w-12 h-6 flex items-center rounded-full p-1 transition-colors duration-300 ${isEnable ? "bg-green-500" : "bg-gray-300"
-                        }`}
+                      className={`w-12 h-6 flex items-center rounded-full p-1 transition-colors duration-300 ${
+                        isEnable ? "bg-green-500" : "bg-gray-300"
+                      }`}
                     >
                       <div
-                        className={`w-4 h-4 bg-white rounded-full shadow-md transform transition-transform duration-300 ${isEnable ? "translate-x-6" : "translate-x-0"
-                          }`}
+                        className={`w-4 h-4 bg-white rounded-full shadow-md transform transition-transform duration-300 ${
+                          isEnable ? "translate-x-6" : "translate-x-0"
+                        }`}
                       />
                     </button>
                     <span
-                      className={`text-sm font-medium ${isEnable ? "text-green-600" : "text-gray-500"
-                        }`}
+                      className={`text-sm font-medium ${
+                        isEnable ? "text-green-600" : "text-gray-500"
+                      }`}
                     >
                       {isEnable ? "Enabled" : "Disabled"}
                     </span>
@@ -520,8 +530,8 @@ const ItemCategory = () => {
                       ? "Updating..."
                       : "Saving..."
                     : editingCategory
-                      ? "Update Category"
-                      : "Save Category"}
+                    ? "Update Category"
+                    : "Save Category"}
                 </button>
               </form>
             </div>
