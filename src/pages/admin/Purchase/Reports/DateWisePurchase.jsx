@@ -172,7 +172,7 @@ const DateWisePurchase = () => {
               cols={6}
               className="lg:grid-cols-[0.3fr_0.7fr_0.7fr_2fr_1fr_1fr_1fr]"
             />
-          ) : receivables.length === 0 ? (
+          ) : searchedReceivables.length === 0 ? (
             <div className="text-center py-6 text-gray-500">
               No ledger entries found.
             </div>

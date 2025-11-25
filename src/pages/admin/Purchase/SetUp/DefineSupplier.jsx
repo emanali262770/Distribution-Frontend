@@ -31,6 +31,7 @@ const DefineSupplier = () => {
   const [loading, setLoading] = useState(true);
   const [mobileNumber, setMobileNumber] = useState("");
   const [creditTime, setCreditTime] = useState("");
+  const [creditLimitError, setCreditLimitError] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 10;
@@ -333,6 +334,10 @@ const DefineSupplier = () => {
                   className="lg:grid-cols-[0.2fr_1fr_1fr_1fr_1fr_1fr]"
                 />
               ) : supplierList.length === 0 ? (
+                <div className="text-center py-4 text-gray-500 bg-white">
+                  No suppliers found.
+                </div>
+              ) : filteredSuppliers.length === 0 ? (
                 <div className="text-center py-4 text-gray-500 bg-white">
                   No suppliers found.
                 </div>
@@ -647,10 +652,29 @@ const DefineSupplier = () => {
                     <input
                       type="number"
                       value={creditLimit}
-                      onChange={(e) => setCreditLimit(e.target.value)}
+                      onChange={(e) => {
+                        const value = Number(e.target.value);
+                        setCreditLimit(value);
+
+                        // Show error if greater than 5,000,000
+                        if (value > 5000000) {
+                          setCreditLimitError(
+                            "You cannot add more than 5,000,000 credit cash limit."
+                          );
+                        } else {
+                          setCreditLimitError("");
+                        }
+                      }}
                       className="w-full p-2 border rounded"
                       placeholder="Enter cash limit"
                     />
+
+                    {/* Error message */}
+                    {creditLimitError && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {creditLimitError}
+                      </p>
+                    )}
                   </div>
                 </div>
               )}

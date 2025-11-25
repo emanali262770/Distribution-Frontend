@@ -106,6 +106,16 @@ const ItemWisePurchase = () => {
     0
   );
 
+  const filteredEntries = ledgerEntries.filter((entry) => {
+  const term = searchQuery.toLowerCase();
+
+  return (
+    entry.ID?.toLowerCase().includes(term) ||
+    entry.SupplierName?.toLowerCase().includes(term) ||
+    entry.Item?.toLowerCase().includes(term)
+  );
+});
+
   return (
     <div className="p-4 bg-gray-50 min-h-screen">
       <CommanHeader />

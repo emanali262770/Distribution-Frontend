@@ -54,7 +54,6 @@ const OpeningStock = () => {
     fetchAllItems();
   }, [isClearing]); // refresh if clearing form
 
-
   // CategoryList Fetch
   const fetchCategoryList = useCallback(async () => {
     try {
@@ -122,7 +121,9 @@ const OpeningStock = () => {
       setLoading(true); // show loader
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL}/item-details/category/${itemCategory}`
+          `${
+            import.meta.env.VITE_API_BASE_URL
+          }/item-details/category/${itemCategory}`
         );
         setItemNameList(res.data); // update table data
       } catch (error) {
@@ -135,7 +136,6 @@ const OpeningStock = () => {
 
     fetchItemsByCategory();
   }, [itemCategory]);
-
 
   // Track editing state per cell
   const [editing, setEditing] = useState({});
@@ -173,27 +173,25 @@ const OpeningStock = () => {
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
   // Filter items by category, type, or item
-  const filteredItems = itemNameList
-    .filter(item => {
-      const matchesCategory = itemCategory
-        ? item?.itemCategory?.categoryName?.toLowerCase() === itemCategory.toLowerCase()
-        : true;
+  const filteredItems = itemNameList.filter((item) => {
+    const matchesCategory = itemCategory
+      ? item?.itemCategory?.categoryName?.toLowerCase() ===
+        itemCategory.toLowerCase()
+      : true;
 
-      const matchesSearch =
-        (item?.itemName || "")
-          .toLowerCase()
-          .includes(searchQuery.toLowerCase()) ||
-        (item?.itemCategory?.categoryName || "")
-          .toLowerCase()
-          .includes(searchQuery.toLowerCase());
+    const matchesSearch =
+      (item?.itemName || "")
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
+      (item?.itemCategory?.categoryName || "")
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
 
-      // ✅ Filter based on stock zero / non-zero
-      const matchesStock = showZeroStock ? true : parseFloat(item.stock) !== 0;
+    // ✅ Filter based on stock zero / non-zero
+    const matchesStock = showZeroStock ? true : parseFloat(item.stock) !== 0;
 
-      return matchesCategory && matchesSearch && matchesStock;
-    });
-
-
+    return matchesCategory && matchesSearch && matchesStock;
+  });
 
   const currentRecords = filteredItems.slice(
     indexOfFirstRecord,
@@ -337,14 +335,15 @@ const OpeningStock = () => {
               <div className="min-w-[1000px]">
                 {/* ✅ Table Header */}
                 <div
-                  className={`hidden lg:grid ${editingStockIndex !== null
-                    ? "grid-cols-[0.5fr_1fr_1fr_1fr_0.1fr_auto]"
-                    : "grid-cols-[0.5fr_1fr_1fr_1fr_0.1fr_auto]"
-                    } gap-4 bg-gray-100 py-3 px-6 text-xs font-semibold text-gray-600 uppercase sticky top-0 z-10 border-b border-gray-200`}
+                  className={`hidden lg:grid ${
+                    editingStockIndex !== null
+                      ? "grid-cols-[0.5fr_1fr_1fr_1fr_0.1fr_auto]"
+                      : "grid-cols-[0.5fr_1fr_1fr_1fr_0.1fr_auto]"
+                  } gap-4 bg-gray-100 py-3 px-6 text-xs font-semibold text-gray-600 uppercase sticky top-0 z-10 border-b border-gray-200`}
                 >
                   <div>Sr</div>
                   <div>Category</div>
-                 
+
                   <div>Item</div>
                   <div>Stock</div>
                   {editingStockIndex !== null && <div>Action</div>}
@@ -356,12 +355,17 @@ const OpeningStock = () => {
                     <TableSkeleton
                       rows={itemNameList.length > 0 ? itemNameList.length : 5}
                       cols={editingStockIndex !== null ? 8 : 7}
-                      className={`${editingStockIndex !== null
-                        ? "lg:grid-cols-[0.5fr_1fr_1fr_1fr_0.1fr_auto]"
-                        : "lg:grid-cols-[0.5fr_1fr_1fr_1fr_0.1fr_auto]"
-                        }`}
+                      className={`${
+                        editingStockIndex !== null
+                          ? "lg:grid-cols-[0.5fr_1fr_1fr_1fr_0.1fr_auto]"
+                          : "lg:grid-cols-[0.5fr_1fr_1fr_1fr_0.1fr_auto]"
+                      }`}
                     />
                   ) : itemNameList.length === 0 ? (
+                    <div className="text-center py-4 text-gray-500 bg-white">
+                      No items found.
+                    </div>
+                  ) : filteredItems.length === 0 ? (
                     <div className="text-center py-4 text-gray-500 bg-white">
                       No items found.
                     </div>
@@ -369,14 +373,15 @@ const OpeningStock = () => {
                     currentRecords.map((rec, index) => (
                       <div
                         key={rec.code}
-                        className={`grid ${editingStockIndex !== null
-                          ? "grid-cols-[0.5fr_1fr_1fr_1fr_0.1fr_auto]"
-                          : "grid-cols-[0.5fr_1fr_1fr_1fr_0.1fr_auto]"
-                          } items-center gap-4 px-6 py-4 text-sm bg-white hover:bg-gray-50 transition`}
+                        className={`grid ${
+                          editingStockIndex !== null
+                            ? "grid-cols-[0.5fr_1fr_1fr_1fr_0.1fr_auto]"
+                            : "grid-cols-[0.5fr_1fr_1fr_1fr_0.1fr_auto]"
+                        } items-center gap-4 px-6 py-4 text-sm bg-white hover:bg-gray-50 transition`}
                       >
                         <div>{indexOfFirstRecord + index + 1}</div>
                         <div>{rec?.itemCategory?.categoryName || "-"}</div>
-                       
+
                         <div className="font-medium text-gray-900">
                           {rec.itemName || "-"}
                         </div>
@@ -418,7 +423,8 @@ const OpeningStock = () => {
                               onClick={async () => {
                                 try {
                                   await axios.put(
-                                    `${import.meta.env.VITE_API_BASE_URL
+                                    `${
+                                      import.meta.env.VITE_API_BASE_URL
                                     }/item-details/${rec._id}/stock`,
                                     { stock: rec.stock },
                                     {
@@ -437,7 +443,7 @@ const OpeningStock = () => {
                                 } catch (error) {
                                   toast.success(
                                     error.response?.data?.message ||
-                                    "Failed to update stock"
+                                      "Failed to update stock"
                                   );
                                   console.error(
                                     "Failed to update stock:",
@@ -468,10 +474,11 @@ const OpeningStock = () => {
                           setCurrentPage((prev) => Math.max(prev - 1, 1))
                         }
                         disabled={currentPage === 1}
-                        className={`px-3 py-1 rounded-md ${currentPage === 1
-                          ? "bg-gray-300 text-gray-600 cursor-not-allowed"
-                          : "bg-newPrimary text-white hover:bg-newPrimary/80"
-                          }`}
+                        className={`px-3 py-1 rounded-md ${
+                          currentPage === 1
+                            ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+                            : "bg-newPrimary text-white hover:bg-newPrimary/80"
+                        }`}
                       >
                         Previous
                       </button>
@@ -483,10 +490,11 @@ const OpeningStock = () => {
                           )
                         }
                         disabled={currentPage === totalPages}
-                        className={`px-3 py-1 rounded-md ${currentPage === totalPages
-                          ? "bg-gray-300 text-gray-600 cursor-not-allowed"
-                          : "bg-newPrimary text-white hover:bg-newPrimary/80"
-                          }`}
+                        className={`px-3 py-1 rounded-md ${
+                          currentPage === totalPages
+                            ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+                            : "bg-newPrimary text-white hover:bg-newPrimary/80"
+                        }`}
                       >
                         Next
                       </button>

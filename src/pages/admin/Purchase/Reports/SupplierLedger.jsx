@@ -234,6 +234,10 @@ const SupplierLedger = () => {
               <div className="text-center py-6 text-gray-500">
                 No ledger entries found.
               </div>
+            ) : filteredRecords.length === 0 ? ( // 👈 ADD THIS
+              <div className="text-center py-6 text-gray-500">
+                No ledger entries found.
+              </div>
             ) : (
               <>
                 <div className="hidden lg:grid grid-cols-[0.3fr_0.7fr_0.7fr_2fr_1fr_1fr_1fr] gap-4 bg-gray-100 py-3 px-6 text-xs font-semibold text-gray-600 uppercase">
@@ -278,8 +282,6 @@ const SupplierLedger = () => {
                   {/* <div className="text-blue-600">
                     Total Balance: {totalBalance.toLocaleString()}
                   </div> */}
-
-                 
                 </div>
               </>
             )}

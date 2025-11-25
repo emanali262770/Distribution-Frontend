@@ -97,7 +97,8 @@ const OpeningStock = () => {
       setLoading(true);
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL
+          `${
+            import.meta.env.VITE_API_BASE_URL
           }/item-type/category/${itemCategory}`
         );
         setItemTypeList(res.data);
@@ -119,7 +120,8 @@ const OpeningStock = () => {
       setLoading(true);
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL
+          `${
+            import.meta.env.VITE_API_BASE_URL
           }/item-details/item-type/${itemType}`
         );
 
@@ -171,12 +173,17 @@ const OpeningStock = () => {
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
   const filteredItems = itemNameList.filter((item) => {
     const matchesCategory = itemCategory
-      ? item?.itemCategory?.categoryName?.toLowerCase() === itemCategory.toLowerCase()
+      ? item?.itemCategory?.categoryName?.toLowerCase() ===
+        itemCategory.toLowerCase()
       : true;
 
     const matchesSearch =
-      (item?.itemName || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (item?.itemCategory?.categoryName || "").toLowerCase().includes(searchQuery.toLowerCase());
+      (item?.itemName || "")
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
+      (item?.itemCategory?.categoryName || "")
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
 
     const totalAmount = (item.purchase || 0) * (item.stock || 0);
 
@@ -185,8 +192,6 @@ const OpeningStock = () => {
 
     return matchesCategory && matchesSearch && matchesZeroFilter;
   });
-
-
 
   const currentRecords = filteredItems.slice(
     indexOfFirstRecord,
@@ -286,7 +291,6 @@ const OpeningStock = () => {
           </div>
 
           <div className="flex gap-6 mt-4">
-
             <label className="flex items-center gap-2">
               <input
                 type="radio"
@@ -310,7 +314,6 @@ const OpeningStock = () => {
               />
               Without Zero
             </label>
-
           </div>
 
           {/* Table */}
@@ -341,6 +344,10 @@ const OpeningStock = () => {
                       className="lg:grid-cols-[0.5fr_1fr_1fr_2fr_1fr]"
                     />
                   ) : itemNameList.length === 0 ? (
+                    <div className="text-center py-4 text-gray-500 bg-white">
+                      No items found.
+                    </div>
+                  ) : filteredItems.length === 0 ? (
                     <div className="text-center py-4 text-gray-500 bg-white">
                       No items found.
                     </div>
@@ -383,10 +390,11 @@ const OpeningStock = () => {
                           setCurrentPage((prev) => Math.max(prev - 1, 1))
                         }
                         disabled={currentPage === 1}
-                        className={`px-3 py-1 rounded-md ${currentPage === 1
-                          ? "bg-gray-300 text-gray-600 cursor-not-allowed"
-                          : "bg-newPrimary text-white hover:bg-newPrimary/80"
-                          }`}
+                        className={`px-3 py-1 rounded-md ${
+                          currentPage === 1
+                            ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+                            : "bg-newPrimary text-white hover:bg-newPrimary/80"
+                        }`}
                       >
                         Previous
                       </button>
@@ -398,10 +406,11 @@ const OpeningStock = () => {
                           )
                         }
                         disabled={currentPage === totalPages}
-                        className={`px-3 py-1 rounded-md ${currentPage === totalPages
-                          ? "bg-gray-300 text-gray-600 cursor-not-allowed"
-                          : "bg-newPrimary text-white hover:bg-newPrimary/80"
-                          }`}
+                        className={`px-3 py-1 rounded-md ${
+                          currentPage === totalPages
+                            ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+                            : "bg-newPrimary text-white hover:bg-newPrimary/80"
+                        }`}
                       >
                         Next
                       </button>

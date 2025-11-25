@@ -231,6 +231,10 @@ const SupplierWisePurchase = () => {
               <div className="text-center py-6 text-gray-500">
                 No ledger entries found.
               </div>
+            ) : filteredEntries.length === 0 ? (
+              <div className="text-center py-6 text-gray-500">
+                No ledger entries found.
+              </div>
             ) : (
               <>
                 {/* Header */}

@@ -320,7 +320,7 @@ const Recovery = () => {
         <div className="px-6 mx-auto">
           <div className="flex justify-between items-center mb-4">
             <h1 className="text-2xl font-bold text-newPrimary">
-              Recovery Report
+              recoveryList
             </h1>
           </div>
 
