@@ -2,12 +2,13 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { HashLoader, ScaleLoader } from "react-spinners";
 import gsap from "gsap";
 import axios from "axios";
-import { toast } from "react-toastify";
+
 import Swal from "sweetalert2";
 import CommanHeader from "../../Components/CommanHeader";
 import { SquarePen, Trash2 } from "lucide-react";
 import TableSkeleton from "../../Components/Skeleton";
 import { set } from "date-fns";
+import toast from "react-hot-toast";
 
 const DefineSupplier = () => {
   const [supplierList, setSupplierList] = useState([]);
@@ -110,14 +111,7 @@ const DefineSupplier = () => {
 
   // Save or Update Supplier
   const handleSave = async () => {
-    if (
-      paymentTerms === "CreditCard" &&
-      status &&
-      (!creditLimit || creditLimit > 5000000)
-    ) {
-      toast.error("❌ Credit limit is required and must not exceed 50 lac");
-      return;
-    }
+    
 
     setIsSaving(true);
 
@@ -658,26 +652,12 @@ useEffect(() => {
                       onChange={(e) => {
                         const value = Number(e.target.value);
                         setCreditLimit(value);
-
-                        // Show error if greater than 5,000,000
-                        if (value > 5000000) {
-                          setCreditLimitError(
-                            "You cannot add more than 5,000,000 credit cash limit."
-                          );
-                        } else {
-                          setCreditLimitError("");
-                        }
                       }}
                       className="w-full p-2 border rounded"
                       placeholder="Enter cash limit"
                     />
 
-                    {/* Error message */}
-                    {creditLimitError && (
-                      <p className="text-red-500 text-sm mt-1">
-                        {creditLimitError}
-                      </p>
-                    )}
+                    
                   </div>
                 </div>
               )}
