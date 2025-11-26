@@ -41,6 +41,8 @@ const Bank = () => {
   const [balance, setBalance] = useState("");
   const [isEdit, setIsEdit] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+
   const recordsPerPage = 10; // you can change to 10/15
 
   const [editId, setEditId] = useState(null);
@@ -181,14 +183,26 @@ const Bank = () => {
     setBalance("");
   };
 
-  // 🔹 Pagination calculation
-  const indexOfLastRecord = currentPage * recordsPerPage;
-  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-  const currentRecords = bankList.slice(indexOfFirstRecord, indexOfLastRecord);
-  const totalPages = Math.ceil(bankList.length / recordsPerPage);
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [bankList]);
+ // 🔍 Filter by bank name OR account holder
+const filteredBanks = bankList.filter((b) => {
+  const search = searchTerm.toLowerCase();
+  return (
+    b.bankName?.toLowerCase().includes(search) ||
+    b.accountHolderName?.toLowerCase().includes(search)
+  );
+});
+
+// Pagination should apply on filteredBanks
+const indexOfLastRecord = currentPage * recordsPerPage;
+const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+const currentRecords = filteredBanks.slice(indexOfFirstRecord, indexOfLastRecord);
+
+const totalPages = Math.ceil(filteredBanks.length / recordsPerPage);
+
+ useEffect(() => {
+  setCurrentPage(1);
+}, [searchTerm]);
+
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
@@ -199,12 +213,23 @@ const Bank = () => {
           <h1 className="text-2xl font-bold text-newPrimary">Bank List</h1>
           <p className="text-gray-500 text-sm">Manage your bank details</p>
         </div>
-        <button
-          className="bg-newPrimary text-white px-4 py-2 rounded-lg hover:bg-newPrimary/90"
-          onClick={handleAddBank}
-        >
-          + Add Bank
-        </button>
+        <div className="flex items-center gap-3">
+          {/* 🔍 Search Bar */}
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search Bank / Account Holder"
+            className="px-3 py-2 border rounded-lg w-56 outline-none"
+          />
+
+          <button
+            className="bg-newPrimary text-white px-4 py-2 rounded-lg hover:bg-newPrimary/90"
+            onClick={handleAddBank}
+          >
+            + Add Bank
+          </button>
+        </div>
       </div>
 
       {/* Table */}
@@ -223,7 +248,7 @@ const Bank = () => {
             <div className="flex flex-col divide-y divide-gray-100 max-h-screen overflow-y-auto">
               {loading ? (
                 <TableSkeleton rows={5} cols={6} />
-              ) : bankList.length === 0 ? (
+              ) : filteredBanks.length === 0 ? (
                 <div className="text-center py-4 text-gray-500 bg-white">
                   No banks found.
                 </div>

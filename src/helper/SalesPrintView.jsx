@@ -1240,3 +1240,112 @@ export const handleCustomerLedgerPrint = (ledgerEntries = []) => {
   win.print();
 };
 
+
+
+export const handleExpenseSheetPrint = (entries = []) => {
+  if (!entries.length) return;
+
+  const win = window.open("", "", "width=900,height=700");
+
+  // Calculate total amount
+  const totalAmount = entries.reduce(
+    (sum, e) => sum + Number(e.amount || 0),
+    0
+  );
+
+  win.document.write(`
+    <html>
+      <head>
+        <title>Expense Sheet</title>
+        <style>
+          body { font-family: Arial, sans-serif; padding: 20px; }
+          h1, h2, p { margin: 0; text-align: center; }
+          h1 { font-size: 22px; font-weight: bold; }
+          h2 { margin-top: 8px; text-decoration: underline; }
+          p { font-size: 14px; color: #555; }
+          hr { border-top: 1px solid #aaa; margin: 10px 0 20px; }
+
+          table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 10px; 
+            font-size: 12px; 
+          }
+          th, td { 
+            border: 1px solid #999; 
+            padding: 6px; 
+            text-align: center; 
+          }
+          th { background: #f2f2f2; }
+          tfoot td { 
+            font-weight: bold; 
+            background: #fafafa; 
+          }
+
+          .note { 
+            font-size: 11px; 
+            color: #777; 
+            margin-top: 20px; 
+            text-align: center; 
+          }
+        </style>
+      </head>
+
+      <body>
+        <h1>Distribution System Pvt. Ltd.</h1>
+        <p>Mall of Lahore, Cantt</p>
+        <p>Phone: 0318-4486979</p>
+        <hr />
+
+        <h2>Expense Sheet</h2>
+
+        <div style="margin-bottom:10px; font-size:13px;">
+          <b>Print Date:</b> ${new Date().toLocaleDateString("en-CA")}
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Sr</th>
+              <th>Date</th>
+              <th>Expense Head</th>
+              <th>Description</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            ${entries
+              .map(
+                (e, i) => `
+                <tr>
+                  <td>${i + 1}</td>
+                  <td>${e.date || "-"}</td>
+                  <td>${e.headName || "-"}</td>
+                  <td>${e.description || "-"}</td>
+                  <td>${Number(e.amount).toLocaleString()}</td>
+                </tr>`
+              )
+              .join("")}
+          </tbody>
+
+          <tfoot>
+            <tr>
+              <td colspan="4" style="text-align:right;">Total:</td>
+              <td>${totalAmount.toLocaleString()}</td>
+            </tr>
+          </tfoot>
+        </table>
+
+        <p class="note">
+          This is a system-generated expense sheet and does not require a signature.
+        </p>
+      </body>
+    </html>
+  `);
+
+  win.document.close();
+  win.print();
+};
+
+

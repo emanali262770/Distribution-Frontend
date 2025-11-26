@@ -198,7 +198,7 @@ const DefineExpenseHead = () => {
         <div className="flex justify-between items-center mb-4">
           <div>
             <h1 className="text-2xl font-bold text-newPrimary">
-              Define Expense Head
+              Define Head
             </h1>
             <p className="text-gray-500 text-sm">
               Manage your daily expense records
@@ -221,7 +221,7 @@ const DefineExpenseHead = () => {
               className="bg-newPrimary text-white px-4 py-2 rounded-lg"
               onClick={() => setIsSliderOpen(true)}
             >
-              + Add Expense Head
+              + Add Head
             </button>
           </div>
         </div>
@@ -232,7 +232,7 @@ const DefineExpenseHead = () => {
             <div className="min-w-full">
               <div className="hidden lg:grid grid-cols-[80px_200px_1fr_150px] text-center gap-6 bg-gray-100 py-3 px-6 text-xs font-semibold text-gray-600 uppercase border-b">
                 <div>Sr</div>
-                <div>Expense Head</div>
+                <div>Head</div>
                 <div>Description</div>
                 <div className="text-center">Actions</div>
               </div>
@@ -335,8 +335,8 @@ const DefineExpenseHead = () => {
               <div className="flex justify-between items-center p-4 border-b bg-white sticky top-0">
                 <h2 className="text-xl font-bold text-newPrimary">
                   {editingExpense
-                    ? "Update Expense Head"
-                    : "Add New Expense Head"}
+                    ? "Update Head"
+                    : "Add New Head"}
                 </h2>
 
                 <button
@@ -357,7 +357,7 @@ const DefineExpenseHead = () => {
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label className="block text-gray-700 font-medium mb-2">
-                      Expense Head <span className="text-red-500">*</span>
+                      Head <span className="text-red-500">*</span>
                     </label>
 
                     <input
@@ -387,7 +387,7 @@ const DefineExpenseHead = () => {
                   type="submit"
                   className="w-full bg-newPrimary text-white px-4 py-3 rounded-lg"
                 >
-                  {editingExpense ? "Update Expense" : "Save Expense"}
+                  {editingExpense ? "Update Head" : "Save Head"}
                 </button>
               </form>
             </div>

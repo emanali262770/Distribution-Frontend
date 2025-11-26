@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { SquarePen, Trash2, Eye, Loader } from "lucide-react";
+import { SquarePen, Trash2, Eye, Loader, Printer } from "lucide-react";
 import toast from "react-hot-toast";
 import { ScaleLoader } from "react-spinners";
 import CommanHeader from "../../Components/CommanHeader";
 import TableSkeleton from "../../Components/Skeleton";
+import {  handleExpenseSheetPrint } from "../../../../helper/SalesPrintView";
 
 const ExpensePage = () => {
   const today = new Date().toLocaleDateString("en-CA");
@@ -114,6 +115,7 @@ const ExpensePage = () => {
     indexOfLastRecord
   );
   const totalPages = Math.ceil(filteredExpenses.length / recordsPerPage);
+console.log({currentRecords});
 
   return (
     <div className="p-4 bg-gray-50 min-h-screen">
@@ -128,6 +130,14 @@ const ExpensePage = () => {
             <h1 className="text-2xl font-bold text-newPrimary">
               Expenses Sheet
             </h1>
+            {currentRecords.length > 0 && (
+                <button
+                  onClick={() => handleExpenseSheetPrint(currentRecords)}
+                  className="flex items-center gap-2 bg-newPrimary text-white px-4 py-2 rounded-md hover:bg-newPrimary/80"
+                >
+                  <Printer size={18} />
+                </button>
+              )}
           </div>
 
           {isLoading && (
@@ -201,11 +211,12 @@ const ExpensePage = () => {
           <div className="rounded-xl border border-gray-200 overflow-hidden">
             <div className="overflow-x-auto">
               <div className="min-w-full">
-                <div className="hidden lg:grid grid-cols-[80px_150px_1fr_150px_150px] gap-6 bg-gray-100 py-3 px-6 text-xs font-semibold text-gray-600 uppercase border-b">
+                <div className="hidden lg:grid grid-cols-[80px_1fr_1fr_2fr_1fr_1fr] gap-6 bg-gray-100 py-3 px-6 text-xs font-semibold text-gray-600 uppercase border-b">
                   <div>Sr</div>
                   <div>Date</div>
                   {/* <div className="text-center">Salesman</div> */}
-                  <div className="text-center">Expenses</div>
+                  <div className="text-center">Head Expense</div>
+                  <div className="text-center">Description</div>
                   <div>Amount</div>
                   <div className="text-center">Actions</div>
                 </div>
@@ -215,8 +226,8 @@ const ExpensePage = () => {
                     // 🦴 Skeleton loader while fetching
                     <TableSkeleton
                       rows={currentRecords.length || 5}
-                      cols={5}
-                      className="lg:grid-cols-[80px_150px_1fr_150px_150px]"
+                      cols={6}
+                      className="lg:grid-cols-[80px_1fr_1fr_2fr_1fr_1fr]"
                     />
                   ) : expenses.length === 0 ? (
                     <div className="text-center py-4 text-gray-500 bg-white">
@@ -230,12 +241,13 @@ const ExpensePage = () => {
                     currentRecords.map((exp, index) => (
                       <div
                         key={exp.id}
-                        className="grid grid-cols-1 lg:grid-cols-[80px_150px_1fr_150px_150px] gap-4 items-center px-6 py-4 text-sm bg-white hover:bg-gray-50 transition"
+                        className="grid grid-cols-1 lg:grid-cols-[80px_1fr_1fr_2fr_1fr_1fr] gap-4 items-center px-6 py-4 text-sm bg-white hover:bg-gray-50 transition"
                       >
                         <div>{indexOfFirstRecord + index + 1}</div>
                         <div>{formDate(exp.date)}</div>
                         {/* <div className="text-center">{exp.salesman}</div> */}
                         <div className="text-center">{exp.headName}</div>
+                        <div className="text-center">{exp.description}</div>
                         <div className="font-semibold text-blue-600">
                           {exp.amount}
                         </div>
@@ -251,6 +263,17 @@ const ExpensePage = () => {
                       </div>
                     ))
                   )}
+                   { currentRecords.length > 0 && (
+                <div className="grid grid-cols-[80px_1fr_1fr_1fr] gap-4 bg-gray-100 py-3 px-6 text-sm font-semibold text-gray-700 border-t">
+                  <div></div>
+                  <div></div>
+                  
+                  <div className="text-right">Total Amount:</div>
+                  <div className="text-blue-600">
+                    {expenseAmount}
+                  </div>
+                </div>
+              )}
                 </div>
 
                 {totalPages > 1 && (
@@ -311,7 +334,7 @@ const ExpensePage = () => {
 
                 <div className="">
                   <p>
-                    <strong>Expense Head:</strong> {viewExpense.headName}
+                    <strong>Head Expense:</strong> {viewExpense.headName}
                   </p>
                   <p>
                     <strong>Description:</strong> {viewExpense.description}

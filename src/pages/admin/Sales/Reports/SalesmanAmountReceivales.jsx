@@ -88,7 +88,7 @@ const SalesmanAmountReceivables = () => {
               {/* Table Header */}
               <div className="hidden lg:grid grid-cols-[0.2fr_0.5fr_1fr] gap-4 bg-gray-100 py-3 px-6 text-xs font-semibold text-gray-600 uppercase sticky top-0 border-b border-gray-200">
                 <div>SR</div>
-                <div>Salesman</div>
+                <div>Sales Officer</div>
                 <div>Balance</div>
               </div>
 

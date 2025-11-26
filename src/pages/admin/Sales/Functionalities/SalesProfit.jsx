@@ -21,14 +21,17 @@ const Sales = () => {
   const fetchSalesmanList = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await api.get("/employees/reports");
-      setSalesmanList(response.data || response);
+      const response = await api.get("/employees/salesman");
+      console.log(response);
+      
+      setSalesmanList(response.employees || response);
     } catch (error) {
       console.error("Failed to fetch salesmen:", error);
     } finally {
       setLoading(false);
     }
   }, []);
+// console.log({salesmanList});
 
   // ✅ Fetch Salesman Report
   const fetchSalesmanReport = useCallback(async () => {
