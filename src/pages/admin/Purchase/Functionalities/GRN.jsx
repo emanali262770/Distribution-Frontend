@@ -42,7 +42,8 @@ const GRN = () => {
   const sliderRef = useRef(null);
   const [nextGRNId, setNextGrnId] = useState("001");
   const [selectedRecord, setSelectedRecord] = useState(null);
-  const [discount, setDiscount] = useState(0);
+  const [salesTax, setSalesTax] = useState(0);
+
   const [searchTerm, setSearchTerm] = useState("");
 
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
@@ -132,10 +133,10 @@ const GRN = () => {
     const id = e.target.value;
     setItem(id);
 
-    const selected = itemOptions.find((opt) => opt._id === id);
-    if (selected) {
-      setRate(selected.purchase || 0);
-    }
+    // const selected = itemOptions.find((opt) => opt._id === id);
+    // if (selected) {
+    //   setRate(selected.purchase || 0);
+    // }
   };
 
   // Fetch GRNs
@@ -165,11 +166,13 @@ const GRN = () => {
         },
         items:
           grn.products?.map((p) => ({
+            itemId: p.itemId,
             item: p.item,
             qty: p.qty,
             rate: p.rate,
             total: p.total,
           })) || [],
+          salesTax:grn.salesTax || 0,
         totalAmount: grn.totalAmount || 0, // ✅ added totalAmount
       }));
 
@@ -222,13 +225,13 @@ const GRN = () => {
     setItemError("");
     setSupplierError("");
     setDescription("");
-    setDiscount(0);
+   setSalesTax(0);
     setIsEnable(true);
     setIsSliderOpen(true);
   };
 
   const handleEditClick = (grn) => {
-    console.log(grn);
+    console.log(grn, "fuyf");
 
     // ✅ Fix date formatting (already correct)
     const formattedDate = (() => {
@@ -259,6 +262,7 @@ const GRN = () => {
     // ✅ Items section (unchanged)
     setItemsList(
       (grn.items || []).map((it) => ({
+        itemId: it.itemId,
         item: it.item,
         qty: it.qty,
         rate: it.rate || 0,
@@ -266,11 +270,12 @@ const GRN = () => {
       }))
     );
 
+    console.log(itemsList);
+
     // ✅ This line ensures totalAmount (3000) appears correctly in summary section
-    setDiscount(
-      (grn.items || []).reduce((sum, i) => sum + i.total, 0) -
-        (grn.totalAmount || 0)
-    );
+   setSalesTax(parseFloat(grn.salesTax) );
+
+
 
     setIsSliderOpen(true);
   };
@@ -298,19 +303,19 @@ const GRN = () => {
 
     // 🧮 Calculate totals
     const grossTotal = itemsList.reduce((sum, i) => sum + i.total, 0);
-    const payableAmount = grossTotal - (discount || 0);
+    const payableAmount = grossTotal + (salesTax / 100) * grossTotal;
 
     const newGrn = {
       grnDate: date,
       supplierId: selectedSalesman,
       products: itemsList.map((it) => ({
-        itemId: it.itemId, // 🔥 required
+        itemId: it.itemId,
         item: it.item,
         qty: it.qty,
         rate: it.rate,
         total: it.total,
       })),
-
+      salesTax: salesTax ,
       totalAmount: payableAmount,
     };
 
@@ -335,7 +340,8 @@ const GRN = () => {
       fetchGrns();
       setIsSliderOpen(false);
       setItemsList([]);
-      setDiscount(0);
+      setSalesTax(0);
+
     } catch (error) {
       console.error("Error saving GRN:", error);
       toast.error(error.response?.data?.error || "Failed to save GRN.");
@@ -410,7 +416,8 @@ const GRN = () => {
   };
   const handleRemoveItem = (index) => {
     setItemsList((prev) => prev.filter((_, i) => i !== index));
-    setDiscount(0); // ✅ reset discount after removing an item
+    setSalesTax(0);
+ // ✅ reset salesTax after removing an item
   };
 
   // Filter GRNs by GRN ID or Supplier Name
@@ -839,7 +846,7 @@ const GRN = () => {
                             setItemError("");
 
                             const newItem = {
-                              itemId: selectedItem.itemId, // ITEM-001
+                              itemId: selectedItem.itemId || selectedItem._id, // ← 🔥 FIXED
                               item: selectedItem.itemName,
                               qty,
                               rate,
@@ -956,12 +963,14 @@ const GRN = () => {
                           </p>
 
                           <div className="flex items-center justify-end gap-2 mt-1">
-                            <label className="font-semibold">Discount:</label>
+                            <label className="font-semibold">
+                              Sales Tax (%):
+                            </label>
                             <input
                               type="number"
-                              value={discount}
+                              value={salesTax}
                               onChange={(e) =>
-                                setDiscount(parseFloat(e.target.value) || 0)
+                                setSalesTax(e.target.value || 0)
                               }
                               className="w-28 p-2 border rounded-md text-right"
                               placeholder="0"
@@ -971,10 +980,12 @@ const GRN = () => {
                           <p className="font-semibold mt-1">
                             Payable:{" "}
                             <span className="font-bold text-green-600">
-                              {(
-                                itemsList.reduce((sum, i) => sum + i.total, 0) -
-                                (discount || 0)
-                              ).toLocaleString()}
+                              {itemsList.reduce((sum, i) => sum + i.total, 0) +
+                                (salesTax / 100) *
+                                  itemsList.reduce(
+                                    (sum, i) => sum + i.total,
+                                    0
+                                  )}
                             </span>
                           </p>
                         </div>

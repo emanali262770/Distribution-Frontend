@@ -72,7 +72,6 @@ const ViewModal = ({ type, data, onClose }) => {
 
           {/* 🔹 Info Sections */}
           <div className="grid grid-cols-2 gap-4 text-base mb-6">
-
             {/* ✅ GRN DETAILS SECTION */}
             {type === "grn" && (
               <>
@@ -86,6 +85,11 @@ const ViewModal = ({ type, data, onClose }) => {
                   <strong>Supplier:</strong>{" "}
                   {data.supplier?.supplierName || "-"}
                 </div>
+                <div>
+                  <strong>Sales Tax :</strong>{" "}
+                  {data.salesTax ? `${parseFloat(data.salesTax) }%` : "0%"}
+                </div>
+
                 <div>
                   <strong>Total Amount:</strong>{" "}
                   {data.totalAmount?.toLocaleString()}
@@ -211,8 +215,7 @@ const ViewModal = ({ type, data, onClose }) => {
                   {data.customerId?.customerName || "-"}
                 </div>
                 <div>
-                  <strong>Phone:</strong>{" "}
-                  {data.customerId?.phoneNumber || "-"}
+                  <strong>Phone:</strong> {data.customerId?.phoneNumber || "-"}
                 </div>
                 <div>
                   <strong>Address:</strong> {data.customerId?.address}
@@ -362,9 +365,7 @@ const ViewModal = ({ type, data, onClose }) => {
               {(data.products || []).map((item, idx) => (
                 <tr key={idx}>
                   {/* Already handled above for GRN */}
-                  {type !== "grn" && (
-                    <td className="text-center">{idx + 1}</td>
-                  )}
+                  {type !== "grn" && <td className="text-center">{idx + 1}</td>}
 
                   {(type === "DateWise-Sales" ||
                     type === "productwise" ||
