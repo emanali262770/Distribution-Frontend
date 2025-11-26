@@ -299,7 +299,7 @@ useEffect(() => {
             placeholder="Search by name, contact, or address..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full md:w-1/3 p-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-200"
+            className="w-full md:w-1/5 p-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-200"
           />
           <button
             className="bg-newPrimary text-white px-4 py-2 rounded-lg hover:bg-newPrimary/90"
@@ -484,7 +484,7 @@ useEffect(() => {
           >
             <div className="flex justify-between items-center p-4 border-b sticky top-0 bg-white rounded-t-2xl">
               <h2 className="text-xl font-bold text-newPrimary">
-                {isEdit ? "Update Supplier" : "Add a New Supplier"}
+                {isEdit ? "Update Supplier" : "Add New Supplier"}
               </h2>
               <button
                 className="w-8 h-8 bg-newPrimary text-white rounded-full flex items-center justify-center hover:bg-newPrimary/70"

@@ -281,9 +281,6 @@ const ItemCategory = () => {
     setCurrentPage(1);
   }, [searchTerm]);
 
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [categories]);
   return (
     <div className="p-4 bg-gray-50 min-h-screen">
       <div className="px-6 mx-auto">
