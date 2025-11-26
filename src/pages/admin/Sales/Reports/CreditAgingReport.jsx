@@ -28,9 +28,9 @@ const CreditAgingReport = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `${import.meta.env.VITE_API_BASE_URL}/employees/reports`
+        `${import.meta.env.VITE_API_BASE_URL}/employees/salesman-done`
       );
-      setSalesmanData(response.data?.data || response.data || []);
+      setSalesmanData(response?.data?.employees || response.data || []);
     } catch (error) {
       console.error("Failed to fetch Salesman:", error);
       toast.error("Error", "Failed to load Salesman", "error");
