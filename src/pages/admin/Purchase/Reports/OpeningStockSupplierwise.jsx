@@ -410,7 +410,7 @@ const OpeningStock = () => {
                               }}
                               className="cursor-pointer"
                             >
-                              {rec.stock || "-"}
+                              {rec.stock || 0}
                             </span>
                           )}
                         </div>

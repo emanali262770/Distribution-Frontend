@@ -87,6 +87,7 @@ const GRN = () => {
       }, 2000);
     }
   }, []);
+  console.log({ itemOptions, grns });
 
   useEffect(() => {
     fetchSalesmen();
@@ -128,13 +129,13 @@ const GRN = () => {
   };
 
   const handleItemsChange = (e) => {
-    const itemId = e.target.value;
-    setItem(itemId);
+    const id = e.target.value;
+    setItem(id);
 
-    // const selected = itemOptions.find((opt) => opt._id === itemId);
-    // if (selected) {
-    //   setRate(selected.purchase || 0); // ✅ auto set rate from purchase field
-    // }
+    const selected = itemOptions.find((opt) => opt._id === id);
+    if (selected) {
+      setRate(selected.purchase || 0);
+    }
   };
 
   // Fetch GRNs
@@ -150,7 +151,7 @@ const GRN = () => {
         headers,
       });
       console.log(res.data.data);
-      
+
       // console.log("GRN API Response:", res.data); // Debug API response
       const transformedGrns = res.data.data.map((grn) => ({
         _id: grn._id,
@@ -218,8 +219,8 @@ const GRN = () => {
     setItem("");
     setQty("");
     setRate("");
-    setItemError("")
-    setSupplierError("")
+    setItemError("");
+    setSupplierError("");
     setDescription("");
     setDiscount(0);
     setIsEnable(true);
@@ -302,12 +303,14 @@ const GRN = () => {
     const newGrn = {
       grnDate: date,
       supplierId: selectedSalesman,
-      products: itemsList.map((item) => ({
-        item: item.item,
-        qty: item.qty,
-        rate: item.rate,
-        total: item.total,
+      products: itemsList.map((it) => ({
+        itemId: it.itemId, // 🔥 required
+        item: it.item,
+        qty: it.qty,
+        rate: it.rate,
+        total: it.total,
       })),
+
       totalAmount: payableAmount,
     };
 
@@ -429,12 +432,11 @@ const GRN = () => {
 
   // Update total pages based on filtered results
   const totalPages = Math.ceil(filteredGrns.length / recordsPerPage);
-useEffect(() => {
- setCurrentPage(1)
-}, [searchTerm])
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
 
-console.log({grns});
-
+  console.log({ grns });
 
   return (
     <div className="p-4 bg-gray-50 min-h-screen">
@@ -518,13 +520,13 @@ console.log({grns});
                           </div>
                           <div className="flex justify-end gap-3">
                             <button
-                            onClick={() => handleEditClick(grn)}
-                            className="py-1 text-sm rounded text-blue-600"
-                            title="Edit"
-                          >
-                            <SquarePen size={18} />
-                          </button>
-                           
+                              onClick={() => handleEditClick(grn)}
+                              className="py-1 text-sm rounded text-blue-600"
+                              title="Edit"
+                            >
+                              <SquarePen size={18} />
+                            </button>
+
                             <button
                               onClick={() => handleDelete(grn._id)}
                               className="py-1 text-sm text-red-600"
@@ -532,7 +534,7 @@ console.log({grns});
                             >
                               <Trash2 size={18} />
                             </button>
-                             <button
+                            <button
                               onClick={() => handleView(grn)}
                               className="text-amber-600 hover:bg-amber-50 rounded"
                               title="View GRN"
@@ -801,7 +803,11 @@ console.log({grns});
                       </div>
 
                       {/* Add Button */}
-                      <div className={`${itemError?"items-center":"items-end"} flex `}>
+                      <div
+                        className={`${
+                          itemError ? "items-center" : "items-end"
+                        } flex `}
+                      >
                         <button
                           type="button"
                           onClick={() => {
@@ -833,7 +839,8 @@ console.log({grns});
                             setItemError("");
 
                             const newItem = {
-                              item: selectedItem?.itemName || "Unknown",
+                              itemId: selectedItem.itemId, // ITEM-001
+                              item: selectedItem.itemName,
                               qty,
                               rate,
                               total,
