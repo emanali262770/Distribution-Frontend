@@ -15,6 +15,8 @@ const GRN = () => {
   const recordsPerPage = 10;
   const [supplierError, setSupplierError] = useState("");
   const [itemError, setItemError] = useState("");
+  const [editIndex, setEditIndex] = useState(null);
+  const [isItemEditMode, setIsItemEditMode] = useState(false);
 
   const [records, setRecords] = useState([]);
   const [salesmanList, setSalesmanList] = useState([]);
@@ -172,7 +174,7 @@ const GRN = () => {
             rate: p.rate,
             total: p.total,
           })) || [],
-          salesTax:grn.salesTax || 0,
+        salesTax: grn.salesTax || 0,
         totalAmount: grn.totalAmount || 0, // ✅ added totalAmount
       }));
 
@@ -225,7 +227,7 @@ const GRN = () => {
     setItemError("");
     setSupplierError("");
     setDescription("");
-   setSalesTax(0);
+    setSalesTax(0);
     setIsEnable(true);
     setIsSliderOpen(true);
   };
@@ -273,9 +275,7 @@ const GRN = () => {
     console.log(itemsList);
 
     // ✅ This line ensures totalAmount (3000) appears correctly in summary section
-   setSalesTax(parseFloat(grn.salesTax) );
-
-
+    setSalesTax(parseFloat(grn.salesTax));
 
     setIsSliderOpen(true);
   };
@@ -315,7 +315,7 @@ const GRN = () => {
         rate: it.rate,
         total: it.total,
       })),
-      salesTax: salesTax ,
+      salesTax: salesTax,
       totalAmount: payableAmount,
     };
 
@@ -341,7 +341,6 @@ const GRN = () => {
       setIsSliderOpen(false);
       setItemsList([]);
       setSalesTax(0);
-
     } catch (error) {
       console.error("Error saving GRN:", error);
       toast.error(error.response?.data?.error || "Failed to save GRN.");
@@ -417,8 +416,26 @@ const GRN = () => {
   const handleRemoveItem = (index) => {
     setItemsList((prev) => prev.filter((_, i) => i !== index));
     setSalesTax(0);
- // ✅ reset salesTax after removing an item
+    // ✅ reset salesTax after removing an item
   };
+
+const handleItemEdit = (index) => {
+  const it = itemsList[index];
+
+  // Map saved itemId → actual dropdown option _id
+  const matched = itemOptions.find(
+    (opt) =>
+      opt._id === it.itemId ||  // if saved itemId was MongoDB _id
+      opt.itemName === it.item  // match by item name
+  );
+
+  setItem(matched?._id || ""); // FIXED 🔥
+  setQty(it.qty);
+  setRate(it.rate);
+  setEditIndex(index);
+  setIsItemEditMode(true);
+};
+
 
   // Filter GRNs by GRN ID or Supplier Name
   const filteredGrns = grns.filter(
@@ -827,26 +844,35 @@ const GRN = () => {
                               (opt) => opt._id === item
                             );
                             const total = qty * rate;
-                            // 🔥 CALCULATE CURRENT + NEW TOTAL
-                            const currentTotal = itemsList.reduce(
-                              (sum, i) => sum + i.total,
-                              0
-                            );
-                            const newPayable = currentTotal + total;
 
-                            // 🔥 Check supplier limit (50 lakh)
-                            if (balance + newPayable >= 5000000) {
-                              setItemError(
-                                "Supplier limit exceeded It must be less than 50 lakh. Reduce rate or quantity."
+                            // If updating an item
+                            if (isItemEditMode) {
+                              const updatedItem = {
+                                itemId: selectedItem.itemId || selectedItem._id,
+                                item: selectedItem.itemName,
+                                qty,
+                                rate,
+                                total,
+                              };
+
+                              setItemsList((prev) =>
+                                prev.map((p, i) =>
+                                  i === editIndex ? updatedItem : p
+                                )
                               );
-                              return; // ❌ STOP adding item
+
+                              // Reset edit state
+                              setItem("");
+                              setQty("");
+                              setRate("");
+                              setIsItemEditMode(false);
+                              setEditIndex(null);
+                              return;
                             }
 
-                            // Clear error if OK
-                            setItemError("");
-
+                            // Normal ADD mode
                             const newItem = {
-                              itemId: selectedItem.itemId || selectedItem._id, // ← 🔥 FIXED
+                              itemId: selectedItem.itemId || selectedItem._id,
                               item: selectedItem.itemName,
                               qty,
                               rate,
@@ -857,11 +883,11 @@ const GRN = () => {
                             setItem("");
                             setQty("");
                             setRate("");
-                            setDiscount(0);
                           }}
                           className="w-20 h-12 bg-newPrimary text-white rounded-lg hover:bg-newPrimary/80 transition"
                         >
-                          + Add
+                          {isItemEditMode ? "Update" : "+ Add"}
+
                         </button>
                       </div>
                     </div>
@@ -914,11 +940,22 @@ const GRN = () => {
                                   <td className="px-4 py-2 border border-gray-300">
                                     {it.total}
                                   </td>
-                                  <td className="px-4 py-2 border border-gray-300">
+                                  <td className="px-4 py-2 border border-gray-300 flex justify-center gap-2">
+                                    {/* EDIT */}
+                                    <button
+                                      type="button"
+                                      onClick={() => handleItemEdit(idx)}
+                                      className="text-blue-600 hover:bg-blue-100 rounded-full p-1"
+                                      title="Edit Item"
+                                    >
+                                      <SquarePen size={18} />
+                                    </button>
+
+                                    {/* DELETE */}
                                     <button
                                       type="button"
                                       onClick={() => handleRemoveItem(idx)}
-                                      className="text-red-600 hover:bg-red-100 rounded-full  transition"
+                                      className="text-red-600 hover:bg-red-100 rounded-full p-1"
                                       title="Remove Item"
                                     >
                                       <X size={18} />
@@ -969,9 +1006,11 @@ const GRN = () => {
                             <input
                               type="number"
                               value={salesTax}
-                              onChange={(e) =>
-                                setSalesTax(e.target.value || 0)
-                              }
+                              max={100}
+                              onChange={(e) => {
+                                const val = Number(e.target.value);
+                                setSalesTax(Math.min(val, 100)); // 🚫 prevents >100
+                              }}
                               className="w-28 p-2 border rounded-md text-right"
                               placeholder="0"
                             />

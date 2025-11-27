@@ -24,6 +24,8 @@ const OrderTaking = () => {
 
   const [loading, setLoading] = useState(false);
   const [editingOrder, setEditingOrder] = useState(null);
+  const [editIndex, setEditIndex] = useState(null);
+  const [isItemEditMode, setIsItemEditMode] = useState(false);
 
   const [orderId, setOrderId] = useState("");
   const [orderDate, setOrderDate] = useState("");
@@ -110,7 +112,7 @@ const OrderTaking = () => {
   }, []);
 
   // fetch order Taking
-console.log({productsList});
+  console.log({ productsList });
 
   async function fetchOrderTaking() {
     try {
@@ -181,7 +183,7 @@ console.log({productsList});
   }, [qty, rate]);
 
   const handleAddItem = () => {
-    setRateError(""); // reset previous error
+    setRateError("");
 
     if (!product) {
       toast.error("Please select a Product");
@@ -191,35 +193,42 @@ console.log({productsList});
       toast.error("Please enter a valid Quantity");
       return;
     }
-   
     if (!rate || rate <= 0) {
       toast.error("Rate is missing or invalid");
       return;
     }
-   
-
     if (Number(rate) <= Number(purchase)) {
       setRateError("Rate should be greater than Purchase!");
       return;
     }
 
-    const newItem = {
-      id: items.length + 1,
-      product,
+    const selected = productsList.find((p) => p._id === product);
 
-      purchase, // API price
-      rate, // Manual rate typed by user
+    const newItem = {
+      product: selected.itemName, // store itemName again
+      purchase,
       qty,
-      total, // total can be rate * qty
+      rate,
+      total,
     };
 
-    setItems([...items, newItem]);
+    // 🔥 UPDATE MODE
+    if (isItemEditMode) {
+      setItems((prev) => prev.map((p, i) => (i === editIndex ? newItem : p)));
+
+      // Reset edit state
+      setIsItemEditMode(false);
+      setEditIndex(null);
+    } else {
+      // 🔥 ADD MODE
+      setItems([...items, newItem]);
+    }
 
     // Reset inputs
     setProduct("");
+    setPurchase("");
     setQty("");
     setRate("");
-    setPurchase("");
     setTotal("");
   };
 
@@ -320,15 +329,19 @@ console.log({productsList});
 
     // transform products to frontend-friendly items
     const formattedItems =
-      order.products?.map((p, i) => ({
-        id: i + 1,
-        product: p.itemName,
-        purchase: p.purchase,
-        qty: p.qty,
-        unit: p.itemUnit,
-        rate: p.rate,
-        total: p.totalAmount,
-      })) || [];
+      order.products?.map((p, i) => {
+        const prod = productsList.find((x) => x.itemName === p.itemName);
+
+        return {
+          id: i + 1,
+          product: p.itemName,
+          purchase: prod?.purchase || 0, // <-- FIXED
+          qty: p.qty,
+          unit: p.itemUnit,
+          rate: p.rate,
+          total: p.totalAmount,
+        };
+      }) || [];
 
     setItems(formattedItems);
     // console.log("HI", formattedItems);
@@ -415,6 +428,23 @@ console.log({productsList});
     const updatedItems = items.filter((_, i) => i !== index);
     setItems(updatedItems);
   };
+
+  const handleItemEdit = (index) => {
+    const it = items[index];
+
+    const selected = productsList.find((p) => p.itemName === it.product);
+    console.log(selected, "fygfyf");
+
+    setProduct(selected?._id || ""); // dropdown select correct
+    setPurchase(it.purchase);
+    setRate(it.rate);
+    setQty(it.qty);
+    setTotal(it.total);
+
+    setEditIndex(index);
+    setIsItemEditMode(true);
+  };
+
   // console.log({ productsList });
   const formatDate = (dateString) => {
     if (!dateString) return "-";
@@ -734,22 +764,21 @@ console.log({productsList});
                           value={product}
                           onChange={(e) => {
                             const selected = productsList.find(
-                              (p) => p.itemName === e.target.value
+                              (p) => p._id === e.target.value
                             );
-                            setProduct(e.target.value);
-                            // setUnit(selected?.itemUnit.unitName || "");
-                            setPurchase(selected?.purchase || ""); // Auto-fill Purchase field with product price
+                            setProduct(selected?._id || "");
+                            setPurchase(selected?.purchase || "");
                           }}
                           className="w-full p-2 border border-gray-300 rounded-md"
                         >
                           <option value="">Select</option>
                           {productsList.map((p) => (
-                            <option key={p._id}>{p.itemName}</option>
+                            <option key={p._id} value={p._id}>
+                              {p.itemName}
+                            </option>
                           ))}
                         </select>
                       </div>
-
-                      
 
                       <div>
                         <label className="text-gray-700 text-sm">
@@ -801,7 +830,7 @@ console.log({productsList});
                           onClick={handleAddItem}
                           className="w-full bg-newPrimary text-white py-2 rounded-md hover:bg-newPrimary/90"
                         >
-                          Add
+                          {isItemEditMode ? "Update" : "Add"}
                         </button>
                       </div>
                     </div>
@@ -817,7 +846,7 @@ console.log({productsList});
                     <div className="mt-4 border border-gray-200 rounded-lg">
                       <div className="grid grid-cols-[3fr_1fr_1fr_1fr_1fr_1fr] bg-gray-200 text-sm font-semibold text-gray-600">
                         <div className="px-4 py-2">Product</div>
-                    
+
                         {/* <div className="px-4 py-2">Purchase</div> */}
                         <div className="px-4 py-2">Rate</div>
                         <div className="px-4 py-2">Qty</div>
@@ -836,17 +865,27 @@ console.log({productsList});
                             className="grid grid-cols-[3fr_1fr_1fr_1fr_1fr_1fr] text-sm bg-white border-t"
                           >
                             <div className="px-4 py-2">{it.product}</div>
-                         
                             {/* <div className="px-4 py-2">{it.purchase}</div>  */}
                             <div className="px-4 py-2">{it.rate}</div>{" "}
                             {/* Manual rate */}
                             <div className="px-4 py-2">{it.qty}</div>
                             <div className="px-4 py-2">{it.total}</div>
-                            <div className="flex justify-center py-2">
+                            <div className="flex justify-center gap-2 py-2">
+                              {/* EDIT */}
+                              <button
+                                type="button"
+                                onClick={() => handleItemEdit(i)}
+                                className="text-blue-600 hover:bg-blue-100 rounded-full p-1"
+                                title="Edit Item"
+                              >
+                                <SquarePen size={18} />
+                              </button>
+
+                              {/* DELETE */}
                               <button
                                 type="button"
                                 onClick={() => handleRemoveItem(i)}
-                                className="text-red-600 hover:bg-red-100 rounded-full transition"
+                                className="text-red-600 hover:bg-red-100 rounded-full p-1"
                                 title="Remove Item"
                               >
                                 <X size={18} />
