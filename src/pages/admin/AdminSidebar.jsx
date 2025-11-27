@@ -27,6 +27,8 @@ import {
   MdOutlineIntegrationInstructions,
   MdOutlineSecurity,
 } from "react-icons/md";
+import { BsCash } from "react-icons/bs";
+
 import { FcSalesPerformance } from "react-icons/fc";
 import { RiLogoutBoxRLine, RiDashboardFill } from "react-icons/ri";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
@@ -63,6 +65,11 @@ const links = [
         to: "/admin/bank",
         label: "Bank",
         icon: <BsBank2 />,
+      },
+      {
+        to: "/admin/cash-deposite",
+        label: "Cash Deposite",
+        icon: <BsCash />,
       },
       {
         to: "/admin/day-book",

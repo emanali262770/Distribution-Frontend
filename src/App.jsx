@@ -15,7 +15,7 @@ import SalesSidebar from "./pages/admin/Sales/Functionalities/SalesSideBar.jsx";
 import OrderTaking from "./pages/admin/Sales/Functionalities/OrderTaking.jsx";
 import LoadSheet from "./pages/admin/Sales/Functionalities/LoadSheet.jsx";
 import SalesInvoice from "./pages/admin/Sales/Functionalities/SalesInvoice.jsx";
-import CashDeposite from "./pages/admin/Sales/Functionalities/CashDeposite.jsx";
+// import CashDeposite from "./pages/admin/Sales/Functionalities/CashDeposite.jsx";
 import LoadReturn from "./pages/admin/Sales/Functionalities/LoadReturn.jsx";
 
 import CustomerwiseOrders from "./pages/admin/Sales/Reports/CustomerwiseOrders.jsx";
@@ -83,6 +83,7 @@ import AllorderInvoice from "./pages/admin/AllOrdersInvoice/AllorderInvoice.jsx"
 import SalesmanAmountReceivales from "./pages/admin/Sales/Reports/SalesmanAmountReceivales.jsx";
 import ExSideBar from "./pages/admin/Accounts/Expense/ExpensePage.jsx";
 import DefineExpenseHead from "./pages/admin/Accounts/Expense/DefineExpenseHead.jsx";
+import CashDeposite from "./pages/admin/Accounts/CashDeposite/CashDeposite.jsx";
 
 function AppContent() {
   return (
@@ -116,7 +117,7 @@ function AppContent() {
             <Route path="sales/sales-invoice" element={<SalesInvoice />} />
             <Route path="sales/recovery" element={<Recovery />} />
             <Route path="sales/sales" element={<Sales />} />
-            <Route path="sales/cash-deposite" element={<CashDeposite />} />
+            {/* <Route path="sales/cash-deposite" element={<CashDeposite />} /> */}
             <Route path="sales/load-return" element={<LoadReturn />} />
          
 
@@ -253,7 +254,8 @@ function AppContent() {
             <Route path="bank" element={<BankSideBar />} />
             <Route path="bank-payment-voucher" element={<PaymentVoucher />} />
             <Route path="bank-receipt-voucher" element={<ReceiptVoucher />} />
-
+               {/* cash deposite */}
+            <Route path="cash-deposite" element={<CashDeposite />} />
             <Route path="bank-ledger" element={<BankLedger />} />
             <Route path="opening-bank-position" element={<BankPosition />} />
             {/* Setup */}
