@@ -22,7 +22,7 @@ const Sales = () => {
     try {
       setLoading(true);
       const response = await api.get("/employees/salesman");
-      console.log(response);
+      // console.log(response);
       
       setSalesmanList(response.employees || response);
     } catch (error) {

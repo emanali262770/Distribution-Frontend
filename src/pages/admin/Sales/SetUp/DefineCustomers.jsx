@@ -252,7 +252,7 @@ const DefineCustomers = () => {
 
   // Edit Customer
   const handleEdit = (customer) => {
-    console.log({ customer });
+    // console.log({ customer });
 
     setIsEdit(true);
     setEditId(customer._id);

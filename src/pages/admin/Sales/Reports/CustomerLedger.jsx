@@ -36,7 +36,7 @@ const CustomerLedger = () => {
       const response = await axios.get(
         `${import.meta.env.VITE_API_BASE_URL}/customers/isPending`
       );
-      console.log(response.data);
+      // console.log(response.data);
       
       setCustomerList(response.data?.customers || response.data || []);
     } catch (error) {

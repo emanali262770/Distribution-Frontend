@@ -226,7 +226,7 @@ const AdminDashboard = () => {
         },
       });
       setTotalProducts(response.data);
-      console.log("Products:", response.data);
+      // console.log("Products:", response.data);
     } catch (error) {
       console.error("Failed to fetch customer list", error);
     } finally {
@@ -250,7 +250,7 @@ const AdminDashboard = () => {
         },
       });
       setTotalStaff(response.data);
-      console.log("Staff:", response.data);
+      // console.log("Staff:", response.data);
     } catch (error) {
       console.error("Failed to fetch customer list", error);
     } finally {
@@ -274,7 +274,7 @@ const AdminDashboard = () => {
         },
       });
       setTotalSales(response.data);
-      console.log("Sales:", response.data);
+      // console.log("Sales:", response.data);
     } catch (error) {
       console.error("Failed to fetch Total Sales", error);
     } finally {
@@ -298,7 +298,7 @@ const AdminDashboard = () => {
         },
       });
       setTotalBooking(response.data);
-      console.log("Booking:", response.data);
+      // console.log("Booking:", response.data);
     } catch (error) {
       console.error("Failed to fetch Total Bookings", error);
     } finally {
@@ -507,7 +507,7 @@ const AdminDashboard = () => {
     }
   };
 
-  console.log(saleschartData);
+  // console.log(saleschartData);
 
   useEffect(() => {
     fetchSalesChart("weekly");

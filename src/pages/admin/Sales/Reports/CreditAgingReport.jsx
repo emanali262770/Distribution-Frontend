@@ -78,7 +78,7 @@ const CreditAgingReport = () => {
     }
   }, [selectedSalesman]);
 
-  console.log({ apiData });
+  // console.log({ apiData });
 
   useEffect(() => {
     if (selectedSalesman) {

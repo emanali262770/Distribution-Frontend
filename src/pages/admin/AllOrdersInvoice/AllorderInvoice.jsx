@@ -36,7 +36,7 @@ const AllorderInvoice = () => {
       );
       setOrders(res.data.data || []);
     } catch (error) {
-      console.log("Error fetching orders", error);
+      // console.log("Error fetching orders", error);
     }
     setLoading(false);
   };
@@ -51,7 +51,7 @@ const AllorderInvoice = () => {
       );
       setInvoices(res.data.data || []);
     } catch (error) {
-      console.log("Error fetching invoices", error);
+      // console.log("Error fetching invoices", error);
     }
     setLoading(false);
   };

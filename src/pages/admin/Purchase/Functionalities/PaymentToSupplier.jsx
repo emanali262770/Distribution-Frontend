@@ -288,7 +288,7 @@ const PaymentToSupplier = () => {
 
 
   const handleEditClick = (voucher) => {
-    console.log(voucher);
+    // console.log(voucher);
 
     setEditingVoucher(voucher);
 
@@ -348,7 +348,7 @@ const PaymentToSupplier = () => {
         remarks: cashData.remarks || "",
       };
 
-      console.log("Submitting payload:", payload);
+      // console.log("Submitting payload:", payload);
 
       const token = userInfo?.token;
 
@@ -461,7 +461,7 @@ const PaymentToSupplier = () => {
   };
   // 🟢 Handle Product Selection
 
-  console.log({ supplierDeposits });
+  // console.log({ supplierDeposits });
 
   return (
     <div className="p-4 bg-gray-50 min-h-screen">

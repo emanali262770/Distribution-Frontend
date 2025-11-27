@@ -39,7 +39,7 @@ const SalesmanwiseOrders = () => {
       setLoading(true);
       const response = await api.get("/employees/reports");
       setSalesman(response); // ✅ use .data
-      console.log("Salesman List:", response);
+      // console.log("Salesman List:", response);
     } catch (error) {
       console.error("Failed to fetch salesman list", error);
     } finally {
@@ -54,7 +54,7 @@ const SalesmanwiseOrders = () => {
   // fetch Salesman List by ID
   const fetchSalesmanList = useCallback(async (id) => {
     if (!id) {
-      console.log("No customer selected yet");
+      // console.log("No customer selected yet");
       return; // don’t run when nothing selected
     }
 
@@ -62,7 +62,7 @@ const SalesmanwiseOrders = () => {
       setLoading(true);
       const response = await api.get(`/sales-report/salesmanwise/${id}`);
       setSalesmanList(response.data);
-      console.log("Salesman Data:", response.data);
+      // console.log("Salesman Data:", response.data);
     } catch (error) {
       console.error("Failed to fetch salesman list", error);
     } finally {
@@ -90,7 +90,7 @@ const SalesmanwiseOrders = () => {
     setCurrentPage(1);
   }, [selectedSalesman]);
 
-  console.log("Tttsstts ", salesmanList);
+  // console.log("Tttsstts ", salesmanList);
 
   return (
     <div className="p-4 bg-gray-50 min-h-screen">
