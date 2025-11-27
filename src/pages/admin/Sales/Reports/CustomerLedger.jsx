@@ -295,8 +295,9 @@ const CustomerLedger = () => {
                     <div>Date</div>
                     <div>ID</div>
                     <div>Description</div>
-                    <div>Credit</div>
                     <div>Debit</div>
+                    <div>Credit</div>
+                    
                     <div>Balance</div>
                   </div>
 
@@ -310,8 +311,9 @@ const CustomerLedger = () => {
                         <div>{entry.Date}</div>
                         <div>{entry.ID || "-"}</div>
                         <div>{entry.Description || "-"}</div>
-                        <div>{entry.Credit || "-"}</div>
+                       
                         <div>{entry.Debit || "-"}</div>
+                         <div>{entry.Credit || "-"}</div>
                         <div>{entry.Balance || "-"}</div>
                       </div>
                     ))}
@@ -322,12 +324,12 @@ const CustomerLedger = () => {
                     <div></div>
                     <div></div>
                     <div></div>
-                    <div></div>
-                    <div className="text-red-600">
-                      Total Credit: {totalCredit.toLocaleString()}
-                    </div>
+                    <div></div>                
                     <div className="text-green-600">
                       Total Debit: {totalDebit.toLocaleString()}
+                    </div>
+                     <div className="text-red-600">
+                      Total Credit: {totalCredit.toLocaleString()}
                     </div>
                   </div>
                 </>

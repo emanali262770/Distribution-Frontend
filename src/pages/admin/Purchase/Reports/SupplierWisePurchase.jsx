@@ -91,13 +91,10 @@ const SupplierWisePurchase = () => {
 
   // 3️⃣ TOTALS
   const totalDebit = ledgerEntries.reduce(
-    (sum, e) => sum + (parseFloat(e.Amount) || 0),
-    0
-  );
-  const totalCredit = ledgerEntries.reduce(
     (sum, e) => sum + (parseFloat(e.Total) || 0),
     0
   );
+
   // 🔥 ADD THIS
   const totalQty = ledgerEntries.reduce(
     (sum, e) => sum + (parseFloat(e.Qty) || 0),
@@ -251,7 +248,7 @@ const SupplierWisePurchase = () => {
                   <div>Item</div>
                   <div>Rate</div>
                   <div>Qty</div>
-                  <div>Amount</div>
+                  <div>Total Amount</div>
                   {/* <div>Net Amount</div> */}
                 </div>
 
@@ -269,24 +266,26 @@ const SupplierWisePurchase = () => {
                       <div>{entry.Item || "-"}</div>
                       <div>{entry.Rate || "-"}</div>
                       <div>{entry.Qty || "-"}</div>
-                      <div>{entry.Amount || "-"}</div>
-                      {/* <div>{entry.Total || "-"}</div> */}
+                     
+                      <div>{entry.Total || "-"}</div>
                     </div>
                   ))}
                 </div>
 
                 {/* Totals */}
-                <div className="grid grid-cols-[0.3fr_0.5fr_0.5fr_1.8fr_1.5fr_1fr_1fr_1fr] items-center whitespace-nowrap bg-gray-100 py-3 px-6 text-xs font-semibold text-gray-700">
+                <div className="grid grid-cols-[0.3fr_1fr_1fr_1.8fr_1.5fr_1fr_1fr_1fr] items-center whitespace-nowrap bg-gray-100 py-3 px-6 text-xs font-semibold text-gray-700">
                   <div></div>
                   <div></div>
                   <div></div>
                   <div></div>
                   <div></div>
                   <div></div>
-                  {/* 🔥 SHOW TOTAL QTY */}
+                   {/* 🔥 SHOW TOTAL QTY */}
                   <div className="text-blue-600">
                     Total Qty: {totalQty.toLocaleString()}
                   </div>
+                 
+                 
                   <div className="text-red-600">
                     Total Amount: {totalDebit.toLocaleString()}
                   </div>

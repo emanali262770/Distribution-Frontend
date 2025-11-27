@@ -169,16 +169,18 @@ const BankLedger = () => {
               ))}
 
               {/* Totals */}
-              <div className="grid grid-cols-[3.7fr_1fr_1fr_1fr] bg-gray-100 py-3 px-6 text-xs font-semibold text-gray-700">
+              <div className="grid grid-cols-[0.5fr_1.2fr_2fr_1fr_1fr_1fr] bg-gray-100 py-3 px-6 text-xs font-semibold text-gray-700">
                 <div></div>
                 <div></div>
+               
 
-                <div className="text-red-600">
+                
+                 <div></div>
+                 <div></div>
+                 <div className="text-red-600">
                   Total Amount: {totalDebit.toLocaleString()}
                 </div>
-                <div className="text-green-600">
-                  Total Balance After: {totalCredit.toLocaleString()}
-                </div>
+                 <div></div>
               </div>
             </>
           )}

@@ -534,19 +534,21 @@ const currentSalesItems = (filteredSalesItems || []).slice(
                 <div className="rounded-xl shadow border border-gray-200 overflow-hidden mb-6">
                   <div className="overflow-y-auto lg:overflow-x-auto max-h-[300px]">
                     <div className="min-w-full custom-scrollbar">
-                      <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr] gap-4 bg-gray-100 py-3 px-6 text-xs font-semibold text-gray-600 uppercase sticky top-0 z-10 border-b border-gray-200">
+                      <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_1fr] gap-4 bg-gray-100 py-3 px-6 text-xs font-semibold text-gray-600 uppercase sticky top-0 z-10 border-b border-gray-200">
                         <div>Invoice No</div>
                         <div>Items</div>
                         <div>Rate</div>
                         <div>Qty</div>
-                        <div>Total</div>
+                        <div>Amount</div>
+                        <div>Discount Amount</div>
+                        <div>Total Amount</div>
                       </div>
                       <div className="flex flex-col divide-y divide-gray-100">
                         {loading ? (
                           <TableSkeleton
                             rows={currentSalesItems.length || 5}
                             cols={5}
-                            className="lg:grid-cols-[1fr_1fr_1fr_1fr_1fr]"
+                            className="lg:grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_1fr]"
                           />
                         ) : currentSalesItems.length === 0 ? (
                           <div className="text-center py-4 text-gray-500 bg-white">
@@ -557,17 +559,21 @@ const currentSalesItems = (filteredSalesItems || []).slice(
                             {currentSalesItems.map((item, index) => (
                               <div
                                 key={index}
-                                className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr] items-center gap-4 px-6 py-4 text-sm bg-white hover:bg-gray-50 transition"
+                                className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_1fr] items-center gap-4 px-6 py-4 text-sm bg-white hover:bg-gray-50 transition"
                               >
                                 <div>{item.invoiceNo || "-"}</div>
                                 <div>{item?.itemName || "-"}</div>
                                 <div>{item?.rate || "-"}</div>
                                 <div>{item?.qty || "-"}</div>
-                                <div>{item?.total || "-"}</div>
+                                <div>{item?.total ?? "-"}</div>
+                                <div>{item?.discount ?? "-"}</div>
+                                <div>{item?.totalAmount ?? "-"}</div>
                               </div>
                             ))}
                             {/* Total Row with Colors */}
-                            <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr] gap-4 bg-gray-100 py-3 px-6 text-xs font-semibold text-gray-700 whitespace-nowrap">
+                            <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_1fr] gap-4 bg-gray-100 py-3 px-6 text-xs font-semibold text-gray-700 whitespace-nowrap">
+                              <div></div>
+                              <div></div>
                               <div></div>
                               <div></div>
                               <div></div>
@@ -575,7 +581,7 @@ const currentSalesItems = (filteredSalesItems || []).slice(
                               <div className="text-blue-800">
                                 Total:{" "}
                                 {currentSalesItems
-                                  .reduce((sum, item) => sum + item.total, 0)
+                                  .reduce((sum, item) => sum + item.totalAmount, 0)
                                   .toLocaleString()}
                               </div>
                             </div>
@@ -625,7 +631,7 @@ const currentSalesItems = (filteredSalesItems || []).slice(
                                         : "text-gray-700"
                                     }
                                   >
-                                    {item.balance || "-"}
+                                    {item.balance ?? "-"}
                                   </div>
                                 </div>
                               ))}

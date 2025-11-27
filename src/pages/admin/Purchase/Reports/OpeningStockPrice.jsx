@@ -90,27 +90,27 @@ const OpeningStock = () => {
   }, [fetchSupplierList]);
 
   // Fetch itemTypes when category changes
-  useEffect(() => {
-    if (!itemCategory || isClearing) return; // only call when category selected
+  // useEffect(() => {
+  //   if (!itemCategory || isClearing) return; // only call when category selected
 
-    const fetchItemTypes = async () => {
-      setLoading(true);
-      try {
-        const res = await axios.get(
-          `${
-            import.meta.env.VITE_API_BASE_URL
-          }/item-type/category/${itemCategory}`
-        );
-        setItemTypeList(res.data);
-      } catch (error) {
-        console.error("Failed to fetch item types", error);
-      } finally {
-        setTimeout(() => setLoading(false), 1000);
-      }
-    };
+  //   const fetchItemTypes = async () => {
+  //     setLoading(true);
+  //     try {
+  //       const res = await axios.get(
+  //         `${
+  //           import.meta.env.VITE_API_BASE_URL
+  //         }/item-type/category/${itemCategory}`
+  //       );
+  //       setItemTypeList(res.data);
+  //     } catch (error) {
+  //       console.error("Failed to fetch item types", error);
+  //     } finally {
+  //       setTimeout(() => setLoading(false), 1000);
+  //     }
+  //   };
 
-    fetchItemTypes();
-  }, [itemCategory, isClearing]);
+  //   fetchItemTypes();
+  // }, [itemCategory, isClearing]);
 
   // when itemType Select then Table repaint according api response
   useEffect(() => {

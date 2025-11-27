@@ -160,7 +160,7 @@ export const handleLedgerPrint = (ledgerEntries = []) => {
     0
   );
   const totalAmount = ledgerEntries.reduce(
-    (sum, e) => sum + (parseFloat(e.Amount) || 0),
+    (sum, e) => sum + (parseFloat(e.Total) || 0),
     0
   );
   const totalOverall = ledgerEntries.reduce(
@@ -210,7 +210,7 @@ export const handleLedgerPrint = (ledgerEntries = []) => {
               <th>Item</th>
               <th>Rate</th>
               <th>Qty</th>
-              <th>Amount</th>
+              <th>Total Amount</th>
             </tr>
           </thead>
           <tbody>
@@ -225,7 +225,7 @@ export const handleLedgerPrint = (ledgerEntries = []) => {
                     <td>${entry.Item || "-"}</td>
                     <td>${parseFloat(entry.Rate || 0).toLocaleString()}</td>
                     <td>${parseFloat(entry.Qty || 0).toLocaleString()}</td>
-                    <td>${parseFloat(entry.Amount || 0).toLocaleString()}</td>
+                    <td>${parseFloat(entry.Total || 0).toLocaleString()}</td>
                   </tr>`
               )
               .join("")}
@@ -312,8 +312,7 @@ export const handleItemWisePrint = (ledgerEntries = []) => {
               <th>Rate</th>
               <th>Qty</th>
               <th>Total Amount</th>
-              <th>
-Net Amount</th>
+             
             </tr>
           </thead>
           <tbody>
@@ -329,7 +328,7 @@ Net Amount</th>
                     <td>${parseFloat(entry.Rate || 0).toLocaleString()}</td>
                     <td>${parseFloat(entry.Qty || 0).toLocaleString()}</td>
                     <td>${parseFloat(entry.Total || 0).toLocaleString()}</td>
-                    <td>${parseFloat(entry.Amount || 0).toLocaleString()}</td>
+                   
                   </tr>`
               )
               .join("")}
@@ -340,7 +339,7 @@ Net Amount</th>
               <td>-</td>
               <td>${totalQty.toLocaleString()}</td>
               <td>${totalAmount.toLocaleString()}</td>
-              <td>${totalOverall.toLocaleString()}</td>
+              
             </tr>
           </tfoot>
         </table>
@@ -661,7 +660,7 @@ export const handleDailySalesPrint = (
   if (
     !salesmanList ||
     (!salesmanList.salesItems?.length &&
-      !salesmanList.paymentReceived?.length &&
+      !salesmanList.customerPayments?.length &&
       !salesmanList.recoveries?.length)
   ) {
     return;
@@ -669,24 +668,29 @@ export const handleDailySalesPrint = (
 
   const {
     salesItems = [],
-    paymentReceived = [],
+    customerPayments = [],
     recoveries = [],
   } = salesmanList;
 
   // 🔹 Totals
-  const totalSales = salesItems.reduce((sum, s) => sum + (s.total || 0), 0);
-  const totalPayment = paymentReceived.reduce(
+  const totalSales = salesItems.reduce(
+    (sum, s) => sum + (s.totalAmount || 0),
+    0
+  );
+
+  const totalPayment = customerPayments.reduce(
     (sum, p) => sum + (p.total || 0),
     0
   );
-  const totalReceived = paymentReceived.reduce(
+  const totalReceived = customerPayments.reduce(
     (sum, p) => sum + (p.received || 0),
     0
   );
-  const totalBalance = paymentReceived.reduce(
+  const totalBalance = customerPayments.reduce(
     (sum, p) => sum + (p.balance || 0),
     0
   );
+
   const totalDueRecovery = recoveries.reduce(
     (sum, r) => sum + (r.dueRecovery || 0),
     0
@@ -719,10 +723,10 @@ export const handleDailySalesPrint = (
         <p>Mall of Lahore, Cantt</p>
         <p>Phone: 0318-4486979</p>
         <hr />
+
         <h2>Daily Sales Report</h2>
-        <p><b>Date:</b> ${new Date().toLocaleDateString()} &nbsp;&nbsp; | &nbsp;&nbsp; <b>Salesman:</b> ${
-    selectedSalesmanName || "-"
-  }</p>
+        <p><b>Date:</b> ${new Date().toLocaleDateString()} &nbsp;&nbsp; | &nbsp;&nbsp; 
+        <b>Salesman:</b> ${selectedSalesmanName || "-"}</p>
 
         <!-- 🔹 Sales Items Table -->
         <h3 style="margin-top:20px;">Sales Items</h3>
@@ -734,7 +738,9 @@ export const handleDailySalesPrint = (
               <th>Item Name</th>
               <th>Rate</th>
               <th>Qty</th>
-              <th>Total</th>
+              <th>Amount</th>
+              <th>Discount</th>
+              <th>Total Amount</th>
             </tr>
           </thead>
           <tbody>
@@ -749,16 +755,18 @@ export const handleDailySalesPrint = (
                       <td>${s.itemName || "-"}</td>
                       <td>${s.rate || 0}</td>
                       <td>${s.qty || 0}</td>
-                      <td>${(s.total || 0).toLocaleString()}</td>
+                      <td>${s.total || 0}</td>
+                      <td>${s.discount || 0}</td>
+                      <td>${s.totalAmount || 0}</td>
                     </tr>`
                     )
                     .join("")
-                : `<tr><td colspan="6">No sales records found.</td></tr>`
+                : `<tr><td colspan="8">No sales records found.</td></tr>`
             }
           </tbody>
           <tfoot>
             <tr>
-              <td colspan="5" style="text-align:right;">Total Sales:</td>
+              <td colspan="7" style="text-align:right;">Total Sales:</td>
               <td>${totalSales.toLocaleString()}</td>
             </tr>
           </tfoot>
@@ -778,8 +786,8 @@ export const handleDailySalesPrint = (
           </thead>
           <tbody>
             ${
-              paymentReceived.length
-                ? paymentReceived
+              customerPayments.length
+                ? customerPayments
                     .map(
                       (p) => `
                     <tr>
@@ -834,7 +842,7 @@ export const handleDailySalesPrint = (
           </tbody>
           <tfoot>
             <tr>
-              <td colspan="2" style="text-align:right;">Total Recovery:</td>
+              <td colspan="2" style="text-align:right;">Totals:</td>
               <td>${totalRecovered.toLocaleString()}</td>
               <td>${totalDueRecovery.toLocaleString()}</td>
             </tr>
@@ -847,9 +855,11 @@ export const handleDailySalesPrint = (
       </body>
     </html>
   `);
+
   win.document.close();
   win.print();
 };
+
 
 export const handleSaleInvoicePrint = (orders = []) => {
   if (!orders.length) return;

@@ -42,9 +42,7 @@ const ViewInvoiceModal = ({ data, onClose }) => {
             <h1 className="text-2xl font-extrabold text-newPrimary tracking-wide">
               City Trader Pvt. Ltd.
             </h1>
-            <p className="text-gray-700 text-sm mt-1">
-              Taj Pura Lahore
-            </p>
+            <p className="text-gray-700 text-sm mt-1">Taj Pura Lahore</p>
             <p className="text-gray-700 text-sm">
               Phone: <span className="font-medium">0318-4486979</span>
             </p>
@@ -56,18 +54,50 @@ const ViewInvoiceModal = ({ data, onClose }) => {
 
           {/* Invoice Info */}
           <div className="grid grid-cols-2 gap-4 text-base mb-6">
-            <div><strong>Invoice No:</strong> {data.invoiceNo}</div>
-            <div><strong>Invoice Date:</strong> {new Date(data.invoiceDate).toLocaleDateString()}</div>
-            <div><strong>Order ID:</strong> {data.orderTakingId?.orderId || "-"}</div>
-            <div><strong>Customer:</strong> {data.customerId?.customerName}</div>
-            <div><strong>Address:</strong> {data.customerId?.address}</div>
-            <div><strong>Phone:</strong> {data.customerId?.phoneNumber}</div>
-            <div><strong>Salesman:</strong> {data.salesmanId?.employeeName || "-"}</div>
-            <div><strong>Status:</strong> {data.status}</div>
-            <div><strong>Receivable:</strong> Rs. {data.receivable?.toLocaleString()}</div>
-            <div><strong>Received:</strong> Rs. {data.received?.toLocaleString()}</div>
-            <div><strong>Discount:</strong> Rs. {data.discount?.toLocaleString()}</div>
-            <div><strong>Total Amount:</strong> Rs. {data.totalAmount?.toLocaleString()}</div>
+            <div>
+              <strong>Invoice No:</strong> {data.invoiceNo}
+            </div>
+            <div>
+              <strong>Invoice Date:</strong>{" "}
+              {new Date(data.invoiceDate).toLocaleDateString()}
+            </div>
+
+            <div>
+              <strong>Order ID:</strong> {data.orderTakingId?.orderId || "-"}
+            </div>
+            <div>
+              <strong>Customer:</strong> {data.customerId?.customerName}
+            </div>
+
+            <div>
+              <strong>Phone:</strong> {data.customerId?.phoneNumber}
+            </div>
+            <div>
+              <strong>Address:</strong> {data.customerId?.address}
+            </div>
+
+            <div>
+              <strong>Salesman:</strong> {data.salesmanId?.employeeName || "-"}
+            </div>
+            <div>
+              <strong>Status:</strong> {data.status}
+            </div>
+
+            <div>
+              <strong>Total Amount:</strong> Rs.{" "}
+              {data.totalAmount?.toLocaleString()}
+            </div>
+            <div>
+              <strong>Discount:</strong> Rs. {data.discount?.toLocaleString()}
+            </div>
+
+            <div>
+              <strong>Receivable:</strong> Rs.{" "}
+              {data.receivable?.toLocaleString()}
+            </div>
+            <div>
+              <strong>Received:</strong> Rs. {data.received?.toLocaleString()}
+            </div>
           </div>
 
           {/* Items Table */}
@@ -95,8 +125,6 @@ const ViewInvoiceModal = ({ data, onClose }) => {
             </tbody>
           </table>
         </div>
-
-     
       </div>
     </div>
   );

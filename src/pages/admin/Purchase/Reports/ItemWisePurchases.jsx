@@ -119,7 +119,7 @@ useEffect(() => {
   }, []);
 
   const totalNetAmount = ledgerEntries.reduce(
-    (sum, entry) => sum + Number(entry.Amount || 0),
+    (sum, entry) => sum + Number(entry.Total || 0),
     0
   );
 
@@ -252,7 +252,7 @@ useEffect(() => {
             ) : (
               <>
                 {/* Header */}
-                <div className="hidden lg:grid grid-cols-[0.3fr_1fr_1fr_1.5fr_1.5fr_1fr_1fr_1fr_1fr] bg-gray-100 py-3 px-6 text-xs font-semibold text-gray-600 uppercase">
+                <div className="hidden lg:grid grid-cols-[0.3fr_1fr_1fr_1.5fr_1.5fr_1fr_1fr_1fr] bg-gray-100 py-3 px-6 text-xs font-semibold text-gray-600 uppercase">
                   <div>SR</div>
                   <div>Date</div>
                   <div>ID</div>
@@ -261,7 +261,7 @@ useEffect(() => {
                   <div>Rate</div>
                   <div>Qty</div>
                   <div>Total Amount</div>
-                  <div>Net Amount</div>
+                
                 </div>
 
                 {/* Rows */}
@@ -269,7 +269,7 @@ useEffect(() => {
                   {currentRecords.map((entry, i) => (
                     <div
                       key={i}
-                      className="grid grid-cols-[0.3fr_1fr_1fr_1.5fr_1.5fr_1fr_1fr_1fr_1fr] items-center px-6 py-3 hover:bg-gray-50 text-sm"
+                      className="grid grid-cols-[0.3fr_1fr_1fr_1.5fr_1.5fr_1fr_1fr_1fr] items-center px-6 py-3 hover:bg-gray-50 text-sm"
                     >
                       <div>{i + 1 + indexOfFirstRecord}</div>
                       <div>{entry.Date || "-"}</div>
@@ -279,7 +279,7 @@ useEffect(() => {
                       <div>{entry.Rate || "-"}</div>
                       <div>{entry.Qty || "-"}</div>
                       <div>{entry.Total || "-"}</div>
-                      <div>{entry.Amount || "-"}</div>
+                    
                     </div>
                   ))}
                 </div>
@@ -288,8 +288,8 @@ useEffect(() => {
 
             {/* TOTAL NET AMOUNT ROW */}
             {ledgerEntries.length > 0 && (
-              <div className="grid grid-cols-[0.3fr_1fr_1fr_1.5fr_1.5fr_1fr_1fr_1fr_1fr] gap-4 bg-gray-100 py-3 px-6 text-sm font-semibold text-gray-700 border-t">
-                <div></div>
+              <div className="grid grid-cols-[0.3fr_1fr_1fr_1.5fr_1.5fr_1fr_1fr_1fr] gap-4 bg-gray-100 py-3 px-6 text-sm font-semibold text-gray-700 border-t">
+             
                 <div></div>
                 <div></div>
                 <div></div>

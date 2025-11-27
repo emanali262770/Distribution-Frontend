@@ -23,7 +23,7 @@ const Sales = () => {
       setLoading(true);
       const response = await api.get("/employees/salesman");
       // console.log(response);
-      
+
       setSalesmanList(response.employees || response);
     } catch (error) {
       console.error("Failed to fetch salesmen:", error);
@@ -31,7 +31,7 @@ const Sales = () => {
       setLoading(false);
     }
   }, []);
-// console.log({salesmanList});
+  // console.log({salesmanList});
 
   // ✅ Fetch Salesman Report
   const fetchSalesmanReport = useCallback(async () => {
@@ -227,8 +227,9 @@ const Sales = () => {
                 {filteredProductSection.map((row, i) => (
                   <div
                     key={i}
-                    className={`grid  grid-cols-[0.2fr_1fr_0.7fr_0.7fr_0.4fr_0.8fr_0.8fr_0.6fr] items-center px-6 py-2 text-sm text-center ${i % 2 === 0 ? "bg-white" : "bg-gray-50"
-                      } hover:bg-gray-100 transition`}
+                    className={`grid  grid-cols-[0.2fr_1fr_0.7fr_0.7fr_0.4fr_0.8fr_0.8fr_0.6fr] items-center px-6 py-2 text-sm text-center ${
+                      i % 2 === 0 ? "bg-white" : "bg-gray-50"
+                    } hover:bg-gray-100 transition`}
                   >
                     <div>{i + 1}</div>
                     {/* <div className="">{row.supplier || "-"}</div> */}
@@ -252,7 +253,6 @@ const Sales = () => {
 
               {/* Totals Row */}
               <div className="grid grid-cols-[0.2fr_1fr_0.5fr_0.7fr_0.7fr_0.4fr_0.8fr_1fr_0.6fr] bg-gray-100 py-3 px-9 text-xs font-semibold text-gray-700 text-center border-t border-gray-200">
-              
                 <div></div>
                 <div></div>
                 <div></div>
@@ -306,8 +306,9 @@ const Sales = () => {
                 {filteredCustomerSection.map((row, i) => (
                   <div
                     key={i}
-                    className={`grid grid-cols-[0.2fr_1fr_1fr_1.5fr_0.8fr_0.8fr] items-center px-6 py-2 text-sm text-center ${i % 2 === 0 ? "bg-white" : "bg-gray-50"
-                      } hover:bg-gray-100 transition`}
+                    className={`grid grid-cols-[0.2fr_1fr_1fr_1.5fr_0.8fr_0.8fr] items-center px-6 py-2 text-sm text-center ${
+                      i % 2 === 0 ? "bg-white" : "bg-gray-50"
+                    } hover:bg-gray-100 transition`}
                   >
                     <div>{i + 1}</div>
                     <div className="">{row.customer || "-"}</div>
@@ -330,8 +331,11 @@ const Sales = () => {
                 <div></div>
                 <div className="text-right pr-2 font-bold">Total:</div>
                 <div className="text-blue-600">
-                  {totals.totalSales.toLocaleString() || "-"}
+                  {customerSection
+                    .reduce((sum, row) => sum + (row.sales || 0), 0)
+                    .toLocaleString()}
                 </div>
+
                 <div className="text-green-600">
                   {customerSection
                     .reduce((sum, row) => sum + (row.recovery || 0), 0)

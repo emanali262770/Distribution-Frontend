@@ -254,7 +254,7 @@ const CreditAgingReport = () => {
                               >
                                 {inv.due.toLocaleString() ?? "-"}
                               </div>
-                               <div>{inv.credit.toLocaleString() || "-"}</div>
+                               <div>{inv.outstanding.toLocaleString() || "-"}</div>
                             </div>
                           ))}
                         </div>
