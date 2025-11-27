@@ -110,7 +110,7 @@ useEffect(() => {
 
   // Update handleEditClick
   const handleEditClick = (vehicle) => {
-    console.log({ vehicle });
+    // console.log({ vehicle });
 
     setEditingVehicle(vehicle);
 

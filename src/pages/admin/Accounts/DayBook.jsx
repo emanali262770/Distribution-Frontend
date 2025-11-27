@@ -98,7 +98,7 @@ const filteredSalesRecovery = salesRecoveryData?.filter((item) =>
     (sum, item) => sum + (item.amount || 0),
     0
   );
-console.log({currentExpenses});
+// console.log({currentExpenses});
 
   return (
     <div className="p-4 bg-gray-50 min-h-screen">

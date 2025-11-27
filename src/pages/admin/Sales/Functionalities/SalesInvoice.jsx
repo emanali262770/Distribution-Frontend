@@ -98,7 +98,7 @@ const SalesInvoice = () => {
     try {
       setLoading(true);
       const response = await api.get(`/employees/reports`);
-      console.log(response);
+      // console.log(response);
       
 
       setSalesmanList(response);
@@ -119,7 +119,7 @@ const SalesInvoice = () => {
 
       const url = `${import.meta.env.VITE_API_BASE_URL}/sales-invoice`;
       const res = await axios.get(url);
-      console.log("Data of sales", res.data);
+      // console.log("Data of sales", res.data);
 
       // Set state with fetched invoices
       setSalesInvoices(res.data?.data || []);
@@ -318,7 +318,7 @@ const SalesInvoice = () => {
     activeTab === "pending"
       ? "0.2fr 1fr 1fr 1fr 1fr 1fr 1fr" // 7 columns
       : "0.2fr 1fr 1fr 1fr 1fr 1fr 1fr"; // 7 columns for invoices too
-  console.log({ currentInvoiceRecords });
+  // console.log({ currentInvoiceRecords });
 
   return (
     <div className="p-4 bg-gray-50 min-h-screen">

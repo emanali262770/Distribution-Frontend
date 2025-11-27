@@ -38,7 +38,7 @@ const AreaPage = () => {
       setLoading(true);
       const response = await api.get("/sales-area");
       setAreas(response); // ✅ fixed
-      console.log("Data", response);
+      // console.log("Data", response);
     } catch (error) {
       console.error("Failed to fetch sales data", error);
     } finally {

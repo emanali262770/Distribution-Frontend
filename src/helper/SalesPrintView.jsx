@@ -356,7 +356,7 @@ Net Amount</th>
 };
 
 export const handleSupplierLedgerPrint = (ledgerEntries = []) => {
-  console.log(ledgerEntries);
+  // console.log(ledgerEntries);
 
   if (!ledgerEntries.length) return;
 

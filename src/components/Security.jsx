@@ -41,7 +41,7 @@ const Security = () => {
         }
       );
       toast.success("Password updated successfully! Please log in again.");
-      console.log("Response:", response.data);
+      // console.log("Response:", response.data);
 
       // 🧹 Clear localStorage & redirect to login
       localStorage.clear();

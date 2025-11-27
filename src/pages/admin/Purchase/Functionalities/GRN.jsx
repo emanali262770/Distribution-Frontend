@@ -90,7 +90,7 @@ const GRN = () => {
       }, 2000);
     }
   }, []);
-  console.log({ itemOptions, grns });
+  // console.log({ itemOptions, grns });
 
   useEffect(() => {
     fetchSalesmen();
@@ -153,7 +153,7 @@ const GRN = () => {
       const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/grn`, {
         headers,
       });
-      console.log(res.data.data);
+      // console.log(res.data.data);
 
       // console.log("GRN API Response:", res.data); // Debug API response
       const transformedGrns = res.data.data.map((grn) => ({
@@ -233,7 +233,7 @@ const GRN = () => {
   };
 
   const handleEditClick = (grn) => {
-    console.log(grn, "fuyf");
+    // console.log(grn, "fuyf");
 
     // ✅ Fix date formatting (already correct)
     const formattedDate = (() => {

@@ -31,7 +31,7 @@ const SalesmanAmountReceivables = () => {
   useEffect(() => {
     fetchReceivables();
   }, [fetchReceivables]);
-  console.log(receivables);
+  // console.log(receivables);
 
   // 🔹 Search filter (employee name or recovery balance)
   const searchedCustomers = receivables.filter(

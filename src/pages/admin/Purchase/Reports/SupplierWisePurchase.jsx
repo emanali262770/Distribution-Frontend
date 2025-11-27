@@ -53,7 +53,7 @@ const SupplierWisePurchase = () => {
       }
 
       const response = await api.get(query);
-      console.log("Response ", response.data);
+      // console.log("Response ", response.data);
 
       const report = response.data || [];
 

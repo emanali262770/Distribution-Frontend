@@ -112,7 +112,7 @@ const OrderTaking = () => {
   }, []);
 
   // fetch order Taking
-  console.log({ productsList });
+  // console.log({ productsList });
 
   async function fetchOrderTaking() {
     try {
@@ -307,7 +307,7 @@ const OrderTaking = () => {
   };
 
   const handleEdit = (order) => {
-    console.log(order, "osder");
+    // console.log(order, "osder");
 
     setEditingOrder(order);
 
@@ -433,7 +433,7 @@ const OrderTaking = () => {
     const it = items[index];
 
     const selected = productsList.find((p) => p.itemName === it.product);
-    console.log(selected, "fygfyf");
+    // console.log(selected, "fygfyf");
 
     setProduct(selected?._id || ""); // dropdown select correct
     setPurchase(it.purchase);
@@ -453,7 +453,7 @@ const OrderTaking = () => {
     return date.toLocaleDateString("en-GB", options).replace(/ /g, "-");
   };
 
-  console.log("Hi", items);
+  // console.log("Hi", items);
 
   return (
     <div className="p-4 bg-gray-50 min-h-screen">

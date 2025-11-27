@@ -4,7 +4,7 @@ export const InvoiceTemplate = React.forwardRef(({ invoice }, ref) => {
   if (!invoice) return null;
   const customer = invoice.orderTakingId?.customerId || {};
   const products = invoice.products || [];
-  console.log({ invoice });
+  // console.log({ invoice });
 
   // basic totals
   const subTotal = products.reduce((sum, p) => sum + (p.rate * p.sold || 0), 0);

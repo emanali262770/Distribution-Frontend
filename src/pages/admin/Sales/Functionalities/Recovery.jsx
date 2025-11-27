@@ -196,7 +196,7 @@ const Recovery = () => {
   }, [selectedCustomer]);
 
   const handleEdit = (invoice) => {
-    console.log("Editing Invoice:", invoice);
+    // console.log("Editing Invoice:", invoice);
 
     setEditingInvoice(invoice);
 
