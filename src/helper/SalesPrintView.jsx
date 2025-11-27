@@ -1021,7 +1021,7 @@ export const handleSaleInvoicePrint = (orders = []) => {
       <!-- TOTALS -->
       <div class="totals-box">
         <div><span>Amount:</span> <span>${totalAmount.toLocaleString()}</span></div>
-        <div><span>Additional Discount:</span> <span>0</span></div>
+        <div><span>Additional Discount:</span> <span>${order.discount || 0}</span></div>
         <div><span>Trade Offer:</span> <span>${order.received || 0}</span></div>
         <div><span><b>Net Amount:</b></span> <span><b>${
           order.receivable

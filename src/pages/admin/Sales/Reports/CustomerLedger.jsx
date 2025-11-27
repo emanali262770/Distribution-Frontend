@@ -36,7 +36,9 @@ const CustomerLedger = () => {
       const response = await axios.get(
         `${import.meta.env.VITE_API_BASE_URL}/customers/isPending`
       );
-      setCustomerList(response.data?.data || response.data || []);
+      console.log(response.data);
+      
+      setCustomerList(response.data?.customers || response.data || []);
     } catch (error) {
       console.error("Failed to fetch customers:", error);
       toast.error("Error", "Failed to load customers", "error");
@@ -46,6 +48,7 @@ const CustomerLedger = () => {
       }, 2000);
     }
   }, []);
+// console.log({customerList});
 
   // 2. FETCH CUSTOMER LEDGER ENTRIES (uses From & To directly)
   const fetchCustomerLedger = useCallback(async () => {

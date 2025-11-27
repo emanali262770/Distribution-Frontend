@@ -225,6 +225,7 @@ const SalesInvoice = () => {
         received: parseFloat(received) || 0,
         deliveryDate: deliveryDate,
         agingDate: receivingDate,
+        discount: Number(discountAmount),
         status: "Pending", // default
       };
       // console.log("🧾 Payload to send:", payload);

@@ -66,6 +66,7 @@ const ViewInvoiceModal = ({ data, onClose }) => {
             <div><strong>Status:</strong> {data.status}</div>
             <div><strong>Receivable:</strong> Rs. {data.receivable?.toLocaleString()}</div>
             <div><strong>Received:</strong> Rs. {data.received?.toLocaleString()}</div>
+            <div><strong>Discount:</strong> Rs. {data.discount?.toLocaleString()}</div>
             <div><strong>Total Amount:</strong> Rs. {data.totalAmount?.toLocaleString()}</div>
           </div>
 
