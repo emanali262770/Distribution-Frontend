@@ -904,7 +904,13 @@ const OrderTaking = () => {
 
                   <button
                     type="submit"
-                    className="w-full bg-newPrimary text-white py-3 rounded-lg hover:bg-newPrimary/80"
+                    disabled={isItemEditMode}
+                    className={`w-full py-3 rounded-lg text-white transition
+    ${
+      isItemEditMode
+        ? "bg-gray-400 cursor-not-allowed"
+        : "bg-newPrimary hover:bg-newPrimary/80"
+    }`}
                   >
                     {editingOrder ? "Update Order" : "Save Order"}
                   </button>

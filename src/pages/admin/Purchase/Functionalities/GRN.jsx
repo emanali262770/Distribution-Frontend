@@ -1038,8 +1038,13 @@ const GRN = () => {
 
                   <button
                     type="submit"
-                    disabled={loading}
-                    className="w-full bg-newPrimary text-white px-4 py-3 rounded-lg hover:bg-newPrimary/80 transition-colors disabled:bg-blue-300"
+                    disabled={loading || isItemEditMode}
+                    className={`w-full px-4 py-3 rounded-lg text-white transition
+    ${
+      loading || isItemEditMode
+        ? "bg-gray-400 cursor-not-allowed"
+        : "bg-newPrimary hover:bg-newPrimary/80"
+    }`}
                   >
                     {loading
                       ? "Saving..."
