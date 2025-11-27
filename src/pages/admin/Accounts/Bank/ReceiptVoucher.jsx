@@ -224,7 +224,7 @@ const ReceiptVoucher = () => {
   // Reset to first page when vouchers change (after add/edit/delete)
   useEffect(() => {
     setCurrentPage(1);
-  }, [vouchers]);
+  }, [searchQuery]);
 
   return (
     <div className="p-4 bg-gray-50 min-h-screen">

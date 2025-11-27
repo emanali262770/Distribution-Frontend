@@ -177,6 +177,15 @@ const handleEdit = (v) => {
   /** ================== Submit Form ================== **/
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!formData.customer) {
+    toast.error("Please select a customer");
+    return;
+  }
+
+  if (!formData.amountReceived ) {
+    toast.error("Please enter a valid amount received");
+    return;
+  }
     setSubmitting(true);
 
     // Build correct payload EXACTLY like Postman
@@ -236,7 +245,7 @@ const handleEdit = (v) => {
   // Reset to first page when vouchers change (after add/edit/delete)
   useEffect(() => {
     setCurrentPage(1);
-  }, [vouchers]);
+  }, [searchQuery]);
 
   return (
     <div className="p-4 bg-gray-50 min-h-screen">
@@ -249,7 +258,7 @@ const handleEdit = (v) => {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search Cash Deposite..."
+            placeholder="Search Customer..."
             className="px-4 py-2 border rounded-lg w-60 focus:ring-2 focus:ring-newPrimary/50 focus:border-newPrimary outline-none"
           />
 
@@ -277,7 +286,7 @@ const handleEdit = (v) => {
               <thead className="bg-gray-100 text-gray-600 uppercase text-xs">
                 <tr>
                   <th className="px-4 py-3 text-left">#</th>
-                  <th className="px-4 py-3 text-left">Receipt ID</th>
+                  <th className="px-4 py-3 text-left">Cash ID</th>
                   <th className="px-4 py-3 text-left">Customer</th>
                   <th className="px-4 py-3 text-left">Phone</th>
                   <th className="px-4 py-3 text-left">Amount Received</th>
@@ -417,7 +426,7 @@ const handleEdit = (v) => {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block mb-1 font-medium">Customers</label>
+                  <label className="block mb-1 font-medium">Customers <span className="text-red-500">*</span></label>
                   <select
                     value={formData.customer}
                     onChange={(e) => {
