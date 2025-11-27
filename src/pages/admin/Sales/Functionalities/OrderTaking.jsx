@@ -234,7 +234,12 @@ const OrderTaking = () => {
 
   const handleSaveOrder = async (e) => {
     e.preventDefault();
-
+    if (isItemEditMode) {
+      toast.error(
+        "You are editing an item. Please update the item before saving the order."
+      );
+      return;
+    }
     // ✅ Strong validation before submitting
     if (!salesman) {
       toast.error("Please select a Salesman before saving!");

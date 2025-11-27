@@ -159,63 +159,63 @@ const ListOfItems = () => {
     fetchItemUnitList();
   }, [fetchItemUnitList]);
 
-  // Fetch itemTypes when category changes
-  useEffect(() => {
-    if (!itemCategory) return; // only call when category selected
+  // // Fetch itemTypes when category changes
+  // useEffect(() => {
+  //   if (!itemCategory) return; // only call when category selected
 
-    const fetchItemTypes = async () => {
-      try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL}/item-details/category/${
-            itemCategory.name
-          }`
-        );
-        setItemTypeList(res.data);
-      } catch (error) {
-        console.error("Failed to fetch item types", error);
-      }
-    };
+  //   const fetchItemTypes = async () => {
+  //     try {
+  //       const res = await axios.get(
+  //         `${import.meta.env.VITE_API_BASE_URL}/item-details/category/${
+  //           itemCategory.name
+  //         }`
+  //       );
+  //       setItemTypeList(res.data);
+  //     } catch (error) {
+  //       console.error("Failed to fetch item types", error);
+  //     }
+  //   };
 
-    fetchItemTypes();
-  }, [itemCategory]);
+  //   fetchItemTypes();
+  // }, [itemCategory]);
 
   // Item Unit List Fetch
-  const fetchItemUnitsList = useCallback(async () => {
-    try {
-      setLoading(true);
-      const res = await axios.get(
-        `${import.meta.env.VITE_API_BASE_URL}/item-unit`
-      );
-      setItemUnitList(res.data); // store actual categories array
-    } catch (error) {
-      console.error("Failed to fetch item unit", error);
-    } finally {
-      setTimeout(() => setLoading(false), 3000);
-    }
-  }, []);
-  useEffect(() => {
-    fetchItemUnitsList();
-  }, [fetchItemUnitsList]);
+  // const fetchItemUnitsList = useCallback(async () => {
+  //   try {
+  //     setLoading(true);
+  //     const res = await axios.get(
+  //       `${import.meta.env.VITE_API_BASE_URL}/item-unit`
+  //     );
+  //     setItemUnitList(res.data); // store actual categories array
+  //   } catch (error) {
+  //     console.error("Failed to fetch item unit", error);
+  //   } finally {
+  //     setTimeout(() => setLoading(false), 3000);
+  //   }
+  // }, []);
+  // useEffect(() => {
+  //   fetchItemUnitsList();
+  // }, [fetchItemUnitsList]);
 
   // console.log({ itemUnitList });
 
   // Manufacturer List Fetch
-  const fetchManufacturerList = useCallback(async () => {
-    try {
-      setLoading(true);
-      const res = await axios.get(
-        `${import.meta.env.VITE_API_BASE_URL}/manufacturers/list`
-      );
-      setManufacturerList(res.data); // store actual categories array
-    } catch (error) {
-      console.error("Failed to fetch Manufacturer", error);
-    } finally {
-      setTimeout(() => setLoading(false), 3000);
-    }
-  }, []);
-  useEffect(() => {
-    fetchManufacturerList();
-  }, [fetchManufacturerList]);
+  // const fetchManufacturerList = useCallback(async () => {
+  //   try {
+  //     setLoading(true);
+  //     const res = await axios.get(
+  //       `${import.meta.env.VITE_API_BASE_URL}/manufacturers/list`
+  //     );
+  //     setManufacturerList(res.data); // store actual categories array
+  //   } catch (error) {
+  //     console.error("Failed to fetch Manufacturer", error);
+  //   } finally {
+  //     setTimeout(() => setLoading(false), 3000);
+  //   }
+  // }, []);
+  // useEffect(() => {
+  //   fetchManufacturerList();
+  // }, [fetchManufacturerList]);
 
   // Supplier List Fetch
   const fetchSupplierList = useCallback(async () => {
@@ -236,22 +236,22 @@ const ListOfItems = () => {
   }, [fetchSupplierList]);
 
   // Shelves List Fetch
-  const fetchShelvesList = useCallback(async () => {
-    try {
-      setLoading(true);
-      const res = await axios.get(
-        `${import.meta.env.VITE_API_BASE_URL}/shelves`
-      );
-      setShelvesList(res.data); // store actual categories array
-    } catch (error) {
-      console.error("Failed to fetch Shelves", error);
-    } finally {
-      setTimeout(() => setLoading(false), 3000);
-    }
-  }, []);
-  useEffect(() => {
-    fetchShelvesList();
-  }, [fetchShelvesList]);
+  // const fetchShelvesList = useCallback(async () => {
+  //   try {
+  //     setLoading(true);
+  //     const res = await axios.get(
+  //       `${import.meta.env.VITE_API_BASE_URL}/shelves`
+  //     );
+  //     setShelvesList(res.data); // store actual categories array
+  //   } catch (error) {
+  //     console.error("Failed to fetch Shelves", error);
+  //   } finally {
+  //     setTimeout(() => setLoading(false), 3000);
+  //   }
+  // }, []);
+  // useEffect(() => {
+  //   fetchShelvesList();
+  // }, [fetchShelvesList]);
 
   // Handlers
   const handleAddItem = () => {

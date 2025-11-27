@@ -282,6 +282,12 @@ const GRN = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isItemEditMode) {
+      toast.error(
+        "You are editing an item. Please update the item before saving GRN."
+      );
+      return;
+    }
 
     if (!selectedSalesman) {
       toast.error("Please select a salesman.");
@@ -419,23 +425,22 @@ const GRN = () => {
     // ✅ reset salesTax after removing an item
   };
 
-const handleItemEdit = (index) => {
-  const it = itemsList[index];
+  const handleItemEdit = (index) => {
+    const it = itemsList[index];
 
-  // Map saved itemId → actual dropdown option _id
-  const matched = itemOptions.find(
-    (opt) =>
-      opt._id === it.itemId ||  // if saved itemId was MongoDB _id
-      opt.itemName === it.item  // match by item name
-  );
+    // Map saved itemId → actual dropdown option _id
+    const matched = itemOptions.find(
+      (opt) =>
+        opt._id === it.itemId || // if saved itemId was MongoDB _id
+        opt.itemName === it.item // match by item name
+    );
 
-  setItem(matched?._id || ""); // FIXED 🔥
-  setQty(it.qty);
-  setRate(it.rate);
-  setEditIndex(index);
-  setIsItemEditMode(true);
-};
-
+    setItem(matched?._id || ""); // FIXED 🔥
+    setQty(it.qty);
+    setRate(it.rate);
+    setEditIndex(index);
+    setIsItemEditMode(true);
+  };
 
   // Filter GRNs by GRN ID or Supplier Name
   const filteredGrns = grns.filter(
@@ -887,7 +892,6 @@ const handleItemEdit = (index) => {
                           className="w-20 h-12 bg-newPrimary text-white rounded-lg hover:bg-newPrimary/80 transition"
                         >
                           {isItemEditMode ? "Update" : "+ Add"}
-
                         </button>
                       </div>
                     </div>
