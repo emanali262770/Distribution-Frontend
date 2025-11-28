@@ -18,6 +18,8 @@ import {
   FaUserCog,
   FaShoppingCart,
 } from "react-icons/fa";
+import { TrendingUpDown } from "lucide-react";
+
 import { FaUserGroup } from "react-icons/fa6";
 import { BsBank2 } from "react-icons/bs";
 import { FaBook } from "react-icons/fa";
@@ -83,6 +85,11 @@ const links = [
     to: "/admin/all-orders-invoice",
     label: "All Orders / Invoice",
     icon: <TbFileInvoice size={20} />,
+  },
+  {
+    to: "/admin/profit-loss",
+    label: "Profit & Loss",
+    icon: <TrendingUpDown size={20} />,
   },
   {
     to: "/admin/security",

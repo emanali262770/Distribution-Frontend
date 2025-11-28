@@ -84,6 +84,7 @@ import SalesmanAmountReceivales from "./pages/admin/Sales/Reports/SalesmanAmount
 import ExSideBar from "./pages/admin/Accounts/Expense/ExpensePage.jsx";
 import DefineExpenseHead from "./pages/admin/Accounts/Expense/DefineExpenseHead.jsx";
 import CashDeposite from "./pages/admin/Accounts/CashDeposite/CashDeposite.jsx";
+import ProfitLoss from "./pages/admin/Accounts/ProfitLoss.jsx";
 
 function AppContent() {
   return (
@@ -215,34 +216,6 @@ function AppContent() {
               element={<DefineSupplier />}
             />
 
-            {/* =================== ACCOUNTS SECTION =================== */}
-
-            {/* <Route path="accounts" element={<AccountSideBar />} /> */}
-
-            {/* Functionalities */}
-            {/* <Route
-              path="admin/expense-voucher"
-              element={<ExpenseVoucher />}
-            /> */}
-
-            {/* Reports */}
-            {/* <Route
-              path="admin/datewise-cashrecived"
-              element={<DateWiseCashRecived />}
-            />
-            <Route
-              path="admin/datewise-recovery"
-              element={<DateWiseRecovery />}
-            />
-            <Route
-              path="admin/itemwise-recovery"
-              element={<ItemWiseRecovery />}
-            />
-            <Route
-              path="admin/salesmanwise-recovery"
-              element={<SalesmanWiseRecovery />}
-            /> */}
-
             {/* Expense Section */}
             {/* Expense Section */}
             <Route path="expense" element={<ExSideBar />} />
@@ -262,6 +235,8 @@ function AppContent() {
             <Route path="bank/define" element={<DefineBank />} />
             {/* All order / invoice */}
             <Route path="all-orders-invoice" element={<AllorderInvoice />} />
+            
+            <Route path="profit-loss" element={<ProfitLoss />} />
           </Route>
         </Routes>
       </main>
