@@ -35,8 +35,6 @@ const PaymentVoucher = () => {
     remarks: "",
     bankBalance: 0,
     supplierPayable: 0,
-    overDays: "",
-    overDues: "",
   });
 
   /** ================== FETCH FUNCTIONS ================== **/
@@ -131,8 +129,6 @@ const PaymentVoucher = () => {
       remarks: v.remarks,
       bankBalance: v.bank?.balance || 0,
       supplierPayable: v.supplier?.payableBalance || 0,
-      overDays: v.overDays || "",
-      overDues: v.overDues || "",
     });
     setIsSliderOpen(true);
     setTimeout(async () => {
@@ -206,8 +202,6 @@ const PaymentVoucher = () => {
       supplier: formData.supplier,
       amountPaid: Number(formData.amountPaid),
       remarks: formData.remarks,
-      overDays: formData.overDays,
-      overDues: formData.overDues,
     };
 
     try {
@@ -300,8 +294,6 @@ const PaymentVoucher = () => {
                   <th className="px-4 py-3 text-left">Bank</th>
                   <th className="px-4 py-3 text-left">Amount</th>
                   <th className="px-4 py-3 text-left">Date</th>
-                  <th className="px-4 py-3 text-left">Over Days</th>
-                  <th className="px-4 py-3 text-left">Over Dues</th>
                   <th className="px-4 py-3 text-left">Actions</th>
                 </tr>
               </thead>
@@ -318,8 +310,7 @@ const PaymentVoucher = () => {
                     <td className="px-4 py-3">
                       {new Date(v?.date).toLocaleDateString()}
                     </td>
-                    <td className="px-4 py-3">{v.overDays ?? 0}</td>
-                    <td className="px-4 py-3">Rs. {(v.overDues ?? 0).toLocaleString()}</td>
+                  
                     <td className="px-4 py-3 flex gap-2">
                       <button
                         onClick={() => handleEdit(v)}
@@ -532,7 +523,7 @@ const PaymentVoucher = () => {
                 )}
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              {/* <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block font-medium mb-1">Over Days</label>
                   <input
@@ -558,7 +549,7 @@ const PaymentVoucher = () => {
                     placeholder="Enter overdue amount"
                   />
                 </div>
-              </div>
+              </div> */}
 
               <div>
                 <label className="block font-medium mb-1">Remarks</label>

@@ -38,7 +38,7 @@ const DefineSupplier = () => {
   const recordsPerPage = 10;
 
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-
+  const [overDays, setOverDays] = useState(45);
   // GSAP Animation for Modal
   useEffect(() => {
     if (isSliderOpen) {
@@ -102,6 +102,9 @@ const DefineSupplier = () => {
     setCreditLimit("");
     setCreditTime(45);
     setStatus(true);
+
+    // 🔥 Reset Over Days + Over Dues
+    setOverDays(overDays);
   };
 
   const validateEmail = (email) => {
@@ -118,7 +121,7 @@ const DefineSupplier = () => {
 
       contactNumber: phoneNumber,
       address,
-
+      overDays,
       paymentTerms: paymentTerms === "CreditCard" ? "Credit" : paymentTerms, // map CreditCard -> Credit
       creditTime: paymentTerms === "CreditCard" ? creditTime : undefined, // <-- add this state
       creditLimit: paymentTerms === "CreditCard" ? creditLimit : undefined,
@@ -158,6 +161,7 @@ const DefineSupplier = () => {
       setStatus(true);
       setIsSliderOpen(false);
       setIsEdit(false);
+      setOverDays(45);
       setEditId(null);
     } catch (error) {
       console.error(error);
@@ -169,6 +173,8 @@ const DefineSupplier = () => {
 
   // Edit Supplier
   const handleEdit = (supplier) => {
+    console.log("Supplier", supplier.overDays);
+
     setIsEdit(true);
     setEditId(supplier._id);
     setSupplierName(supplier.supplierName);
@@ -178,8 +184,7 @@ const DefineSupplier = () => {
     setPhoneNumber(supplier.contactNumber || "");
     setMobileNumber(supplier.mobileNumber || "");
     setDesignation(supplier.designation || "");
-    setNtn(supplier.ntn || "");
-    setGst(supplier.gst || "");
+    setOverDays(supplier.overDays || "");
     setPaymentTerms(
       supplier.paymentTerms === "Credit"
         ? "CreditCard"
@@ -658,7 +663,32 @@ const DefineSupplier = () => {
                 </div>
               )}
 
-              {/* Status */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block font-medium mb-1">Over Days</label>
+                  <input
+                    type="number"
+                    value={overDays}
+                    onChange={(e) => setOverDays(e.target.value)}
+                    className="w-full border rounded-md p-3"
+                    placeholder="Enter overdue days"
+                  />
+                </div>
+
+                {/* <div>
+                  <label className="block font-medium mb-1">Over Dues</label>
+                  <input
+                    type="number"
+                    value={formData.overDues}
+                    onChange={(e) =>
+                      setFormData({ ...formData, overDues: e.target.value })
+                    }
+                    className="w-full border rounded-md p-3"
+                    placeholder="Enter overdue amount"
+                  />
+                </div> */}
+              </div>
+              {/* due days */}
 
               {/* Save Button */}
 

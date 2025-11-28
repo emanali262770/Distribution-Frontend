@@ -844,7 +844,7 @@ const GRN = () => {
                         </label>
                         <input
                           type="number"
-                          value={qty && rate ? qty * rate : ""}
+                          value={(qty || 0) * (rate || 0) + (gst || 0)}
                           readOnly
                           className="w-full outline-none p-3 border border-gray-300 rounded-md bg-gray-100"
                           placeholder="Auto Total"
