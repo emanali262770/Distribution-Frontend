@@ -35,6 +35,8 @@ const PaymentVoucher = () => {
     remarks: "",
     bankBalance: 0,
     supplierPayable: 0,
+    overDays: "",
+    overDues: "",
   });
 
   /** ================== FETCH FUNCTIONS ================== **/
@@ -129,6 +131,8 @@ const PaymentVoucher = () => {
       remarks: v.remarks,
       bankBalance: v.bank?.balance || 0,
       supplierPayable: v.supplier?.payableBalance || 0,
+      overDays: v.overDays || "",
+      overDues: v.overDues || "",
     });
     setIsSliderOpen(true);
     setTimeout(async () => {
@@ -202,6 +206,8 @@ const PaymentVoucher = () => {
       supplier: formData.supplier,
       amountPaid: Number(formData.amountPaid),
       remarks: formData.remarks,
+      overDays: formData.overDays,
+      overDues: formData.overDues,
     };
 
     try {
@@ -278,7 +284,7 @@ const PaymentVoucher = () => {
       {/* Table Section */}
       <div className="border rounded-xl shadow bg-white mx-6 overflow-hidden">
         {loading ? (
-          <TableSkeleton rows={6} cols={7} />
+          <TableSkeleton rows={6} cols={9} />
         ) : currentRecords.length === 0 ? (
           <div className="text-center py-6 text-gray-500">
             No vouchers found
@@ -294,6 +300,8 @@ const PaymentVoucher = () => {
                   <th className="px-4 py-3 text-left">Bank</th>
                   <th className="px-4 py-3 text-left">Amount</th>
                   <th className="px-4 py-3 text-left">Date</th>
+                  <th className="px-4 py-3 text-left">Over Days</th>
+                  <th className="px-4 py-3 text-left">Over Dues</th>
                   <th className="px-4 py-3 text-left">Actions</th>
                 </tr>
               </thead>
@@ -310,6 +318,8 @@ const PaymentVoucher = () => {
                     <td className="px-4 py-3">
                       {new Date(v?.date).toLocaleDateString()}
                     </td>
+                    <td className="px-4 py-3">{v.overDays ?? 0}</td>
+                    <td className="px-4 py-3">Rs. {(v.overDues ?? 0).toLocaleString()}</td>
                     <td className="px-4 py-3 flex gap-2">
                       <button
                         onClick={() => handleEdit(v)}
@@ -341,11 +351,10 @@ const PaymentVoucher = () => {
                   <button
                     onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
                     disabled={currentPage === 1}
-                    className={`px-3 py-1 rounded-md ${
-                      currentPage === 1
-                        ? "bg-gray-300 cursor-not-allowed"
-                        : "bg-newPrimary text-white hover:bg-newPrimary/80"
-                    }`}
+                    className={`px-3 py-1 rounded-md ${currentPage === 1
+                      ? "bg-gray-300 cursor-not-allowed"
+                      : "bg-newPrimary text-white hover:bg-newPrimary/80"
+                      }`}
                   >
                     Previous
                   </button>
@@ -355,11 +364,10 @@ const PaymentVoucher = () => {
                       setCurrentPage((p) => Math.min(p + 1, totalPages))
                     }
                     disabled={currentPage === totalPages}
-                    className={`px-3 py-1 rounded-md ${
-                      currentPage === totalPages
-                        ? "bg-gray-300 cursor-not-allowed"
-                        : "bg-newPrimary text-white hover:bg-newPrimary/80"
-                    }`}
+                    className={`px-3 py-1 rounded-md ${currentPage === totalPages
+                      ? "bg-gray-300 cursor-not-allowed"
+                      : "bg-newPrimary text-white hover:bg-newPrimary/80"
+                      }`}
                   >
                     Next
                   </button>
@@ -480,7 +488,7 @@ const PaymentVoucher = () => {
                   {/* ❗ Show message when no supplier has payable > 0 */}
                   {suppliers.length > 0 &&
                     suppliers.filter((s) => s.payableBalance > 0).length ===
-                      0 && (
+                    0 && (
                       <p className="text-red-500 text-sm mt-1">
                         No supplier available — all suppliers have 0 payable
                         balance.
@@ -535,6 +543,34 @@ const PaymentVoucher = () => {
                   className="w-full border rounded-md p-3"
                   placeholder="Enter remarks"
                 />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block font-medium mb-1">Over Days</label>
+                  <input
+                    type="number"
+                    value={formData.overDays}
+                    onChange={(e) =>
+                      setFormData({ ...formData, overDays: e.target.value })
+                    }
+                    className="w-full border rounded-md p-3"
+                    placeholder="Enter overdue days"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-medium mb-1">Over Dues</label>
+                  <input
+                    type="number"
+                    value={formData.overDues}
+                    onChange={(e) =>
+                      setFormData({ ...formData, overDues: e.target.value })
+                    }
+                    className="w-full border rounded-md p-3"
+                    placeholder="Enter overdue amount"
+                  />
+                </div>
               </div>
 
               <button

@@ -6,6 +6,7 @@ import axios from "axios";
 import TableSkeleton from "../../Components/Skeleton";
 import toast from "react-hot-toast";
 import { set } from "date-fns";
+import { formatNumber } from "../../../../utils/formatNumber";
 
 const OpeningStock = () => {
   const [itemCategory, setItemCategory] = useState("");
@@ -121,8 +122,7 @@ const OpeningStock = () => {
       setLoading(true); // show loader
       try {
         const res = await axios.get(
-          `${
-            import.meta.env.VITE_API_BASE_URL
+          `${import.meta.env.VITE_API_BASE_URL
           }/item-details/category/${itemCategory}`
         );
         setItemNameList(res.data); // update table data
@@ -176,7 +176,7 @@ const OpeningStock = () => {
   const filteredItems = itemNameList.filter((item) => {
     const matchesCategory = itemCategory
       ? item?.itemCategory?.categoryName?.toLowerCase() ===
-        itemCategory.toLowerCase()
+      itemCategory.toLowerCase()
       : true;
 
     const matchesSearch =
@@ -201,13 +201,22 @@ const OpeningStock = () => {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [itemCategory,searchQuery]);
+  }, [itemCategory, searchQuery]);
 
   useEffect(() => {
     if (!itemCategory) {
       setShowCategoryError(true);
     }
   }, []);
+
+  const totalStock = filteredItems.reduce(
+    (sum, rec) => sum + Number(rec.stock || 0),
+    0
+  );
+  const totalAmount = filteredItems.reduce(
+    (sum, rec) => sum + ((rec.purchase || 0) * (rec.stock || 0)),
+    0
+  );
 
   return (
     <div className="p-6 space-y-6">
@@ -335,17 +344,18 @@ const OpeningStock = () => {
               <div className="min-w-[1000px]">
                 {/* ✅ Table Header */}
                 <div
-                  className={`hidden lg:grid ${
-                    editingStockIndex !== null
-                      ? "grid-cols-[0.5fr_1fr_1fr_1fr_0.1fr_auto]"
-                      : "grid-cols-[0.5fr_1fr_1fr_1fr_0.1fr_auto]"
-                  } gap-4 bg-gray-100 py-3 px-6 text-xs font-semibold text-gray-600 uppercase sticky top-0 z-10 border-b border-gray-200`}
+                  className={`hidden lg:grid ${editingStockIndex !== null
+                    ? "grid-cols-[0.5fr_1fr_1fr_1fr_1fr_1fr_0.1fr_auto]"  // 8 columns
+                    : "grid-cols-[0.5fr_1fr_1fr_1fr_1fr_1fr_0.1fr_auto]"  // 8 columns
+                    } gap-4 bg-gray-100 py-3 px-6 text-xs font-semibold text-gray-600 uppercase sticky top-0 z-10 border-b border-gray-200`}
                 >
                   <div>Sr</div>
                   <div>Category</div>
 
                   <div>Item</div>
                   <div>Stock</div>
+                  <div>Purchase</div>
+                  <div>Total Amount</div>
                   {editingStockIndex !== null && <div>Action</div>}
                 </div>
 
@@ -355,11 +365,10 @@ const OpeningStock = () => {
                     <TableSkeleton
                       rows={itemNameList.length > 0 ? itemNameList.length : 5}
                       cols={editingStockIndex !== null ? 8 : 7}
-                      className={`${
-                        editingStockIndex !== null
-                          ? "lg:grid-cols-[0.5fr_1fr_1fr_1fr_0.1fr_auto]"
-                          : "lg:grid-cols-[0.5fr_1fr_1fr_1fr_0.1fr_auto]"
-                      }`}
+                      className={`${editingStockIndex !== null
+                        ? "grid-cols-[0.5fr_1fr_1fr_1fr_1fr_1fr_0.1fr_auto]"  // 8 columns
+                        : "grid-cols-[0.5fr_1fr_1fr_1fr_1fr_1fr_0.1fr_auto]"  // 8 columns
+                        }`}
                     />
                   ) : itemNameList.length === 0 ? (
                     <div className="text-center py-4 text-gray-500 bg-white">
@@ -373,11 +382,10 @@ const OpeningStock = () => {
                     currentRecords.map((rec, index) => (
                       <div
                         key={rec.code}
-                        className={`grid ${
-                          editingStockIndex !== null
-                            ? "grid-cols-[0.5fr_1fr_1fr_1fr_0.1fr_auto]"
-                            : "grid-cols-[0.5fr_1fr_1fr_1fr_0.1fr_auto]"
-                        } items-center gap-4 px-6 py-4 text-sm bg-white hover:bg-gray-50 transition`}
+                        className={`grid ${editingStockIndex !== null
+                          ? "grid-cols-[0.5fr_1fr_1fr_1fr_1fr_1fr_0.1fr_auto]"  // 8 columns
+                          : "grid-cols-[0.5fr_1fr_1fr_1fr_1fr_1fr_0.1fr_auto]"  // 8 columns
+                          } items-center gap-4 px-6 py-4 text-sm bg-white hover:bg-gray-50 transition`}
                       >
                         <div>{indexOfFirstRecord + index + 1}</div>
                         <div>{rec?.itemCategory?.categoryName || "-"}</div>
@@ -415,6 +423,13 @@ const OpeningStock = () => {
                           )}
                         </div>
 
+                        <div className="text-gray-600">
+                          {formatNumber(rec.purchase)}
+                        </div>
+                        <div className="text-gray-600">
+                          {formatNumber(rec.purchase * rec.stock)}
+                        </div>
+
                         {/* Action Button */}
                         {editingStockIndex === index && (
                           <div className="flex gap-3 justify-end">
@@ -423,8 +438,7 @@ const OpeningStock = () => {
                               onClick={async () => {
                                 try {
                                   await axios.put(
-                                    `${
-                                      import.meta.env.VITE_API_BASE_URL
+                                    `${import.meta.env.VITE_API_BASE_URL
                                     }/item-details/${rec._id}/stock`,
                                     { stock: rec.stock },
                                     {
@@ -443,7 +457,7 @@ const OpeningStock = () => {
                                 } catch (error) {
                                   toast.success(
                                     error.response?.data?.message ||
-                                      "Failed to update stock"
+                                    "Failed to update stock"
                                   );
                                   console.error(
                                     "Failed to update stock:",
@@ -456,9 +470,30 @@ const OpeningStock = () => {
                             </button>
                           </div>
                         )}
+
                       </div>
                     ))
                   )}
+
+                  {/* TOTAL STOCK FOOTER ALIGNED TO STOCK COLUMN */}
+                  <div
+                    className={`grid ${editingStockIndex !== null
+                      ? "grid-cols-[0.5fr_1fr_1fr_1fr_1fr_1fr_0.1fr_auto]"  // 8 columns
+                      : "grid-cols-[0.5fr_1fr_1fr_1fr_1fr_1fr_0.1fr_auto]"  // 8 columns
+                      } bg-gray-100 px-6 py-3 border-t text-sm font-semibold text-gray-700`}>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+
+                    {/* ⭐ This cell aligns exactly under the STOCK column */}
+                    <div className="text-newPrimary">
+                      Total Stock: {totalStock}
+                    </div>
+                    <div></div>
+                    <div className="text-green-600">Total Amount: {totalAmount.toLocaleString()}</div>
+                    {editingStockIndex !== null && <div></div>}
+                  </div>
+
                 </div>
                 {totalPages > 1 && (
                   <div className="flex justify-between items-center py-4 px-6 bg-white border-t">
@@ -474,11 +509,10 @@ const OpeningStock = () => {
                           setCurrentPage((prev) => Math.max(prev - 1, 1))
                         }
                         disabled={currentPage === 1}
-                        className={`px-3 py-1 rounded-md ${
-                          currentPage === 1
-                            ? "bg-gray-300 text-gray-600 cursor-not-allowed"
-                            : "bg-newPrimary text-white hover:bg-newPrimary/80"
-                        }`}
+                        className={`px-3 py-1 rounded-md ${currentPage === 1
+                          ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+                          : "bg-newPrimary text-white hover:bg-newPrimary/80"
+                          }`}
                       >
                         Previous
                       </button>
@@ -490,11 +524,10 @@ const OpeningStock = () => {
                           )
                         }
                         disabled={currentPage === totalPages}
-                        className={`px-3 py-1 rounded-md ${
-                          currentPage === totalPages
-                            ? "bg-gray-300 text-gray-600 cursor-not-allowed"
-                            : "bg-newPrimary text-white hover:bg-newPrimary/80"
-                        }`}
+                        className={`px-3 py-1 rounded-md ${currentPage === totalPages
+                          ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+                          : "bg-newPrimary text-white hover:bg-newPrimary/80"
+                          }`}
                       >
                         Next
                       </button>

@@ -67,11 +67,11 @@ const purchaseReports = [
     label: "Stock Position",
     icon: <Scale strokeWidth={3} size={40} />,
   },
-    {
-    to: "/admin/report/stock-price",
-    label: "Stock Price",
-    icon: <BarChart2 strokeWidth={3} size={40} />,
-  }
+  //   {
+  //   to: "/admin/report/stock-price",
+  //   label: "Stock Price",
+  //   icon: <BarChart2 strokeWidth={3} size={40} />,
+  // }
 ];
 
 // 🔹 Setup
