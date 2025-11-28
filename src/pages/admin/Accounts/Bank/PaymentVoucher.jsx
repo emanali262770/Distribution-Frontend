@@ -532,19 +532,6 @@ const PaymentVoucher = () => {
                 )}
               </div>
 
-              <div>
-                <label className="block font-medium mb-1">Remarks</label>
-                <textarea
-                  value={formData.remarks}
-                  onChange={(e) =>
-                    setFormData({ ...formData, remarks: e.target.value })
-                  }
-                  rows="3"
-                  className="w-full border rounded-md p-3"
-                  placeholder="Enter remarks"
-                />
-              </div>
-
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block font-medium mb-1">Over Days</label>
@@ -572,6 +559,21 @@ const PaymentVoucher = () => {
                   />
                 </div>
               </div>
+
+              <div>
+                <label className="block font-medium mb-1">Remarks</label>
+                <textarea
+                  value={formData.remarks}
+                  onChange={(e) =>
+                    setFormData({ ...formData, remarks: e.target.value })
+                  }
+                  rows="3"
+                  className="w-full border rounded-md p-3"
+                  placeholder="Enter remarks"
+                />
+              </div>
+
+              
 
               <button
                 type="submit"
