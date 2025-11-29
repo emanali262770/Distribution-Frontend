@@ -3,6 +3,7 @@ import { X } from "lucide-react";
 
 const ViewInvoiceModal = ({ data, onClose }) => {
   const printRef = useRef();
+  console.log({ data });
 
   const handlePrint = () => {
     const printContent = printRef.current.innerHTML;
@@ -101,25 +102,27 @@ const ViewInvoiceModal = ({ data, onClose }) => {
           </div>
 
           {/* Items Table */}
-          <table className="w-full border text-sm mb-4">
+          <table className="w-full border text-sm mb-4 table-fixed">
             <thead className="bg-gray-100">
               <tr>
-                <th>Sr #</th>
-                <th>Item</th>
-                <th>Qty</th>
-                <th>Rate</th>
-                <th>Total</th>
+                <th className="w-[10%] text-center py-2">Sr #</th>
+                <th className="w-[18%] text-center">Item</th>
+                <th className="w-[18%] text-center">Qty</th>
+                <th className="w-[18%] text-center">Rate</th>
+                <th className="w-[18%] text-center">Total</th>
+                <th className="w-[18%] text-center">PayAble Amount</th>
               </tr>
             </thead>
 
             <tbody>
               {(data.products || []).map((item, idx) => (
-                <tr key={idx} className="">
-                  <td className="text-center py-2">{idx + 1}</td>
-                  <td className="text-center">{item.itemName}</td>
-                  <td className="text-center">{item.qty}</td>
-                  <td className="text-center">{item.rate}</td>
-                  <td className="text-center">{item.totalAmount}</td>
+                <tr key={idx}>
+                  <td className="text-center py-2 w-[10%]">{idx + 1}</td>
+                  <td className="text-center w-[18%]">{item.itemName}</td>
+                  <td className="text-center w-[18%]">{item.qty}</td>
+                  <td className="text-center w-[18%]">{item.rate}</td>
+                  <td className="text-center w-[18%]">{item.totalAmount}</td>
+                  <td className="text-center w-[18%]">{data.totalAmount}</td>
                 </tr>
               ))}
             </tbody>
