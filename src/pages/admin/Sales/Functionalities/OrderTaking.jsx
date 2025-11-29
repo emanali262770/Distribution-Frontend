@@ -856,7 +856,7 @@ const OrderTaking = () => {
                         <div className="px-4 py-2">Rate</div>
                         <div className="px-4 py-2">Qty</div>
                         <div className="px-4 py-2">Total</div>
-                        <div className="px-4 py-2">Remove</div>
+                        <div className="px-4 py-2">Edit/Remove</div>
                       </div>
 
                       {items.length === 0 ? (

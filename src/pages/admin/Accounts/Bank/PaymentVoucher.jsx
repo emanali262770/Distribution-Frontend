@@ -12,6 +12,8 @@ const PaymentVoucher = () => {
   const [loading, setLoading] = useState(true);
   const [banks, setBanks] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
+  const [supplierGrns, setSupplierGrns] = useState([]);
+
   const [isSliderOpen, setIsSliderOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editId, setEditId] = useState(null);
@@ -31,6 +33,8 @@ const PaymentVoucher = () => {
     paymentId: "",
     bank: "",
     supplier: "",
+    grn: "",
+    grnAmount: 0,
     amountPaid: 0,
     remarks: "",
     bankBalance: 0,
@@ -77,6 +81,17 @@ const PaymentVoucher = () => {
   }, []);
   // console.log({ suppliers });
 
+  const fetchGrnBySupplier = async (supplierId) => {
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_BASE_URL}/grn/supplier?supplierId=${supplierId}`
+      );
+      setSupplierGrns(res.data?.data || []);
+    } catch (err) {
+      setSupplierGrns([]);
+    }
+  };
+
   /** ================== AUTO PAYMENT ID ================== **/
   useEffect(() => {
     if (vouchers.length > 0) {
@@ -118,22 +133,50 @@ const PaymentVoucher = () => {
 
   /** ================== EDIT ================== **/
   const handleEdit = (v) => {
+    console.log(v);
+
     setIsEditing(true);
     setEditId(v._id);
+
+    // Load GRNs for the supplier so dropdown can show correct GRN
+    fetchGrnBySupplier(v.supplier?._id);
+
+    // Find GRN amount AFTER supplierGrns is fetched
+    // (Temporarily get GRN amount using existing list)
+    const selectedGrn = supplierGrns.find((g) => g._id === v.grn);
+
     setFormData({
       date: v.date?.split("T")[0],
       paymentId: v.paymentId,
       bank: v.bank?._id || "",
       supplier: v.supplier?._id || "",
+
+      // ⭐ ADDED FIELDS ⭐
+      grn: v.grn || "",
+      grnAmount: selectedGrn?.totalAmount || 0,
+
       amountPaid: v.amountPaid,
       remarks: v.remarks,
       bankBalance: v.bank?.balance || 0,
       supplierPayable: v.supplier?.payableBalance || 0,
     });
+
     setIsSliderOpen(true);
+
     setTimeout(async () => {
       await Promise.all([fetchBanks(), fetchSuppliers()]);
     }, 300);
+  };
+
+    const formatDate = (date) => {
+    if (!date) return "-";
+    const d = new Date(date);
+
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = d.toLocaleString("en-US", { month: "short" });
+    const year = d.getFullYear();
+
+    return `${day}-${month}-${year}`;
   };
 
   /** ================== DELETE ================== **/
@@ -164,6 +207,7 @@ const PaymentVoucher = () => {
   /** ================== SUBMIT ================== **/
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!formData.bank) {
       toast.error("Please select a bank");
       return;
@@ -184,21 +228,34 @@ const PaymentVoucher = () => {
       return;
     }
 
-    if (Number(formData.amountPaid) > formData.supplierPayable) {
-      setAmountError("Amount cannot exceed payable balance");
-      return;
+    // ⭐ UPDATED VALIDATIONS START ⭐
+    if (formData.grn) {
+      // If GRN is selected → validate against GRN total
+      if (Number(formData.amountPaid) > formData.grnAmount) {
+        setAmountError("Amount cannot exceed GRN total amount");
+        return;
+      }
+    } else {
+      // No GRN selected → fallback to supplier payable
+      if (Number(formData.amountPaid) > formData.supplierPayable) {
+        setAmountError("Amount cannot exceed payable balance");
+        return;
+      }
     }
+    // ⭐ UPDATED VALIDATIONS END ⭐
 
     if (Number(formData.amountPaid) > formData.bankBalance) {
       toast.error("Amount cannot exceed bank balance");
       return;
     }
 
-    setSubmitting(true); // start spinner
+    setSubmitting(true);
+
     const payload = {
       date: formData.date,
       paymentId: isEditing ? formData.paymentId : nextPaymentId,
       bank: formData.bank,
+      grn: formData.grn,
       supplier: formData.supplier,
       amountPaid: Number(formData.amountPaid),
       remarks: formData.remarks,
@@ -223,7 +280,7 @@ const PaymentVoucher = () => {
     } catch (error) {
       toast.error(error?.response?.data?.message || "Failed to save voucher");
     } finally {
-      setSubmitting(false); // stop spinner
+      setSubmitting(false);
     }
   };
 
@@ -308,9 +365,9 @@ const PaymentVoucher = () => {
                     <td className="px-4 py-3">{v?.bank?.bankName || "-"}</td>
                     <td className="px-4 py-3">Rs. {v?.amountPaid || "-"}</td>
                     <td className="px-4 py-3">
-                      {new Date(v?.date).toLocaleDateString()}
+                      {formatDate(v?.date) || '-'}
                     </td>
-                  
+
                     <td className="px-4 py-3 flex gap-2">
                       <button
                         onClick={() => handleEdit(v)}
@@ -342,10 +399,11 @@ const PaymentVoucher = () => {
                   <button
                     onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
                     disabled={currentPage === 1}
-                    className={`px-3 py-1 rounded-md ${currentPage === 1
-                      ? "bg-gray-300 cursor-not-allowed"
-                      : "bg-newPrimary text-white hover:bg-newPrimary/80"
-                      }`}
+                    className={`px-3 py-1 rounded-md ${
+                      currentPage === 1
+                        ? "bg-gray-300 cursor-not-allowed"
+                        : "bg-newPrimary text-white hover:bg-newPrimary/80"
+                    }`}
                   >
                     Previous
                   </button>
@@ -355,10 +413,11 @@ const PaymentVoucher = () => {
                       setCurrentPage((p) => Math.min(p + 1, totalPages))
                     }
                     disabled={currentPage === totalPages}
-                    className={`px-3 py-1 rounded-md ${currentPage === totalPages
-                      ? "bg-gray-300 cursor-not-allowed"
-                      : "bg-newPrimary text-white hover:bg-newPrimary/80"
-                      }`}
+                    className={`px-3 py-1 rounded-md ${
+                      currentPage === totalPages
+                        ? "bg-gray-300 cursor-not-allowed"
+                        : "bg-newPrimary text-white hover:bg-newPrimary/80"
+                    }`}
                   >
                     Next
                   </button>
@@ -449,7 +508,7 @@ const PaymentVoucher = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-4">
                 <div>
                   <label className="block font-medium mb-1">Supplier</label>
                   <select
@@ -458,11 +517,15 @@ const PaymentVoucher = () => {
                       const selected = suppliers.find(
                         (s) => s._id === e.target.value
                       );
+
                       setFormData({
                         ...formData,
                         supplier: selected?._id,
                         supplierPayable: selected?.payableBalance || 0,
                       });
+
+                      // ⬇️ ADD THIS LINE
+                      fetchGrnBySupplier(selected?._id);
                     }}
                     className="w-full border rounded-md p-3"
                   >
@@ -479,7 +542,7 @@ const PaymentVoucher = () => {
                   {/* ❗ Show message when no supplier has payable > 0 */}
                   {suppliers.length > 0 &&
                     suppliers.filter((s) => s.payableBalance > 0).length ===
-                    0 && (
+                      0 && (
                       <p className="text-red-500 text-sm mt-1">
                         No supplier available — all suppliers have 0 payable
                         balance.
@@ -497,6 +560,34 @@ const PaymentVoucher = () => {
                     className="w-full border rounded-md p-3 bg-gray-100"
                   />
                 </div>
+                {formData.supplier && (
+                  <div>
+                    <label className="block font-medium mb-1">Grn</label>
+                    <select
+                      className="w-full border rounded-md p-3"
+                      value={formData.grn}
+                      onChange={(e) => {
+                        const grnId = e.target.value;
+                        const selectedGrn = supplierGrns.find(
+                          (g) => g._id === grnId
+                        );
+
+                        setFormData({
+                          ...formData,
+                          grn: grnId,
+                          grnAmount: selectedGrn?.totalAmount || 0, // ⬅️ Set GRN amount
+                        });
+                      }}
+                    >
+                      <option value="">Select GRN</option>
+                      {supplierGrns.map((g) => (
+                        <option key={g._id} value={g._id}>
+                          {g.grnId} — Rs. {g.totalAmount}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
               </div>
 
               <div>
@@ -507,12 +598,14 @@ const PaymentVoucher = () => {
                   type="number"
                   value={formData.amountPaid}
                   onChange={(e) => {
-                    const value = e.target.value;
-                    if (Number(value) > formData.supplierPayable) {
-                      setAmountError("Amount cannot exceed payable balance");
+                    const value = Number(e.target.value);
+
+                    if (value > formData.grnAmount) {
+                      setAmountError("Amount cannot exceed GRN total amount");
                     } else {
-                      setAmountError(""); // clear error
+                      setAmountError("");
                     }
+
                     setFormData({ ...formData, amountPaid: value });
                   }}
                   required
@@ -563,8 +656,6 @@ const PaymentVoucher = () => {
                   placeholder="Enter remarks"
                 />
               </div>
-
-              
 
               <button
                 type="submit"

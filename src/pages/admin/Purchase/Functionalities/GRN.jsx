@@ -945,7 +945,7 @@ const GRN = () => {
                                   Total
                                 </th>
                                 <th className="px-4 py-2 border border-gray-300">
-                                  Remove
+                                  Edit/Remove
                                 </th>
                               </tr>
                             </thead>
