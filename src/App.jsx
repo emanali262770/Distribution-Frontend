@@ -85,6 +85,7 @@ import ExSideBar from "./pages/admin/Accounts/Expense/ExpensePage.jsx";
 import DefineExpenseHead from "./pages/admin/Accounts/Expense/DefineExpenseHead.jsx";
 import CashDeposite from "./pages/admin/Accounts/CashDeposite/CashDeposite.jsx";
 import ProfitLoss from "./pages/admin/Accounts/ProfitLoss.jsx";
+import SupplierAging from "./pages/admin/Purchase/Reports/SupplierAging.jsx";
 
 function AppContent() {
   return (
@@ -208,6 +209,10 @@ function AppContent() {
             <Route
               path="purchase/supplierwise-purchase"
               element={<PurchaseSupplierWisePurchase />}
+            />
+            <Route
+              path="purchase/supplier-aging"
+              element={<SupplierAging />}
             />
 
             {/* Setup */}

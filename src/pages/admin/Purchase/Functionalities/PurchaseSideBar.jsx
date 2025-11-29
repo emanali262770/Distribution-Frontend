@@ -62,6 +62,11 @@ const purchaseReports = [
     label: "Supplierwise Purchase",
     icon: <FaUserTie className="text-4xl" />,
   },
+  {
+    to: "/admin/purchase/supplier-aging",
+    label: "Supplier Aging",
+    icon: <FaBook className="text-4xl" />,
+  },
     {
     to: "/admin/report/opening-stock-supplierwise",
     label: "Stock Position",

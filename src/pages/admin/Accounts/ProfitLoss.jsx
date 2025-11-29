@@ -4,7 +4,7 @@ import axios from "axios";
 export default function ProfitLoss() {
   const [month, setMonth] = useState("");
   const [loading, setLoading] = useState(false);
-  const [countdown, setCountdown] = useState(30);
+  const [countdown, setCountdown] = useState(60);
   const [report, setReport] = useState(null);
   const [error, setError] = useState("");
   // Pagination for days
@@ -17,7 +17,7 @@ export default function ProfitLoss() {
   useEffect(() => {
     let timer;
     if (loading) {
-      setCountdown(30); // Reset
+      setCountdown(60); // Reset
       timer = setInterval(() => {
         setCountdown((prev) => {
           if (prev <= 1) {

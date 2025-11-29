@@ -1351,3 +1351,108 @@ export const handleExpenseSheetPrint = (entries = []) => {
 };
 
 
+export const handleSupplierAgingPrint = (entries = []) => {
+  if (!entries.length) return;
+
+  const win = window.open("", "", "width=900,height=700");
+
+  // Calculate totals
+ 
+
+  win.document.write(`
+    <html>
+      <head>
+        <title>Supplier Aging Report</title>
+        <style>
+          body { font-family: Arial, sans-serif; padding: 20px; }
+          h1, h2, p { margin: 0; text-align: center; }
+          h1 { font-size: 22px; font-weight: bold; }
+          h2 { margin-top: 8px; text-decoration: underline; }
+          p { font-size: 14px; color: #555; }
+          hr { border-top: 1px solid #aaa; margin: 10px 0 20px; }
+
+          table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 10px; 
+            font-size: 12px; 
+          }
+          th, td { 
+            border: 1px solid #999; 
+            padding: 6px; 
+            text-align: center; 
+          }
+          th { background: #f2f2f2; }
+          tfoot td { 
+            font-weight: bold; 
+            background: #fafafa; 
+          }
+
+          .note { 
+            font-size: 11px; 
+            color: #777; 
+            margin-top: 20px; 
+            text-align: center; 
+          }
+        </style>
+      </head>
+
+      <body>
+        <h1>Distribution System Pvt. Ltd.</h1>
+        <p>Mall of Lahore, Cantt</p>
+        <p>Phone: 0318-4486979</p>
+        <hr />
+
+        <h2>Supplier Aging Report</h2>
+
+       
+
+        <table>
+          <thead>
+            <tr>
+              <th>Sr</th>
+              <th>Supplier</th>
+              <th>GRN No</th>
+              <th>GRN Date</th>
+              <th>Over Days</th>
+              <th>Bill Days</th>
+              <th>Dues</th>
+              <th>Over Dues</th>
+              <th>Balance</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            ${entries
+              .map(
+                (e, i) => `
+                <tr>
+                  <td>${i + 1}</td>
+                  <td>${e.supplier || "-"}</td>
+                  <td>${e.grnNo || "-"}</td>
+                  <td>${e.grnDate || "-"}</td>
+                  <td>${e.overDays ?? 0}</td>
+                  <td>${e.billDays ?? 0}</td>
+                  <td>${Number(e.dues).toLocaleString()}</td>
+                  <td>${Number(e.overDues).toLocaleString()}</td>
+                  <td>${Number(e.balance).toLocaleString()}</td>
+                </tr>`
+              )
+              .join("")}
+          </tbody>
+
+         
+        </table>
+
+        <p class="note">
+          This is a system-generated supplier aging report and does not require a signature.
+        </p>
+      </body>
+    </html>
+  `);
+
+  win.document.close();
+  win.print();
+};
+
+
