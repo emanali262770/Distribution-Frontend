@@ -549,8 +549,9 @@ const GRN = () => {
                           </div>
 
                           <div className="text-gray-500">
-                            {grn.totalAmount || "-"}
+                            {grn.totalAmount?.toLocaleString() || "-"}
                           </div>
+
                           <div className="flex gap-3">
                             <button
                               onClick={() => handleEditClick(grn)}
@@ -663,7 +664,7 @@ const GRN = () => {
                       setDescription("");
                       setIsEnable(true);
                       setEditingGrn(null);
-                      setGst(0)
+                      setGst(0);
                     }}
                   >
                     ×
@@ -825,7 +826,7 @@ const GRN = () => {
                       {/* GST Amount */}
                       <div className="flex-1 min-w-0">
                         <label className="block text-gray-700 font-medium mb-2">
-                          GST
+                          GST (%)
                         </label>
                         <input
                           type="number"
