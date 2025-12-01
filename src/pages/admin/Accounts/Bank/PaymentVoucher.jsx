@@ -29,7 +29,7 @@ const PaymentVoucher = () => {
   const API_URL = `${import.meta.env.VITE_API_BASE_URL}/payment-vouchers`;
 
   const [formData, setFormData] = useState({
-    date: new Date().toISOString().split("T")[0],
+    date: new Date().toLocaleDateString("en-CA"),
     paymentId: "",
     bank: "",
     supplier: "",
@@ -108,7 +108,7 @@ const PaymentVoucher = () => {
   /** ================== RESET FORM ================== **/
   const resetForm = () => {
     setFormData({
-      date: new Date().toISOString().split("T")[0],
+      date: new Date().toLocaleDateString("en-CA"),
       paymentId: "",
       bank: "",
       supplier: "",

@@ -27,7 +27,7 @@ const ReceiptVoucher = () => {
   const API_URL = `${import.meta.env.VITE_API_BASE_URL}/receipt-vouchers`;
 
   const [formData, setFormData] = useState({
-    date: new Date().toISOString().split("T")[0],
+    date: new Date().toLocaleDateString("en-CA"),
     receiptId: "",
     bank: "",
     salesman: "",
@@ -74,7 +74,7 @@ const ReceiptVoucher = () => {
     setIsEditing(false);
     setEditId(null);
     setFormData({
-      date: new Date().toISOString().split("T")[0],
+      date: new Date().toLocaleDateString("en-CA"),
       receiptId: nextReceiptId,
       bank: "",
       salesman: "",

@@ -14,7 +14,7 @@ const BankLedger = () => {
 
   const [ledgerEntries, setLedgerEntries] = useState([]);
   const [selectedBank, setSelectedBank] = useState("");
-  const today = new Date().toISOString().split("T")[0];
+  const today = new Date().toLocaleDateString("en-CA");
   const [dateFrom, setDateFrom] = useState(today);
   const [dateTo, setDateTo] = useState("");
   const [loading, setLoading] = useState(false);

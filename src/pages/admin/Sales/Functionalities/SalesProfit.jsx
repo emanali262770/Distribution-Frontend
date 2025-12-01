@@ -13,7 +13,7 @@ const Sales = () => {
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [showSalesmanError, setShowSalesmanError] = useState(false);
-  const today = new Date().toISOString().split("T")[0];
+  const today = new Date().toLocaleDateString("en-CA");
   const [dateFrom, setDateFrom] = useState(today);
   const [dateTo, setDateTo] = useState("");
 

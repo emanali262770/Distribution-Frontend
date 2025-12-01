@@ -161,7 +161,7 @@ const SalesInvoice = () => {
     setCustomer(invoice.customerId?.customerName || "N/A");
     setSalesman(invoice.salesmanId?.employeeName || "N/A");
     setPreviousBalance(invoice.customerId?.salesBalance || 0);
-    setDeliveryDate(new Date().toISOString().split("T")[0]); // current date
+    setDeliveryDate(new Date().toLocaleDateString("en-CA")); // current date
 
     // map products correctly
     const mappedItems = (invoice.products || []).map((p) => ({
@@ -210,7 +210,7 @@ const SalesInvoice = () => {
 
       const payload = {
         invoiceNo: invoiceId,
-        invoiceDate: new Date().toISOString().split("T")[0],
+        invoiceDate: new Date().toLocaleDateString("en-CA"),
         customerId: editingInvoice.customerId._id,
         salesmanId: editingInvoice.salesmanId._id,
         orderTakingId: editingInvoice._id,

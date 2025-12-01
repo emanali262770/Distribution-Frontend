@@ -28,7 +28,7 @@ const CashDeposite = () => {
   const API_URL = `${import.meta.env.VITE_API_BASE_URL}/cash-deposits`;
 
   const [formData, setFormData] = useState({
-    date: new Date().toISOString().split("T")[0],
+    date: new Date().toLocaleDateString("en-CA"),
     receiptId: "",
     customer: "",
     amountReceived: "",
@@ -90,7 +90,7 @@ const CashDeposite = () => {
     setEditId(null);
 
     setFormData({
-      date: new Date().toISOString().split("T")[0],
+      date: new Date().toLocaleDateString("en-CA"),
       receiptId: nextReceiptId,
       customer: "",
       amountReceived: "",

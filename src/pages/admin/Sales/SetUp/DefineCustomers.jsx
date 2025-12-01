@@ -147,7 +147,7 @@ const DefineCustomers = () => {
     setDepartment(""); // Reset department
     setNtn("");
     setGst("");
-    setOpeningBalanceDate(new Date().toISOString().split("T")[0]); // Reset opening balance date
+    setOpeningBalanceDate(new Date().toLocaleDateString("en-CA")); // Reset opening balance date
     setBalanceReceived(0); // Reset balance received
     setStatus(true);
     setCreditTime(30);
