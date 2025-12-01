@@ -106,11 +106,6 @@ const setupChildren = [
   //   label: "Shelve Location",
   //   icon: <FaWarehouse />,
   // },
-  {
-    to: "/admin/list-of-items",
-    label: "List Of Items",
-    icon: <AiOutlineProduct />,
-  },
   // {
   //   to: "/admin/sales-area",
   //   label: "Sales Area",
@@ -125,6 +120,11 @@ const setupChildren = [
     to: "/admin/define-customers",
     label: "Define Customers",
     icon: <FaUsers />,
+  },
+   {
+    to: "/admin/list-of-items",
+    label: "List Of Items",
+    icon: <AiOutlineProduct />,
   },
   // {
   //   to: "/admin/vehicle-information",

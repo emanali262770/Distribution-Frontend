@@ -658,9 +658,18 @@ const Recovery = () => {
                         type="number"
                         value={received}
                         onChange={(e) => {
-                          const val = e.target.value;
+                          let val = e.target.value;
+
+                          // 🚫 Restrict value greater than receivable
+                          if (parseFloat(val) > parseFloat(receivable)) {
+                            toast.error(
+                              "Amount cannot be greater than receivable balance"
+                            );
+                            return; // stop execution
+                          }
+
                           setReceived(val);
-                          // live update balance
+
                           const remaining = parseFloat(receivable) || 0;
                           const newBalance = remaining - parseFloat(val || 0);
                           setBalance(newBalance >= 0 ? newBalance : 0);

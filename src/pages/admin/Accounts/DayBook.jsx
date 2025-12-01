@@ -100,7 +100,8 @@ const DayBook = () => {
         </div>
 
         {/* ---------------- 4 COLUMNS GRID ---------------- */}
-        <div className="grid grid-cols-4 gap-6 items-start">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 items-start">
+
 
           {/* ========== SALES ========== */}
           <ColumnTable

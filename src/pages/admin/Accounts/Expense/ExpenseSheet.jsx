@@ -244,12 +244,12 @@ const ExpensePage = () => {
                         className="grid grid-cols-1 lg:grid-cols-[80px_1fr_1fr_2fr_1fr_1fr] gap-4 items-center px-6 py-4 text-sm bg-white hover:bg-gray-50 transition"
                       >
                         <div>{indexOfFirstRecord + index + 1}</div>
-                        <div>{formDate(exp.date)}</div>
+                        <div>{formDate(exp.date) || '-'}</div>
                         {/* <div className="text-center">{exp.salesman}</div> */}
-                        <div className="text-center">{exp.headName}</div>
-                        <div className="text-center">{exp.description}</div>
+                        <div className="text-center">{exp.headName || '-'}</div>
+                        <div className="text-center">{exp.description || '-'}</div>
                         <div className="font-semibold text-blue-600">
-                          {exp.amount}
+                          {exp.amount ?? "-"}
                         </div>
 
                         <div className="flex justify-center gap-2">

@@ -211,15 +211,13 @@ const SalesManInformation = () => {
   // Date formating
   const formatDate = (date) => {
     if (!date) return "-";
+    const d = new Date(date);
 
-    const parsed = new Date(date);
-    if (isNaN(parsed.getTime())) return "Invalid Date";
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = d.toLocaleString("en-US", { month: "short" });
+    const year = d.getFullYear();
 
-    const day = String(parsed.getDate()).padStart(2, "0");
-    const month = String(parsed.getMonth() + 1).padStart(2, "0");
-    const year = parsed.getFullYear();
-
-    return `${day}-${month}-${year}`; // DD-MM-YYYY
+    return `${day}-${month}-${year}`;
   };
 
   const handleDelete = (id) => {

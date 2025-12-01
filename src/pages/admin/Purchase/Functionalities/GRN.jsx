@@ -66,7 +66,7 @@ const GRN = () => {
     } finally {
       setTimeout(() => {
         setLoading(false);
-      }, 2000);
+      }, 1000);
     }
   }, []);
   // console.log({salesmanList});
@@ -83,11 +83,11 @@ const GRN = () => {
       console.error("Error fetching items:", error);
       setTimeout(() => {
         toast.error("Failed to load items");
-      }, 3000);
+      }, 4000);
     } finally {
       setTimeout(() => {
         setLoading(false);
-      }, 2000);
+      }, 1000);
     }
   }, []);
   // console.log({ itemOptions, grns });
@@ -184,11 +184,11 @@ const GRN = () => {
       console.error("Failed to fetch GRNs:", error);
       setTimeout(() => {
         toast.error(error.response?.data?.error || "Failed to fetch GRNs.");
-      }, 3000);
+      }, 4000);
     } finally {
       setTimeout(() => {
         setLoading(false);
-      }, 3000);
+      }, 1000);
     }
   }, []);
 
@@ -279,7 +279,7 @@ const GRN = () => {
       })
     );
 
-    console.log(itemsList);
+    // console.log(itemsList);
 
     // ✅ This line ensures totalAmount (3000) appears correctly in summary section
     setSalesTax(parseFloat(grn.salesTax));

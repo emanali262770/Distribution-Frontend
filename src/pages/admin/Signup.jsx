@@ -2,7 +2,15 @@ import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { FiLock, FiMail, FiUser, FiUserCheck } from "react-icons/fi";
+import {
+  FiEye,
+  FiEyeOff,
+  FiLock,
+  FiMail,
+  FiUser,
+  FiUserCheck,
+} from "react-icons/fi";
+import { Loader } from "lucide-react";
 
 const Signup = () => {
   const [form, setForm] = useState({
@@ -14,8 +22,8 @@ const Signup = () => {
     confirm: "",
     agree: false,
   });
-   const [eyeOpen, setEyeclose] = useState(false);
-   const [ConfirmEyeOpen, setConfirmEyeOpen] = useState(false);
+  const [eyeOpen, setEyeclose] = useState(false);
+  const [ConfirmEyeOpen, setConfirmEyeOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -29,7 +37,7 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-   
+
     if (
       !form.name ||
       !form.username ||
@@ -61,7 +69,7 @@ const Signup = () => {
           role: form.role,
         }
       );
-     
+
       toast.success("Signup successful!");
       navigate("/");
     } catch (error) {
@@ -199,9 +207,9 @@ const Signup = () => {
     //     />
     //   </div>
     // </div>
-   <div className="min-h-screen relative bg-[url('/images/erpImage.png')] bg-cover bg-center py-6 flex flex-col justify-center sm:py-12">
+    <div className="min-h-screen relative bg-[url('/images/erpImage.png')] bg-cover bg-center py-6 flex flex-col justify-center sm:py-12">
       {/* Overlay for opacity */}
-      <div className="absolute inset-0 bg-black/70"></div> 
+      <div className="absolute inset-0 bg-black/70"></div>
 
       <div className="relative py-3 px-4 sm:px-0 sm:max-w-xl sm:mx-auto">
         {/* Gradient background layer */}
@@ -274,29 +282,51 @@ const Signup = () => {
 
               {/* Password */}
               <div className="relative">
-                <FiLock onClick={()=> setEyeclose((p)=>!p)} className="absolute cursor-pointer left-3 top-3 text-gray-400 text-lg" />
+                <FiLock className="absolute left-3 top-3 text-gray-400 text-lg" />
+
+                {/* Eye Icon */}
+                <span
+                  onClick={() => setEyeclose(!eyeOpen)}
+                  className="absolute right-3 top-3 cursor-pointer text-gray-500"
+                >
+                  {eyeOpen ? <FiEyeOff size={20} /> : <FiEye size={20} />}
+                </span>
+
                 <input
-                  type={eyeOpen===false?'password':'text'}
+                  type={eyeOpen ? "text" : "password"}
                   name="password"
                   placeholder="Password"
                   value={form.password}
                   onChange={handleChange}
                   required
-                  className="peer pl-10 h-12 w-full border-b-2 border-gray-300  text-gray-900 focus:outline-none focus:border-cyan-500"
+                  className="peer pl-10 pr-10 h-12 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-cyan-500"
                 />
               </div>
 
               {/* Confirm Password */}
               <div className="relative">
-                <FiLock onClick={()=> setConfirmEyeOpen((p)=>!p)} className="absolute cursor-pointer left-3 top-3 text-gray-400 text-lg" />
+                <FiLock className="absolute left-3 top-3 text-gray-400 text-lg" />
+
+                {/* Eye Icon */}
+                <span
+                  onClick={() => setConfirmEyeOpen(!ConfirmEyeOpen)}
+                  className="absolute right-3 top-3 cursor-pointer text-gray-500"
+                >
+                  {ConfirmEyeOpen ? (
+                    <FiEyeOff size={20} />
+                  ) : (
+                    <FiEye size={20} />
+                  )}
+                </span>
+
                 <input
-                  type={ConfirmEyeOpen===false?'password':'text'}
+                  type={ConfirmEyeOpen ? "text" : "password"}
                   name="confirm"
                   placeholder="Confirm Password"
                   value={form.confirm}
                   onChange={handleChange}
                   required
-                  className="peer pl-10 h-12 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-cyan-500"
+                  className="peer pl-10 pr-10 h-12 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-cyan-500"
                 />
               </div>
 
@@ -312,8 +342,14 @@ const Signup = () => {
                 />
                 <span className="text-sm text-gray-600">
                   By creating an account you agree to the{" "}
-                  <a href="#" className="text-cyan-600 hover:underline">terms of use</a> and our{" "}
-                  <a href="#" className="text-cyan-600 hover:underline">privacy policy</a>.
+                  <a href="#" className="text-cyan-600 hover:underline">
+                    terms of use
+                  </a>{" "}
+                  and our{" "}
+                  <a href="#" className="text-cyan-600 hover:underline">
+                    privacy policy
+                  </a>
+                  .
                 </span>
               </div>
 
@@ -323,7 +359,13 @@ const Signup = () => {
                 disabled={loading}
                 className="w-full bg-gradient-to-r flex justify-center from-newPrimary to-blue-400 text-white font-semibold py-3 rounded-lg shadow-md hover:opacity-90 transition"
               >
-                {loading ? <span className="animate-spin"><Loader size={18} /></span>  : "Create Account"}
+                {loading ? (
+                  <span className="animate-spin">
+                    <Loader size={18} />
+                  </span>
+                ) : (
+                  "Create Account"
+                )}
               </button>
             </form>
 

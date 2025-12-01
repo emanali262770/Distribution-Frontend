@@ -355,7 +355,7 @@ const ViewModal = ({ type, data, onClose }) => {
                     <td className="text-center">{item.item}</td>
                     <td className="text-center">{item.qty}</td>
                     <td className="text-center">{item.rate}</td>
-                    <td className="text-center">{item.gst}</td>
+                    <td className="text-center">{item.gst}%</td>
                     <td className="text-center">
                       {item.total?.toLocaleString()}
                     </td>
