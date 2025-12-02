@@ -9,7 +9,6 @@ import { ScaleLoader } from "react-spinners";
 import toast from "react-hot-toast";
 
 const PaymentToSupplier = () => {
-  const [deliveryChallans, setDeliveryChallans] = useState([]);
   const [isSaving, setIsSaving] = useState(false);
   const [isSliderOpen, setIsSliderOpen] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -20,7 +19,6 @@ const PaymentToSupplier = () => {
   const [product, setProduct] = useState("");
   const [rate, setRate] = useState("");
   const [inStock, setInStock] = useState("");
-  const [bookingOrders, setBookingOrders] = useState([]);
   const [specification, setSpecification] = useState("");
   const [itemsList, setItemsList] = useState([]);
   const [qty, setQty] = useState(1);
@@ -36,55 +34,6 @@ const PaymentToSupplier = () => {
   });
   const [nextReceiptId, setNextReceiptId] = useState("001");
   const [customersCash, setCustomersCash] = useState([]);
-
-  const handleAddItem = () => {
-    if (!product) return;
-
-    // Update availableProducts table visually
-    const updatedProducts = availableProducts.map((p) =>
-      p.name === product ? { ...p, deliverQty: qty, total: qty * p.rate } : p
-    );
-    setAvailableProducts(updatedProducts);
-
-    // Update or add the modified product in itemsList
-    const existingIndex = itemsList.findIndex((i) => i.name === product);
-    const updatedItem = {
-      name: product,
-      specification,
-      qty,
-      rate,
-      total: qty * rate,
-    };
-
-    let newList = [];
-    if (existingIndex !== -1) {
-      newList = [...itemsList];
-      newList[existingIndex] = updatedItem;
-    } else {
-      newList = [...itemsList, updatedItem];
-    }
-
-    setItemsList(newList);
-
-    // ✅ NEW: Ensure all updated products are in itemsList before submit
-    const syncedList = updatedProducts
-      .filter((p) => p.deliverQty > 0)
-      .map((p) => ({
-        name: p.name,
-        rate: p.rate,
-        qty: p.deliverQty,
-        total: p.total,
-      }));
-
-    setItemsList(syncedList);
-
-    // Reset fields
-    setProduct("");
-
-    setQty(1);
-    setRate("");
-    setTotal(0);
-  };
 
 
 
@@ -110,7 +59,6 @@ const PaymentToSupplier = () => {
   const [editingChallan, setEditingChallan] = useState(null);
   const [errors, setErrors] = useState({});
   const [activeTab, setActiveTab] = useState("orderDetails");
-  const [nextDcNo, setNextDcNo] = useState("003");
   const [currentPage, setCurrentPage] = useState(1);
   const [supplierDeposits, setSupplierDeposits] = useState([]);
 
@@ -177,10 +125,6 @@ const PaymentToSupplier = () => {
   useEffect(() => {
     fetchSuppliers();
   }, []);
-
-
-
-
 
 
   // Reset form fields

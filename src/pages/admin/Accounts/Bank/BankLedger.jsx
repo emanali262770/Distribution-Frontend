@@ -55,7 +55,7 @@ const BankLedger = () => {
     if (selectedBank) fetchBankLedger(selectedBank);
   }, [selectedBank, dateFrom, dateTo]);
 
-  const totalDebit = ledgerEntries.reduce((sum, e) => sum + e.amount, 0);
+  const totalDebit = ledgerEntries.reduce((sum, e) => sum + e.credit, 0);
 
   const totalCredit = ledgerEntries.reduce((sum, e) => sum + e.balanceAfter, 0);
 
@@ -141,8 +141,8 @@ const BankLedger = () => {
                 <div>SR</div>
                 <div>Date</div>
                 <div>Description</div>
-                <div>Type</div>
-                <div>Amount</div>
+                <div>Debit</div>
+                <div>Credit</div>
                 <div>Balance After</div>
               </div>
 
@@ -161,10 +161,13 @@ const BankLedger = () => {
                         : "text-red-600 font-semibold"
                     }
                   >
-                    {entry.type}
+                    {entry?.debit}
                   </div>
-                  <div>Rs. {entry.amount.toLocaleString()}</div>
-                  <div>Rs. {entry.balanceAfter.toLocaleString()}</div>
+                  <div>
+                    Rs. {entry?.credit}
+                  </div>
+
+                  <div>Rs. {entry?.balanceAfter.toLocaleString()}</div>
                 </div>
               ))}
 
@@ -172,15 +175,15 @@ const BankLedger = () => {
               <div className="grid grid-cols-[0.5fr_1.2fr_2fr_1fr_1fr_1fr] bg-gray-100 py-3 px-6 text-xs font-semibold text-gray-700">
                 <div></div>
                 <div></div>
-               
 
-                
-                 <div></div>
-                 <div></div>
-                 <div className="text-red-600">
+
+
+                <div></div>
+                <div></div>
+                <div className="text-red-600">
                   Total Amount: {totalDebit.toLocaleString()}
                 </div>
-                 <div></div>
+                <div></div>
               </div>
             </>
           )}
@@ -198,11 +201,10 @@ const BankLedger = () => {
                   onClick={() =>
                     setCurrentPage((prev) => Math.max(prev - 1, 1))
                   }
-                  className={`px-3 py-1 rounded-md ${
-                    currentPage === 1
-                      ? "bg-gray-300 cursor-not-allowed"
-                      : "bg-newPrimary text-white"
-                  }`}
+                  className={`px-3 py-1 rounded-md ${currentPage === 1
+                    ? "bg-gray-300 cursor-not-allowed"
+                    : "bg-newPrimary text-white"
+                    }`}
                 >
                   Previous
                 </button>
@@ -212,11 +214,10 @@ const BankLedger = () => {
                   onClick={() =>
                     setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                   }
-                  className={`px-3 py-1 rounded-md ${
-                    currentPage === totalPages
-                      ? "bg-gray-300 cursor-not-allowed"
-                      : "bg-newPrimary text-white"
-                  }`}
+                  className={`px-3 py-1 rounded-md ${currentPage === totalPages
+                    ? "bg-gray-300 cursor-not-allowed"
+                    : "bg-newPrimary text-white"
+                    }`}
                 >
                   Next
                 </button>
