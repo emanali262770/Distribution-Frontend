@@ -18,18 +18,17 @@ const GRN = () => {
   const [editIndex, setEditIndex] = useState(null);
   const [isItemEditMode, setIsItemEditMode] = useState(false);
 
-  const [records, setRecords] = useState([]);
   const [salesmanList, setSalesmanList] = useState([]);
   const [selectedSalesman, setSelectedSalesman] = useState("");
   const [balance, setBalance] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
+  const [agingDate, setAgingDate] = useState("");
   const [itemsList, setItemsList] = useState([]);
   const [item, setItem] = useState("");
   const [qty, setQty] = useState("");
   const [rate, setRate] = useState(0);
   const [description, setDescription] = useState("");
-  const [gatePassOptions, setGatePassOptions] = useState([]);
   const [itemOptions, setItemOptions] = useState([]);
   const [isSliderOpen, setIsSliderOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -43,9 +42,9 @@ const GRN = () => {
   const [selectedGrn, setSelectedGrn] = useState(null);
   const sliderRef = useRef(null);
   const [nextGRNId, setNextGrnId] = useState("001");
-  const [selectedRecord, setSelectedRecord] = useState(null);
   const [salesTax, setSalesTax] = useState(0);
-  const [gst, setGst] = useState(0);
+  const [gst, setGst] = useState(18);
+  const [gstRate, setGstRate] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
 
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
@@ -104,6 +103,7 @@ const GRN = () => {
     setSelectedSalesman(salesmanId);
 
     const selected = salesmanList.find((s) => s._id === salesmanId);
+    // console.log("selected ", selected);
 
     if (selected) {
       // 🔥 Check limit & show inline error
@@ -128,6 +128,11 @@ const GRN = () => {
       setBalance(selected.payableBalance || 0);
       setPhone(selected.contactNumber || "-");
       setAddress(selected.address || "-");
+      setAgingDate(
+        selected.agingDate
+          ? selected.agingDate.split("T")[0]  // ✔ Convert ISO → YYYY-MM-DD
+          : ""
+      );
     }
   };
 
@@ -265,19 +270,21 @@ const GRN = () => {
     // ✅ Items section (unchanged)
     setItemsList(
       (grn.items || []).map((it) => {
-        const subtotal = (it.qty || 0) * (it.rate || 0);
-        const gstAmount = (subtotal * (it.gst || 0)) / 100;
+        const gstValue = (it.rate * (it.gst || 0)) / 100;
+        const finalRate = it.rate + gstValue;
 
         return {
           itemId: it.itemId,
           item: it.item,
           qty: it.qty,
-          rate: it.rate || 0,
-          gst: it.gst || 0,
-          total: subtotal + gstAmount,
+          rate: it.rate,
+          gst: it.gst,
+          gstRate: finalRate,
+          total: finalRate * it.qty,
         };
       })
     );
+
 
     // console.log(itemsList);
 
@@ -287,6 +294,7 @@ const GRN = () => {
     setIsSliderOpen(true);
   };
 
+  console.log("itemsList ", itemsList);
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isItemEditMode) {
@@ -326,13 +334,16 @@ const GRN = () => {
         item: it.item,
         qty: it.qty,
         gst: it.gst || 0,
+        gstRate: it.gstRate || 0,
         rate: it.rate,
         total: it.total,
       })),
-      salesTax: salesTax,
+      agingDate,
       totalAmount: payableAmount,
     };
 
+    console.log("newGrn ", newGrn);
+    
     // console.log({ newGrn });
 
     // 🔸 Step 4: API call
@@ -423,6 +434,18 @@ const GRN = () => {
       });
   };
 
+  useEffect(() => {
+    if (!rate || rate <= 0) {
+      setGstRate(0);
+      return;
+    }
+
+    const gstValue = (rate * gst) / 100;     // GST amount only
+    const finalRate = rate + gstValue;       // gst-inclusive rate (for 1 qty)
+
+    setGstRate(finalRate.toFixed(2));
+  }, [rate, gst]);
+
   const handleView = (grn) => {
     setSelectedGrn(grn);
     setIsView(true);
@@ -447,6 +470,7 @@ const GRN = () => {
     setQty(it.qty);
     setRate(it.rate);
     setGst(it.gst || 0);
+    setGstRate(it.gstRate || 0);   // ADD THIS LINE
     setEditIndex(index);
     setIsItemEditMode(true);
   };
@@ -606,11 +630,10 @@ const GRN = () => {
                             setCurrentPage((prev) => Math.max(prev - 1, 1))
                           }
                           disabled={currentPage === 1}
-                          className={`px-3 py-1 rounded-md ${
-                            currentPage === 1
-                              ? "bg-gray-300 cursor-not-allowed"
-                              : "bg-newPrimary text-white hover:bg-newPrimary/80"
-                          }`}
+                          className={`px-3 py-1 rounded-md ${currentPage === 1
+                            ? "bg-gray-300 cursor-not-allowed"
+                            : "bg-newPrimary text-white hover:bg-newPrimary/80"
+                            }`}
                         >
                           Previous
                         </button>
@@ -622,11 +645,10 @@ const GRN = () => {
                             )
                           }
                           disabled={currentPage === totalPages}
-                          className={`px-3 py-1 rounded-md ${
-                            currentPage === totalPages
-                              ? "bg-gray-300 cursor-not-allowed"
-                              : "bg-newPrimary text-white hover:bg-newPrimary/80"
-                          }`}
+                          className={`px-3 py-1 rounded-md ${currentPage === totalPages
+                            ? "bg-gray-300 cursor-not-allowed"
+                            : "bg-newPrimary text-white hover:bg-newPrimary/80"
+                            }`}
                         >
                           Next
                         </button>
@@ -843,12 +865,6 @@ const GRN = () => {
                             if (val > 100) val = 100;
                             if (val < 0) val = 0;
 
-                            // Subtotal = qty × rate
-                            const subtotal = (qty || 0) * (rate || 0);
-
-                            // GST amount calculation
-                            const gstAmt = (subtotal * val) / 100;
-
                             setGst(val); // store percentage only
                           }}
                           max={100}
@@ -856,6 +872,21 @@ const GRN = () => {
                           className="w-full outline-none p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-newPrimary"
                           placeholder="Enter GST %"
                         />
+                      </div>
+                      {/* GST Rate */}
+                      <div className="flex-1 min-w-0">
+                        <label className="block text-gray-700 font-medium mb-2">
+                          GST Rate
+                        </label>
+                        <input
+                          type="number"
+                          value={gstRate}
+                          readOnly
+                          className="w-full outline-none p-3 border border-gray-300 rounded-md bg-gray-100"
+                          placeholder="GST Rate (auto)"
+                        />
+
+
                       </div>
 
                       {/* Total (auto calc) */}
@@ -877,9 +908,8 @@ const GRN = () => {
 
                       {/* Add Button */}
                       <div
-                        className={`${
-                          itemError ? "items-center" : "items-end"
-                        } flex `}
+                        className={`${itemError ? "items-center" : "items-end"
+                          } flex `}
                       >
                         <button
                           type="button"
@@ -892,9 +922,11 @@ const GRN = () => {
                             const selectedItem = itemOptions.find(
                               (opt) => opt._id === item
                             );
-                            const subtotal = qty * rate;
-                            const gstAmt = (subtotal * gst) / 100;
-                            const total = subtotal + gstAmt;
+                            const gstValue = (rate * gst) / 100;
+                            const gstRateFinal = rate + gstValue;
+                            const total = gstRateFinal * qty;
+
+
 
                             // If updating an item
                             if (isItemEditMode) {
@@ -904,6 +936,7 @@ const GRN = () => {
                                 qty,
                                 rate,
                                 gst,
+                                gstRate: gstRateFinal,
                                 total,
                               };
 
@@ -917,7 +950,8 @@ const GRN = () => {
                               setItem("");
                               setQty("");
                               setRate("");
-                              setGst("");
+                              setGst(18);
+                              setGstRate(0);
                               setIsItemEditMode(false);
                               setEditIndex(null);
                               return;
@@ -930,6 +964,7 @@ const GRN = () => {
                               qty,
                               rate,
                               gst,
+                              gstRate: gstRateFinal,
                               total,
                             };
 
@@ -938,6 +973,7 @@ const GRN = () => {
                             setQty("");
                             setRate("");
                             setGst("");
+                            setGstRate("")
                           }}
                           className="w-20 h-12 bg-newPrimary text-white rounded-lg hover:bg-newPrimary/80 transition"
                         >
@@ -968,6 +1004,7 @@ const GRN = () => {
                                 <th className="px-4 py-2 border border-gray-300">
                                   GST (%)
                                 </th>
+                                <th className="px-4 py-2 border border-gray-300">GST Rate</th>
                                 <th className="px-4 py-2 border border-gray-300">
                                   Total
                                 </th>
@@ -997,6 +1034,9 @@ const GRN = () => {
                                   <td className="px-4 py-2 border border-gray-300">
                                     {it.gst || 0}
                                   </td>
+
+                                  <td className="px-4 py-2 border border-gray-300">{it.gstRate}</td>
+
                                   <td className="px-4 py-2 border border-gray-300">
                                     {it.total}
                                   </td>
@@ -1050,43 +1090,55 @@ const GRN = () => {
 
                         {/* RIGHT SIDE: Total Amount + Discount + Payable */}
                         <div className="text-right">
-                          <p className="font-semibold">
-                            Total Amount:{" "}
-                            <span className="font-normal">
-                              {itemsList
-                                .reduce((sum, i) => sum + i.total, 0)
-                                .toLocaleString()}
-                            </span>
-                          </p>
 
                           <div className="flex items-center justify-end gap-2 mt-1">
                             <label className="font-semibold">
-                              Sales Tax (%):
+                              Aging Date :
                             </label>
                             <input
-                              type="number"
-                              value={salesTax}
+                              type="date"
+                              value={agingDate}
                               max={100}
                               onChange={(e) => {
-                                const val = Number(e.target.value);
-                                setSalesTax(Math.min(val, 100)); // 🚫 prevents >100
+                                setAgingDate(e.target.value);
                               }}
-                              className="w-28 p-2 border rounded-md text-right"
+                              className="w-32 p-2 border rounded-md text-right"
                               placeholder="0"
                             />
                           </div>
 
-                          <p className="font-semibold mt-1">
-                            Payable:{" "}
-                            <span className="font-bold text-green-600">
-                              {itemsList.reduce((sum, i) => sum + i.total, 0) +
-                                (salesTax / 100) *
-                                  itemsList.reduce(
-                                    (sum, i) => sum + i.total,
-                                    0
-                                  )}
+                          {/* TOTAL AMOUNT (rate * qty) */}
+                          <p className="font-semibold">
+                            Total Amount (Without GST):{" "}
+                            <span className="font-normal">
+                              {itemsList
+                                .reduce((sum, i) => sum + i.rate * i.qty, 0)
+                                .toLocaleString()}
                             </span>
                           </p>
+
+                          {/* TOTAL AMOUNT WITH GST (gstRate * qty) */}
+                          <p className="font-semibold">
+                            Total Amount with GST:{" "}
+                            <span className="font-normal">
+                              {itemsList
+                                .reduce((sum, i) => sum + i.gstRate * i.qty, 0)
+                                .toLocaleString()}
+                            </span>
+                          </p>
+
+                          {/* GST AMOUNT DIFFERENCE */}
+                          <p className="font-semibold mt-1">
+                            GST Amount:{" "}
+                            <span className="font-bold text-green-600">
+                              {(
+                                itemsList.reduce((sum, i) => sum + i.gstRate * i.qty, 0) -
+                                itemsList.reduce((sum, i) => sum + i.rate * i.qty, 0)
+                              ).toLocaleString()}
+                            </span>
+                          </p>
+
+
                         </div>
                       </div>
                     )}
@@ -1096,17 +1148,16 @@ const GRN = () => {
                     type="submit"
                     disabled={loading || isItemEditMode}
                     className={`w-full px-4 py-3 rounded-lg text-white transition
-    ${
-      loading || isItemEditMode
-        ? "bg-gray-400 cursor-not-allowed"
-        : "bg-newPrimary hover:bg-newPrimary/80"
-    }`}
+    ${loading || isItemEditMode
+                        ? "bg-gray-400 cursor-not-allowed"
+                        : "bg-newPrimary hover:bg-newPrimary/80"
+                      }`}
                   >
                     {loading
                       ? "Saving..."
                       : editingGrn
-                      ? "Update GRN"
-                      : "Save GRN"}
+                        ? "Update GRN"
+                        : "Save GRN"}
                   </button>
                 </form>
               </div>

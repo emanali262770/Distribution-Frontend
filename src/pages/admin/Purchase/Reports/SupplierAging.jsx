@@ -21,6 +21,7 @@ const SupplierAging = () => {
     totalDues: 0,
     totalOverDues: 0,
     totalBalance: 0,
+    agingDate: new Date().toLocaleDateString("en-CA"),
   });
 
   /** Fetch Suppliers */
@@ -74,6 +75,7 @@ const SupplierAging = () => {
         totalDues: 0,
         totalOverDues: 0,
         totalBalance: 0,
+        agingDate: new Date().toLocaleDateString("en-CA"),
       });
     } finally {
       setLoading(false);
@@ -91,6 +93,7 @@ const SupplierAging = () => {
         totalDues: 0,
         totalOverDues: 0,
         totalBalance: 0,
+        agingDate: new Date().toLocaleDateString("en-CA"),  
       });
     }
   }, [selectedSupplier, fetchSupplierAging]);
@@ -186,12 +189,13 @@ const filteredData = apiData.filter(row =>
               <div className="max-h-screen overflow-y-auto custom-scrollbar">
                 <div className="inline-block min-w-[1300px] w-full align-middle">
                   {/* Table Header */}
-                  <div className="hidden lg:grid grid-cols-[0.2fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr] gap-4 bg-gray-100 py-3 px-6 text-xs font-semibold text-gray-600 uppercase sticky top-0 z-10 border-b border-gray-200">
+                  <div className="hidden lg:grid grid-cols-[0.2fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr] gap-4 bg-gray-100 py-3 px-6 text-xs font-semibold text-gray-600 uppercase sticky top-0 z-10 border-b border-gray-200">
                     <div>SR</div>
                     <div>Supplier</div>
                     <div>GRN#</div>
                     <div>GRN Date</div>
                     <div>Over Days</div>
+                    <div>Aging Date</div>
                     <div>Bill Days</div>
                     <div>Dues</div>
                     <div>Over Dues</div>
@@ -204,13 +208,14 @@ const filteredData = apiData.filter(row =>
                       currentRecords.map((row, idx) => (
                         <div
                           key={idx}
-                          className="grid grid-cols-[0.2fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr] items-center gap-6 px-6 py-3 text-sm hover:bg-gray-50 transition"
+                          className="grid grid-cols-[0.2fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr] items-center gap-6 px-6 py-3 text-sm hover:bg-gray-50 transition"
                         >
                           <div>{row.sr}</div>
                           <div>{row.supplier || "-"}</div>
                           <div>{row?.grnNo || "-"}</div> {/* No GRN# in API */}
                           <div>{row.grnDate || "-"}</div>
                           <div>{row.overDays ?? 0}</div>
+                          <div>{row.agingDate || "-"}</div>
                           <div>{row.billDays ?? 0}</div>
                           <div>{row.dues?.toLocaleString() ?? 0}</div>
                           <div>{row.overDues?.toLocaleString() ?? 0}</div>

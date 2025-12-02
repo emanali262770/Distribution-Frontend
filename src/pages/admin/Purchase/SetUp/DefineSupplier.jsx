@@ -11,6 +11,8 @@ import { set } from "date-fns";
 import toast from "react-hot-toast";
 
 const DefineSupplier = () => {
+  // Set today date in YYYY-MM-DD for input[type=date]
+  const today = new Date().toLocaleDateString("en-CA");
   const [supplierList, setSupplierList] = useState([]);
   const [isSaving, setIsSaving] = useState(false);
   const [isSliderOpen, setIsSliderOpen] = useState(false);
@@ -25,6 +27,9 @@ const DefineSupplier = () => {
   const [designation, setDesignation] = useState("");
   const [ntn, setNtn] = useState("");
   const [gst, setGst] = useState("");
+  // 🆕 NEW STATES
+  const [openingBalance, setOpeningBalance] = useState("");
+  const [openingBalanceDate, setOpeningBalanceDate] = useState(today);
   const [creditLimit, setCreditLimit] = useState("");
   const [isEdit, setIsEdit] = useState(false);
   const [editId, setEditId] = useState(null);
@@ -102,6 +107,9 @@ const DefineSupplier = () => {
     setCreditLimit("");
     setCreditTime(45);
     setStatus(true);
+    // 🆕 RESET NEW FIELDS
+    setOpeningBalance("");
+    setOpeningBalanceDate(today);
 
     // 🔥 Reset Over Days + Over Dues
     setOverDays(overDays);
@@ -125,7 +133,13 @@ const DefineSupplier = () => {
       paymentTerms: paymentTerms === "CreditCard" ? "Credit" : paymentTerms, // map CreditCard -> Credit
       creditTime: paymentTerms === "CreditCard" ? creditTime : undefined, // <-- add this state
       creditLimit: paymentTerms === "CreditCard" ? creditLimit : undefined,
+      // 🆕 NEW FIELDS
+      openingBalance: openingBalance ? Number(openingBalance) : 0,
+      openingBalanceDate: openingBalanceDate || null,
     };
+
+    console.log("formData ", { formData });
+    // return
 
     try {
       const { token } = userInfo || {};
@@ -194,6 +208,14 @@ const DefineSupplier = () => {
     setCreditTime(supplier.creditTime || "");
     setStatus(supplier.status);
     setIsSliderOpen(true);
+    // 🆕 LOAD NEW FIELDS INTO FORM
+    setOpeningBalance(supplier.openingBalance || 0);
+    setOpeningBalanceDate(
+      supplier.openingBalanceDate
+        ? supplier.openingBalanceDate.substring(0, 10)
+        : ""
+    );
+
   };
 
   // Delete Supplier
@@ -401,9 +423,8 @@ const DefineSupplier = () => {
                           : ""}
                       </p>
                       <p
-                        className={`text-sm font-semibold ${
-                          s.status ? "text-green-600" : "text-red-600"
-                        }`}
+                        className={`text-sm font-semibold ${s.status ? "text-green-600" : "text-red-600"
+                          }`}
                       >
                         {s.status ? "Active" : "Inactive"}
                       </p>
@@ -443,11 +464,10 @@ const DefineSupplier = () => {
                       setCurrentPage((prev) => Math.max(prev - 1, 1))
                     }
                     disabled={currentPage === 1}
-                    className={`px-3 py-1 rounded-md ${
-                      currentPage === 1
+                    className={`px-3 py-1 rounded-md ${currentPage === 1
                         ? "bg-gray-300 cursor-not-allowed"
                         : "bg-newPrimary text-white hover:bg-newPrimary/80"
-                    }`}
+                      }`}
                   >
                     Previous
                   </button>
@@ -457,11 +477,10 @@ const DefineSupplier = () => {
                       setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                     }
                     disabled={currentPage === totalPages}
-                    className={`px-3 py-1 rounded-md ${
-                      currentPage === totalPages
+                    className={`px-3 py-1 rounded-md ${currentPage === totalPages
                         ? "bg-gray-300 cursor-not-allowed"
                         : "bg-newPrimary text-white hover:bg-newPrimary/80"
-                    }`}
+                      }`}
                   >
                     Next
                   </button>
@@ -523,48 +542,9 @@ const DefineSupplier = () => {
                     className="w-full p-2 border rounded"
                   />
                 </div>
-                {/* <div className="flex-1 min-w-0">
-                  <label className="block text-gray-700 font-medium">
-                    Phone Number <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={phoneNumber}
-                    required
-                    onChange={(e) => setPhoneNumber(e.target.value)}
-                    className="w-full p-2 border rounded"
-                    placeholder="e.g. +1-212-555-1234"
-                  />
-                </div> */}
-              </div>
-              {/* <div className="flex gap-4">
-                <div className="flex-1 min-w-0">
-                  <label className="block text-gray-700 font-medium">
-                    Mobile Number <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={mobileNumber}
-                    required
-                    onChange={(e) => setMobileNumber(e.target.value)}
-                    className="w-full p-2 border rounded"
-                    placeholder="e.g. 03001234567"
-                  />
-                </div>
 
-                <div className="flex-1 min-w-0">
-                  <label className="block text-gray-700 font-medium">
-                    Email Address <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="email"
-                    value={email}
-                    required
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full p-2 border rounded"
-                  />
-                </div>
-              </div> */}
+              </div>
+
               <div className="flex gap-4">
                 <div className="flex-1 min-w-0">
                   <label className="block text-gray-700 font-medium">
@@ -599,6 +579,34 @@ const DefineSupplier = () => {
                   onChange={(e) => setAddress(e.target.value)}
                   className="w-full p-2 border rounded"
                 />
+              </div>
+
+              {/* 🆕 NEW FIELDS — after address */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block font-medium mb-1">
+                    Opening Balance
+                  </label>
+                  <input
+                    type="number"
+                    value={openingBalance}
+                    onChange={(e) => setOpeningBalance(e.target.value)}
+                    className="w-full p-2 border rounded"
+                    placeholder="Enter Opening Balance"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-medium mb-1">
+                    Opening Balance Date
+                  </label>
+                  <input
+                    type="date"
+                    value={openingBalanceDate}
+                    onChange={(e) => setOpeningBalanceDate(e.target.value)}
+                    className="w-full p-2 border rounded"
+                  />
+                </div>
               </div>
 
               {/* Payment Terms */}
@@ -693,11 +701,10 @@ const DefineSupplier = () => {
               {/* Save Button */}
 
               <button
-                className={`${
-                  isEdit
+                className={`${isEdit
                     ? "bg-newPrimary hover:bg-newPrimary/80"
                     : "bg-newPrimary hover:bg-newPrimary/80"
-                } text-white px-4 py-2 rounded-lg w-full`}
+                  } text-white px-4 py-2 rounded-lg w-full`}
                 onClick={handleSave}
               >
                 {isEdit ? "Update Supplier" : "Save Supplier"}
