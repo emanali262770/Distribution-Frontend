@@ -151,7 +151,7 @@ const AdminSidebar = () => {
         {/* Logo + Title */}
         <div className="flex items-center justify-center sm:justify-start mb-12 space-x-2 sm:space-x-4">
           <h1 className="hidden md:block text-xl font-bold bg-gradient-to-r from-newPrimary to-primaryDark bg-clip-text text-transparent">
-            Infinity Distribution System. 
+            Infinitybyte Distribution System. 
           </h1>
         </div>
 

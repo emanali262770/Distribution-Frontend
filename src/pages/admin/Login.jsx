@@ -75,7 +75,7 @@ const Login = () => {
         <div className="relative px-8 py-14 bg-white shadow-lg sm:rounded-3xl sm:p-16 max-w-[26rem] w-full">
           <div className="max-w-md mx-auto">
             <h1 className="text-2xl leading-relaxed font-bold text-gray-800 mb-8 text-center">
-              Welcome to Infinity Distribution System
+              Welcome to Infinitybyte Distribution System
             </h1>
 
             <form onSubmit={handleLogin} className="space-y-6">

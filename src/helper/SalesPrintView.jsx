@@ -34,7 +34,7 @@ export const handleDirectPrint = (reportData = {}) => {
       </head>
       <body>
         <!-- 🔹 Header -->
-        <h1>Infinity Distribution System Pvt. Ltd.</h1>
+        <h1>Infinitybyte Distribution System Pvt. Ltd.</h1>
         <p>Mall of Lahore, Cantt</p>
         <p>Phone: 0318-4486979</p>
         <hr />
@@ -189,7 +189,7 @@ export const handleLedgerPrint = (ledgerEntries = []) => {
         </style>
       </head>
       <body>
-        <h1>Infinity Distribution System Pvt. Ltd.</h1>
+        <h1>Infinitybyte Distribution System Pvt. Ltd.</h1>
         <p>Mall of Lahore, Cantt</p>
         <p>Phone: 0318-4486979</p>
         <hr />
@@ -290,7 +290,7 @@ export const handleItemWisePrint = (ledgerEntries = []) => {
         </style>
       </head>
       <body>
-        <h1>Infinity Distribution System Pvt. Ltd.</h1>
+        <h1>Infinitybyte Distribution System Pvt. Ltd.</h1>
         <p>Mall of Lahore, Cantt</p>
         <p>Phone: 0318-4486979</p>
         <hr />
@@ -397,7 +397,7 @@ export const handleSupplierLedgerPrint = (ledgerEntries = []) => {
         </style>
       </head>
       <body>
-        <h1>Infinity Distribution System Pvt. Ltd.</h1>
+        <h1>Infinitybyte Distribution System Pvt. Ltd.</h1>
         <p>Mall of Lahore, Cantt</p>
         <p>Phone: 0318-4486979</p>
         <hr />
@@ -487,7 +487,7 @@ export const handleDateWisePrint = (ledgerEntries = []) => {
         </style>
       </head>
       <body>
-        <h1>Infinity Distribution System Pvt. Ltd.</h1>
+        <h1>Infinitybyte Distribution System Pvt. Ltd.</h1>
         <p>Mall of Lahore, Cantt</p>
         <p>Phone: 0318-4486979</p>
         <hr />
@@ -576,7 +576,7 @@ export const handleCreditAgingPrint = (apiData = [], totals = {}) => {
         </style>
       </head>
       <body>
-        <h1>Infinity Distribution System Pvt. Ltd.</h1>
+        <h1>Infinitybyte Distribution System Pvt. Ltd.</h1>
         <p>Mall of Lahore, Cantt</p>
         <p>Phone: 0318-4486979</p>
         <hr />
@@ -719,7 +719,7 @@ export const handleDailySalesPrint = (
         </style>
       </head>
       <body>
-        <h1>Infinity Distribution System Pvt. Ltd.</h1>
+        <h1>Infinitybyte Distribution System Pvt. Ltd.</h1>
         <p>Mall of Lahore, Cantt</p>
         <p>Phone: 0318-4486979</p>
         <hr />
@@ -927,7 +927,7 @@ export const handleSaleInvoicePrint = (orders = []) => {
 
     win.document.write(`
 
-      <div class="heading">Infinity Distribution System Pvt. Ltd.</div>
+      <div class="heading">Infinitybyte Distribution System Pvt. Ltd.</div>
      
      <div style="
   text-align:center; 
@@ -1176,7 +1176,7 @@ export const handleCustomerLedgerPrint = (ledgerEntries = []) => {
       </head>
 
       <body>
-        <h1>Infinity Distribution System Pvt. Ltd.</h1>
+        <h1>Infinitybyte Distribution System Pvt. Ltd.</h1>
         <p>Mall of Lahore, Cantt</p>
         <p>Phone: 0318-4486979</p>
         <hr />
@@ -1294,7 +1294,7 @@ export const handleExpenseSheetPrint = (entries = []) => {
       </head>
 
       <body>
-        <h1>Infinity Distribution System Pvt. Ltd.</h1>
+        <h1>Infinitybyte Distribution System Pvt. Ltd.</h1>
         <p>Mall of Lahore, Cantt</p>
         <p>Phone: 0318-4486979</p>
         <hr />
@@ -1398,7 +1398,7 @@ export const handleSupplierAgingPrint = (entries = []) => {
       </head>
 
       <body>
-        <h1>Infinity Distribution System Pvt. Ltd.</h1>
+        <h1>Infinitybyte Distribution System Pvt. Ltd.</h1>
         <p>Mall of Lahore, Cantt</p>
         <p>Phone: 0318-4486979</p>
         <hr />
