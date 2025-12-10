@@ -43,7 +43,7 @@ const ViewModal = ({ type, data, onClose }) => {
         <div ref={printRef}>
           <div className="text-center mb-6  pb-3">
             <h1 className="text-2xl font-extrabold text-newPrimary tracking-wide">
-              Distribution System Pvt. Ltd.
+              Infinity Distribution System Pvt. Ltd.
             </h1>
             <p className="text-gray-700 text-sm mt-1">Mall of Lahore, Cantt</p>
             <p className="text-gray-700 text-sm">

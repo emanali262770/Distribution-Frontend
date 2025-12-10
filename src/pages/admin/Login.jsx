@@ -72,10 +72,10 @@ const Login = () => {
         <div className="hidden sm:block absolute inset-0 bg-gradient-to-r from-newPrimary to-blue-400 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
 
         {/* Main card */}
-        <div className="relative px-8 py-14 bg-white shadow-lg sm:rounded-3xl sm:p-16 max-w-lg w-full">
+        <div className="relative px-8 py-14 bg-white shadow-lg sm:rounded-3xl sm:p-16 max-w-[26rem] w-full">
           <div className="max-w-md mx-auto">
-            <h1 className="text-2xl font-bold text-gray-800 mb-8 text-center">
-              Welcome to Distribution System
+            <h1 className="text-2xl leading-relaxed font-bold text-gray-800 mb-8 text-center">
+              Welcome to Infinity Distribution System
             </h1>
 
             <form onSubmit={handleLogin} className="space-y-6">

@@ -235,7 +235,7 @@ const ExpensePage = () => {
         <div className="flex justify-between items-center mb-4">
           <div>
             <h1 className="text-2xl font-bold text-newPrimary">
-              Distribution System Expense
+              Infinity Distribution System Expense
             </h1>
             <p className="text-gray-500 text-sm">
               Manage your daily expense records

@@ -20,7 +20,7 @@ export const InvoiceTemplate = React.forwardRef(({ invoice }, ref) => {
     >
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-2xl font-bold">Distribution System Pvt. Ltd.</h1>
+          <h1 className="text-2xl font-bold">Infinity Distribution System Pvt. Ltd.</h1>
           <p>Mall of Lahore</p>
           <p>NTN: 7576450 | STN: Yes w.e.f 16-Oct-17</p>
         </div>

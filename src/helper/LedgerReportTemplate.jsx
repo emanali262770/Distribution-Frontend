@@ -28,7 +28,7 @@ export const LedgerTemplate = React.forwardRef(({ ledgerEntries }, ref) => {
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-2xl font-bold">Distribution System Pvt. Ltd.</h1>
+          <h1 className="text-2xl font-bold">Infinity Distribution System Pvt. Ltd.</h1>
           <p>Mall of Lahore</p>
           <p>Customer Ledger Report</p>
         </div>
